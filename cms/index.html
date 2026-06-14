@@ -71,10 +71,10 @@
       -webkit-backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
       border-radius: 24px;
-      padding: 40px;
+      padding: 45px 40px;
       width: 100%;
       max-width: 450px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
       text-align: center;
       animation: fadeInUp 0.6s ease;
     }
@@ -88,7 +88,7 @@
     }
 
     .login-title {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 700;
       letter-spacing: 0.5px;
       margin-bottom: 8px;
@@ -117,7 +117,7 @@
 
     .form-control {
       width: 100%;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.35);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 14px 18px;
@@ -134,7 +134,7 @@
 
     .btn {
       width: 100%;
-      background-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary), #ffb266);
       color: var(--bg-dark);
       font-weight: 700;
       font-size: 16px;
@@ -147,9 +147,9 @@
     }
 
     .btn:hover {
-      background-color: var(--primary-hover);
+      background: linear-gradient(135deg, var(--primary-hover), var(--primary));
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+      box-shadow: 0 6px 20px rgba(255, 153, 51, 0.45);
     }
 
     .btn:active {
@@ -157,11 +157,11 @@
     }
 
     .btn:disabled {
-      background-color: var(--border-color);
-      color: var(--text-muted);
+      background: var(--border-color) !important;
+      color: var(--text-muted) !important;
       cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     .shake {
@@ -186,7 +186,7 @@
 
     /* Sidebar */
     .sidebar {
-      background-color: var(--bg-surface);
+      background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-dark) 100%);
       border-right: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
@@ -206,6 +206,7 @@
       font-weight: 700;
       letter-spacing: 0.5px;
       margin-bottom: 4px;
+      text-shadow: 0 0 10px var(--primary-glow);
     }
 
     .sidebar-title {
@@ -226,7 +227,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       border-radius: 12px;
       cursor: pointer;
       color: var(--text-muted);
@@ -236,7 +237,7 @@
     }
 
     .menu-item:hover {
-      background-color: var(--border-color);
+      background-color: rgba(255, 255, 255, 0.05);
       color: var(--text-light);
     }
 
@@ -301,13 +302,16 @@
 
     .top-navbar {
       height: 70px;
-      background-color: var(--bg-surface);
+      background-color: rgba(20, 20, 30, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 40px;
       flex-shrink: 0;
+      z-index: 100;
     }
 
     .navbar-title {
@@ -371,6 +375,16 @@
       box-shadow: none;
     }
 
+    .btn-danger {
+      background: linear-gradient(135deg, var(--error), #ff6666);
+      color: white;
+      box-shadow: 0 4px 10px rgba(255, 76, 76, 0.2);
+    }
+    .btn-danger:hover {
+      background: linear-gradient(135deg, hsl(354, 76%, 40%), var(--error));
+      box-shadow: 0 6px 15px rgba(255, 76, 76, 0.35);
+    }
+
     .grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -385,12 +399,13 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     .card:hover {
       transform: translateY(-4px);
       border-color: var(--primary);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
     }
 
     .card-title-sanskrit {
@@ -490,6 +505,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     .selector-left {
@@ -521,6 +537,7 @@
       border: 1px solid var(--border-color);
       border-radius: 16px;
       overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     .sutra-table {
@@ -532,6 +549,7 @@
     .sutra-table th, .sutra-table td {
       padding: 16px 24px;
       border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
     }
 
     .sutra-table th {
@@ -541,6 +559,14 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+
+    .sutra-table tbody tr {
+      transition: background-color 0.2s ease;
+    }
+
+    .sutra-table tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.015);
     }
 
     .sutra-table tr:last-child td {
@@ -583,6 +609,97 @@
       pointer-events: none;
     }
 
+    /* --- COMPONENT: AUDIO WIDGET --- */
+    .audio-widget-container {
+      background-color: rgba(0,0,0,0.15);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+    
+    .audio-mode-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn:hover {
+      color: var(--text-light);
+      border-color: var(--text-muted);
+    }
+
+    .mode-btn.active {
+      background-color: var(--primary-glow);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .audio-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .audio-panel.active {
+      display: block;
+    }
+
+    /* Live voice recorder animation styling */
+    @keyframes pulse-red {
+      0% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 76, 76, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 76, 76, 0); }
+    }
+
+    .btn-record {
+      background: linear-gradient(135deg, #4b5563, #374151);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn-record.recording-active {
+      background: linear-gradient(135deg, var(--error), #ff6666) !important;
+      animation: pulse-red 1.5s infinite;
+      box-shadow: 0 4px 15px rgba(255, 76, 76, 0.4);
+    }
+
+    .record-status-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background-color: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      padding: 14px 18px;
+      border-radius: 12px;
+    }
+
+    .record-timer {
+      font-family: monospace;
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--error);
+      background-color: rgba(255,76,76,0.08);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,76,76,0.2);
+    }
+
     /* Modal Styling */
     .modal-backdrop {
       position: fixed;
@@ -590,7 +707,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0,0,0,0.75);
       backdrop-filter: blur(5px);
       display: flex;
       justify-content: center;
@@ -612,7 +729,7 @@
       border-radius: 20px;
       width: 100%;
       max-width: 650px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
       overflow: hidden;
       transform: scale(0.9);
       transition: transform 0.3s ease;
@@ -700,8 +817,9 @@
     /* Audio Preview Player */
     .audio-player-preview {
       width: 100%;
-      height: 32px;
+      height: 36px;
       outline: none;
+      border-radius: 8px;
     }
 
     /* Animations */
@@ -845,7 +963,7 @@
                   <th>Title</th>
                   <th>Sanskrit</th>
                   <th>Audio File</th>
-                  <th style="width: 100px; text-align: right;">Actions</th>
+                  <th style="width: 140px; text-align: right;">Actions</th>
                 </tr>
               </thead>
               <tbody id="sutras-list">
@@ -861,7 +979,7 @@
         <section id="audio-section" class="tab-section hidden">
           <div class="section-header">
             <h3 class="section-title">Audio Files Manager</h3>
-            <button class="btn btn-sm" id="btn-add-audio">Upload Audio</button>
+            <button class="btn btn-sm" id="btn-add-audio">Upload / Record Audio</button>
           </div>
           
           <div class="sutra-table-container">
@@ -1050,26 +1168,61 @@
           </div>
           <div class="form-group">
             <label for="sutra-sanskrit-input">Sanskrit Devanagari (Single line)</label>
-            <textarea id="sutra-sanskrit-input" class="form-control" style="height: 80px; resize: none;" placeholder="निधाय हृदि विश्वेशं..." required></textarea>
+            <textarea id="sutra-sanskrit-input" class="form-control" style="height: 70px; resize: none;" placeholder="निधाय हृदि विश्वेशं..." required></textarea>
           </div>
           <div class="form-group">
             <label for="sutra-english-input">English Translation</label>
-            <textarea id="sutra-english-input" class="form-control" style="height: 80px; resize: none;" placeholder="Having placed the Lord of the Universe in the heart..." required></textarea>
+            <textarea id="sutra-english-input" class="form-control" style="height: 70px; resize: none;" placeholder="Having placed the Lord of the Universe in the heart..." required></textarea>
           </div>
           <div class="form-group">
             <label for="sutra-kannada-input">Kannada Translation</label>
-            <textarea id="sutra-kannada-input" class="form-control" style="height: 80px; resize: none;" placeholder="ವಿಶ್ವೇಶ್ವರನನ್ನು ಹೃದಯದಲ್ಲಿ ನೆನೆದು..." required></textarea>
+            <textarea id="sutra-kannada-input" class="form-control" style="height: 70px; resize: none;" placeholder="ವಿಶ್ವೇಶ್ವರನನ್ನು ಹೃದಯದಲ್ಲಿ ನೆನೆದು..." required></textarea>
           </div>
+          
+          <!-- Unified Advanced Audio Manager Widget inside Sutra Modal -->
           <div class="form-group">
-            <label for="sutra-audio-select">Audio File</label>
-            <div style="display: flex; gap: 10px;">
-              <select id="sutra-audio-select" class="form-control" style="flex: 1;">
-                <option value="">-- Select audio --</option>
-              </select>
-              <input type="text" id="sutra-audio-input" class="form-control" style="flex: 1;" placeholder="Or type manually: audio_0.mp3" required>
+            <label>Sutra Audio File Management</label>
+            <div class="audio-widget-container">
+              <div class="audio-mode-selector">
+                <button type="button" class="mode-btn active" data-panel="sutra-audio-select-panel">Select Existing</button>
+                <button type="button" class="mode-btn" data-panel="sutra-audio-upload-panel">Upload File</button>
+                <button type="button" class="mode-btn" data-panel="sutra-audio-record-panel">Record Live</button>
+              </div>
+
+              <!-- Panel 1: Select dropdown -->
+              <div class="audio-panel active" id="sutra-audio-select-panel">
+                <select id="sutra-audio-select" class="form-control">
+                  <option value="">-- Select audio file --</option>
+                </select>
+              </div>
+
+              <!-- Panel 2: Upload input -->
+              <div class="audio-panel" id="sutra-audio-upload-panel">
+                <div style="display:flex; gap:10px;">
+                  <input type="file" id="sutra-audio-file-uploader" class="form-control" accept="audio/mpeg,audio/mp3">
+                  <button type="button" class="btn btn-sm btn-secondary" id="btn-sutra-audio-upload-action" style="flex-shrink:0;">Upload</button>
+                </div>
+                <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Supported format: .mp3</p>
+              </div>
+
+              <!-- Panel 3: Direct Recorder -->
+              <div class="audio-panel" id="sutra-audio-record-panel">
+                <div class="record-status-container">
+                  <button type="button" class="btn btn-sm btn-record" id="btn-sutra-record-toggle">🎙️ Start Recording</button>
+                  <span class="record-timer hidden" id="sutra-record-timer">00:00</span>
+                  <audio id="sutra-record-player" class="audio-player-preview hidden" controls></audio>
+                  <button type="button" class="btn btn-sm hidden" id="btn-sutra-record-upload" style="background:var(--success); color:white;">Save & Use</button>
+                </div>
+              </div>
+
+              <!-- Selected Audio Field -->
+              <div style="margin-top:14px; border-top:1px dashed var(--border-color); padding-top:12px;">
+                <label for="sutra-audio-input" style="font-size:12px; margin-bottom:4px;">Active Filename in Repository:</label>
+                <input type="text" id="sutra-audio-input" class="form-control" placeholder="audio_0.mp3" required>
+              </div>
             </div>
-            <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Select an existing audio file from your repository, or type a custom filename.</p>
           </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('sutra-modal-backdrop')">Cancel</button>
@@ -1119,30 +1272,53 @@
     </div>
   </div>
 
-  <!-- 4. Audio Upload Modal -->
+  <!-- 4. General Audio Upload Modal -->
   <div class="modal-backdrop" id="audio-modal-backdrop">
     <div class="modal">
       <div class="modal-header">
-        <h4 class="modal-title">Upload Audio File</h4>
+        <h4 class="modal-title">Upload / Record Audio</h4>
         <button class="modal-close" onclick="closeModal('audio-modal-backdrop')">&times;</button>
       </div>
-      <form id="audio-upload-form">
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="audio-file-input">Select Audio File (.mp3)</label>
-            <input type="file" id="audio-file-input" class="form-control" accept="audio/mpeg" required>
+      <div class="modal-body">
+        <div class="audio-widget-container" style="background:transparent; border:none; padding:0;">
+          <div class="audio-mode-selector" style="margin-bottom:20px;">
+            <button type="button" class="mode-btn active" data-panel="gen-audio-upload-panel">Upload File</button>
+            <button type="button" class="mode-btn" data-panel="gen-audio-record-panel">Record Live</button>
           </div>
-          <div class="form-group">
-            <label for="audio-filename-input">Filename in Repository</label>
-            <input type="text" id="audio-filename-input" class="form-control" placeholder="e.g. audio_muktavali_0.mp3" required>
-            <p style="font-size:12px; color:var(--text-muted); margin-top:6px;">We recommend using lowercase and underscores, e.g. <code>audio_&lt;grantha_id&gt;_&lt;index&gt;.mp3</code>.</p>
+
+          <!-- Panel 1: Upload -->
+          <div class="audio-panel active" id="gen-audio-upload-panel">
+            <form id="audio-upload-form">
+              <div class="form-group">
+                <label for="audio-file-input">Select Audio File (.mp3)</label>
+                <input type="file" id="audio-file-input" class="form-control" accept="audio/mpeg" required>
+              </div>
+              <div class="form-group">
+                <label for="audio-filename-input">Filename in Repository</label>
+                <input type="text" id="audio-filename-input" class="form-control" placeholder="e.g. audio_muktavali_0.mp3" required>
+              </div>
+              <button type="submit" class="btn btn-sm" id="btn-audio-submit">Upload to GitHub</button>
+            </form>
+          </div>
+
+          <!-- Panel 2: Record -->
+          <div class="audio-panel" id="gen-audio-record-panel">
+            <div class="form-group">
+              <label for="gen-record-filename-input">Desired Filename in Repository</label>
+              <input type="text" id="gen-record-filename-input" class="form-control" placeholder="recorded_audio.webm" required>
+            </div>
+            <div class="record-status-container">
+              <button type="button" class="btn btn-sm btn-record" id="btn-gen-record-toggle">🎙️ Start Recording</button>
+              <span class="record-timer hidden" id="gen-record-timer">00:00</span>
+              <audio id="gen-record-player" class="audio-player-preview hidden" controls></audio>
+              <button type="button" class="btn btn-sm hidden" id="btn-gen-record-upload" style="background:var(--success); color:white;">Upload Recording</button>
+            </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('audio-modal-backdrop')">Cancel</button>
-          <button type="submit" class="btn btn-sm" id="btn-audio-submit">Upload to GitHub</button>
-        </div>
-      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('audio-modal-backdrop')">Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -1176,6 +1352,14 @@
         sutras: {}
       }
     };
+
+    // Recorder Global States
+    let recorderStream = null;
+    let voiceRecorder = null;
+    let voiceChunks = [];
+    let recordInterval = null;
+    let recordSeconds = 0;
+    let recordedBlob = null;
 
     // Helper: SHA-256 hash using Web Cryptography API
     async function sha256(str) {
@@ -1250,6 +1434,11 @@
           document.getElementById("audio-filename-input").value = e.target.files[0].name.toLowerCase().replace(/\s+/g, "_");
         }
       });
+      document.getElementById("sutra-audio-file-uploader").addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          document.getElementById("sutra-audio-input").value = e.target.files[0].name.toLowerCase().replace(/\s+/g, "_");
+        }
+      });
 
       // Form Submits
       document.getElementById("grantha-form").addEventListener("submit", submitGranthaForm);
@@ -1271,12 +1460,52 @@
         document.getElementById("sutra-audio-input").value = e.target.value;
       });
 
+      // Audio Widget panel toggles
+      document.querySelectorAll(".audio-mode-selector").forEach(selector => {
+        selector.addEventListener("click", (e) => {
+          if (e.target.classList.contains("mode-btn")) {
+            const panelId = e.target.getAttribute("data-panel");
+            const parent = e.target.closest(".audio-widget-container") || e.target.closest(".modal-body");
+            
+            parent.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
+            e.target.classList.add("active");
+            
+            parent.querySelectorAll(".audio-panel").forEach(p => p.classList.remove("active"));
+            parent.querySelector(`#${panelId}`).classList.add("active");
+          }
+        });
+      });
+
+      // Live Voice Recording Actions
+      setupRecordingListeners();
+
       // Logout
       document.getElementById("logout-btn").addEventListener("click", logOut);
 
       // Load config from LocalStorage if present
       loadSettingsFromStorage();
+
+      // Check session
+      checkSessionRestore();
     });
+
+    // Restore login session
+    function checkSessionRestore() {
+      const authSession = localStorage.getItem("tarka_auth_session");
+      if (authSession === "true") {
+        state.isAuthenticated = true;
+        document.getElementById("login-view").classList.add("hidden");
+        document.getElementById("dashboard-view").classList.remove("hidden");
+        logConsole("Active session restored from local storage.", "success");
+        if (state.pat) {
+          testConnection(false).then(success => {
+            if (success) {
+              fetchAllData();
+            }
+          });
+        }
+      }
+    }
 
     // Check Password & Login
     async function handleLogin(e) {
@@ -1290,9 +1519,10 @@
 
       if (hash === AUTH_HASH) {
         state.isAuthenticated = true;
+        localStorage.setItem("tarka_auth_session", "true");
         document.getElementById("login-view").classList.add("hidden");
         document.getElementById("dashboard-view").classList.remove("hidden");
-        logConsole("Authentication successful. Dashboard unlocked.", "success");
+        logConsole("Authentication successful. Session started.", "success");
         
         // Auto pull data if credentials exist
         if (state.pat) {
@@ -1315,11 +1545,12 @@
 
     function logOut() {
       state.isAuthenticated = false;
+      localStorage.removeItem("tarka_auth_session");
       document.getElementById("password-input").value = "";
       document.getElementById("login-error").style.display = "none";
       document.getElementById("dashboard-view").classList.add("hidden");
       document.getElementById("login-view").classList.remove("hidden");
-      logConsole("Logged out.", "info");
+      logConsole("Logged out. Session terminated.", "info");
     }
 
     // Save Settings
@@ -1372,7 +1603,7 @@
         granthas: "Granthas (ग्रन्थाः)",
         sutras: "Sutras (सूत्राणि)",
         audio: "Audio Files (ध्वनिमुद्रणानि)",
-        dictionary: "Dictionary (शब्दकोಶः)",
+        dictionary: "Dictionary (शब्दकोशः)",
         settings: "Settings (विन्यासः)"
       };
       document.getElementById("nav-title").innerText = titleMap[tabId] || "Dashboard";
@@ -1406,7 +1637,7 @@
           state.user = userData.login;
           document.getElementById("user-display").innerText = `Admin: ${state.user}`;
           updateGitStatus(true, `Connected as ${state.user}`);
-          if (notifyUser) logConsole(`GitHub Connection Successful! Connected as ${state.user}`, "success");
+          if (notifyUser) logConsole("GitHub Connection Successful!", "success");
           return true;
         } else {
           updateGitStatus(false, "Invalid credentials");
@@ -1556,14 +1787,14 @@
         if (response.ok) {
           const files = await response.json();
           state.audioFiles = files.filter(f => f.type === "file");
-          logConsole(`Successfully loaded ${state.audioFiles.length} audio files from repository.`, "success");
+          logConsole(`Successfully loaded ${state.audioFiles.length} audio files.`, "success");
           renderAudioFiles();
           populateSutraAudioDropdown();
         } else {
           throw new Error(response.statusText);
         }
       } catch (err) {
-        logConsole(`Error loading audio directory assets/audio: ${err.message}`, "error");
+        logConsole(`Error loading audio directory: ${err.message}`, "error");
         state.audioFiles = [];
         renderAudioFiles();
       }
@@ -1578,10 +1809,10 @@
         const { sha, data } = await fetchRepoFile(`assets/data/${state.activeGranthaId}.json`);
         state.sutras = data;
         state.shas.sutras[state.activeGranthaId] = sha;
-        logConsole(`Loaded ${data.length} sutras for ${state.activeGranthaId}.`, "success");
+        logConsole(`Loaded ${data.length} sutras.`, "success");
         renderSutras();
       } catch (err) {
-        logConsole(`Error loading ${state.activeGranthaId}.json (might be empty/new): ${err.message}`, "error");
+        logConsole(`Error loading ${state.activeGranthaId}.json: ${err.message}`, "error");
         state.sutras = [];
         state.shas.sutras[state.activeGranthaId] = null;
         renderSutras();
@@ -1667,8 +1898,6 @@
 
       state.audioFiles.forEach(f => {
         const sizeMb = (f.size / (1024 * 1024)).toFixed(2);
-        
-        // streaming direct URL from github or jsdelivr CDN
         const audioUrl = f.download_url;
 
         const tr = document.createElement("tr");
@@ -1739,7 +1968,7 @@
 
     function populateSutraAudioDropdown() {
       const select = document.getElementById("sutra-audio-select");
-      select.innerHTML = '<option value="">-- Select audio --</option>';
+      select.innerHTML = '<option value="">-- Select audio file --</option>';
       
       state.audioFiles.forEach(f => {
         const opt = document.createElement("option");
@@ -1779,6 +2008,7 @@
 
     window.closeModal = function(id) {
       document.getElementById(id).classList.remove("open");
+      stopVoiceRecording(); // ensure recorder state is reset when closing modal
     };
 
     // Grantha Modal Add/Edit
@@ -1820,6 +2050,20 @@
       
       const modeInput = document.getElementById("sutra-form-mode");
       const titleEl = document.getElementById("sutra-modal-title");
+
+      // Reset Audio widget styling/toggles
+      const container = document.querySelector("#sutra-modal-backdrop .audio-widget-container");
+      container.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
+      container.querySelector('[data-panel="sutra-audio-select-panel"]').classList.add("active");
+      container.querySelectorAll(".audio-panel").forEach(p => p.classList.remove("active"));
+      container.querySelector("#sutra-audio-select-panel").classList.add("active");
+
+      // Reset record UI state
+      document.getElementById("sutra-record-player").classList.add("hidden");
+      document.getElementById("sutra-record-timer").classList.add("hidden");
+      document.getElementById("btn-sutra-record-upload").classList.add("hidden");
+      document.getElementById("btn-sutra-record-toggle").innerText = "🎙️ Start Recording";
+      document.getElementById("btn-sutra-record-toggle").classList.remove("recording-active");
 
       // Populate Audio Dropdown options first
       populateSutraAudioDropdown();
@@ -1894,6 +2138,21 @@
     function openAudioModal() {
       const form = document.getElementById("audio-upload-form");
       form.reset();
+      
+      const container = document.getElementById("audio-modal-backdrop");
+      container.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
+      container.querySelector('[data-panel="gen-audio-upload-panel"]').classList.add("active");
+      container.querySelectorAll(".audio-panel").forEach(p => p.classList.remove("active"));
+      container.querySelector("#gen-audio-upload-panel").classList.add("active");
+
+      // reset record states
+      document.getElementById("gen-record-player").classList.add("hidden");
+      document.getElementById("gen-record-timer").classList.add("hidden");
+      document.getElementById("btn-gen-record-upload").classList.add("hidden");
+      document.getElementById("btn-gen-record-toggle").innerText = "🎙️ Start Recording";
+      document.getElementById("btn-gen-record-toggle").classList.remove("recording-active");
+      document.getElementById("gen-record-filename-input").value = `recorded_audio_${Date.now()}.webm`;
+
       openModal("audio-modal-backdrop");
     }
 
@@ -1962,7 +2221,6 @@
       } catch (err) {
         logConsole(`Failed to save Grantha: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
-        // Refresh index
         fetchGranthasJson();
       }
     }
@@ -2148,7 +2406,7 @@
       }
     }
 
-    // Submit Audio Upload Form (Binary Upload)
+    // Submit Audio Upload Form (Binary Upload from Tab)
     async function submitAudioUploadForm(e) {
       e.preventDefault();
       
@@ -2161,20 +2419,24 @@
         return;
       }
 
-      const file = fileInput.files[0];
-      
-      // Disable inputs and show loading state
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Uploading to GitHub...";
-      logConsole(`Reading audio file: ${file.name} (${(file.size/1024).toFixed(1)} KB)...`, "info");
+      await uploadAudioFile(fileInput.files[0], filename, submitBtn, () => {
+        closeModal("audio-modal-backdrop");
+        fetchAudioFiles();
+      });
+    }
+
+    // Core Binary Audio uploader helper
+    async function uploadAudioFile(fileObject, filename, buttonEl, successCallback) {
+      buttonEl.disabled = true;
+      buttonEl.innerText = "Uploading to GitHub...";
+      logConsole(`Uploading audio file ${filename} (${(fileObject.size / 1024).toFixed(1)} KB) to GitHub...`, "info");
 
       const reader = new FileReader();
       reader.onload = async () => {
         try {
-          const base64Data = reader.result.split(',')[1]; // Remove data URL prefix
+          const base64Data = reader.result.split(',')[1];
           const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio/${filename}`;
           
-          // Check if file exists to get SHA (for overwriting)
           let sha = null;
           try {
             const existingFileResp = await fetch(url + `?ref=${state.branch}`, {
@@ -2186,7 +2448,6 @@
             if (existingFileResp.ok) {
               const fileMeta = await existingFileResp.json();
               sha = fileMeta.sha;
-              logConsole(`Audio file already exists. Will overwrite existing file (SHA: ${sha}).`, "info");
             }
           } catch (_) {}
 
@@ -2199,7 +2460,6 @@
             body.sha = sha;
           }
 
-          logConsole(`Committing audio file to assets/audio/${filename}...`, "info");
           const response = await fetch(url, {
             method: "PUT",
             headers: {
@@ -2215,26 +2475,24 @@
             throw new Error(errorJson.message || response.statusText);
           }
 
-          logConsole(`Audio file ${filename} committed successfully!`, "success");
-          closeModal("audio-modal-backdrop");
-          await fetchAudioFiles();
+          logConsole(`Audio file ${filename} uploaded successfully.`, "success");
+          if (successCallback) successCallback(filename);
         } catch (err) {
-          logConsole(`Failed to upload audio: ${err.message}`, "error");
+          logConsole(`Upload failed: ${err.message}`, "error");
           alert(`Upload error: ${err.message}`);
         } finally {
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Upload to GitHub";
+          buttonEl.disabled = false;
+          buttonEl.innerText = "Upload";
         }
       };
-
-      reader.onerror = (err) => {
-        logConsole(`File reading error: ${err.message}`, "error");
+      
+      reader.onerror = () => {
+        logConsole("FileReader error.", "error");
         alert("Failed to read file.");
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Upload to GitHub";
+        buttonEl.disabled = false;
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(fileObject);
     }
 
     // Delete Audio File
@@ -2243,7 +2501,7 @@
         return;
       }
 
-      logConsole(`Deleting audio file '${filename}' from repository...`, "info");
+      logConsole(`Deleting audio file '${filename}'...`, "info");
       const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio/${filename}`;
       
       try {
@@ -2350,6 +2608,184 @@
         alert(`Error: ${err.message}`);
         fetchDictionaryJson();
       }
+    }
+
+    // --- DIRECT MICROPHONE RECORDING SYSTEM ---
+
+    function getSupportedMimeType() {
+      const types = ["audio/webm", "audio/ogg", "audio/mp4", "audio/wav", "audio/aac"];
+      for (const t of types) {
+        if (MediaRecorder.isTypeSupported(t)) {
+          return t;
+        }
+      }
+      return "";
+    }
+
+    function setupRecordingListeners() {
+      // 1. Sutra Modal Recorder
+      const btnSutraRecord = document.getElementById("btn-sutra-record-toggle");
+      btnSutraRecord.addEventListener("click", () => {
+        toggleRecording("sutra");
+      });
+
+      document.getElementById("btn-sutra-record-upload").addEventListener("click", async () => {
+        if (!recordedBlob) return;
+        
+        const ext = getSupportedMimeType().includes("mp4") ? "m4a" : "webm";
+        let defaultName = `audio_${state.activeGranthaId}_rec_${Date.now()}.${ext}`;
+        const finalName = prompt("Enter a filename for your recording in the repository:", defaultName);
+        
+        if (!finalName) return;
+
+        const uploadBtn = document.getElementById("btn-sutra-record-upload");
+        const fileObj = new File([recordedBlob], finalName, { type: recordedBlob.type });
+
+        await uploadAudioFile(fileObj, finalName, uploadBtn, (uploadedFilename) => {
+          document.getElementById("sutra-audio-input").value = uploadedFilename;
+          uploadBtn.classList.add("hidden");
+          // Refresh list of audios in background
+          fetchAudioFiles();
+        });
+      });
+
+      // 2. Audio tab Modal Recorder
+      const btnGenRecord = document.getElementById("btn-gen-record-toggle");
+      btnGenRecord.addEventListener("click", () => {
+        toggleRecording("gen");
+      });
+
+      document.getElementById("btn-gen-record-upload").addEventListener("click", async () => {
+        if (!recordedBlob) return;
+        
+        const filename = document.getElementById("gen-record-filename-input").value.trim();
+        if (!filename) {
+          alert("Please specify a filename first.");
+          return;
+        }
+
+        const uploadBtn = document.getElementById("btn-gen-record-upload");
+        const fileObj = new File([recordedBlob], filename, { type: recordedBlob.type });
+
+        await uploadAudioFile(fileObj, filename, uploadBtn, () => {
+          closeModal("audio-modal-backdrop");
+          fetchAudioFiles();
+        });
+      });
+
+      // Inline uploader inside Sutra Modal widget
+      document.getElementById("btn-sutra-audio-upload-action").addEventListener("click", async () => {
+        const fileInput = document.getElementById("sutra-audio-file-uploader");
+        const filenameInput = document.getElementById("sutra-audio-input");
+        const uploadBtn = document.getElementById("btn-sutra-audio-upload-action");
+
+        if (fileInput.files.length === 0) {
+          alert("Please choose a file first.");
+          return;
+        }
+
+        const file = fileInput.files[0];
+        const filename = filenameInput.value.trim() || file.name.toLowerCase().replace(/\s+/g, "_");
+        
+        await uploadAudioFile(file, filename, uploadBtn, (uploadedName) => {
+          filenameInput.value = uploadedName;
+          fetchAudioFiles();
+        });
+      });
+    }
+
+    async function toggleRecording(context) {
+      const isSutra = context === "sutra";
+      const btn = isSutra ? document.getElementById("btn-sutra-record-toggle") : document.getElementById("btn-gen-record-toggle");
+      const timerEl = isSutra ? document.getElementById("sutra-record-timer") : document.getElementById("gen-record-timer");
+      const player = isSutra ? document.getElementById("sutra-record-player") : document.getElementById("gen-record-player");
+      const uploadBtn = isSutra ? document.getElementById("btn-sutra-record-upload") : document.getElementById("btn-gen-record-upload");
+
+      if (voiceRecorder && voiceRecorder.state === "recording") {
+        // Stop recording
+        voiceRecorder.stop();
+        stopRecordTimer(timerEl);
+        btn.innerText = "🎙️ Start Recording";
+        btn.classList.remove("recording-active");
+      } else {
+        // Start recording
+        audioChunks = [];
+        recordedBlob = null;
+        player.classList.add("hidden");
+        uploadBtn.classList.add("hidden");
+
+        const mime = getSupportedMimeType();
+        if (!mime) {
+          alert("Your browser does not support voice recording.");
+          return;
+        }
+
+        try {
+          recorderStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          voiceRecorder = new MediaRecorder(recorderStream, { mimeType: mime });
+          
+          voiceChunks = [];
+          voiceRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              voiceChunks.push(event.data);
+            }
+          };
+
+          voiceRecorder.onstop = () => {
+            recordedBlob = new Blob(voiceChunks, { type: mime });
+            const audioUrl = URL.createObjectURL(recordedBlob);
+            
+            // Show preview
+            player.src = audioUrl;
+            player.classList.remove("hidden");
+            uploadBtn.classList.remove("hidden");
+
+            // Stop mic tracks
+            if (recorderStream) {
+              recorderStream.getTracks().forEach(track => track.stop());
+            }
+          };
+
+          voiceRecorder.start();
+          btn.innerText = "⏹️ Stop Recording";
+          btn.classList.add("recording-active");
+          startRecordTimer(timerEl);
+          logConsole(`Microphone recording started (${mime})...`, "info");
+        } catch (err) {
+          logConsole(`Recording error: ${err.message}`, "error");
+          alert("Could not access microphone: " + err.message);
+        }
+      }
+    }
+
+    function stopVoiceRecording() {
+      if (voiceRecorder && voiceRecorder.state === "recording") {
+        voiceRecorder.stop();
+      }
+      if (recorderStream) {
+        recorderStream.getTracks().forEach(track => track.stop());
+      }
+      clearInterval(recordInterval);
+      recordInterval = null;
+      recordedBlob = null;
+    }
+
+    function startRecordTimer(timerEl) {
+      timerEl.classList.remove("hidden");
+      recordSeconds = 0;
+      timerEl.innerText = "00:00";
+      
+      recordInterval = setInterval(() => {
+        recordSeconds++;
+        const minutes = Math.floor(recordSeconds / 60).toString().padStart(2, '0');
+        const seconds = (recordSeconds % 60).toString().padStart(2, '0');
+        timerEl.innerText = `${minutes}:${seconds}`;
+      }, 1000);
+    }
+
+    function stopRecordTimer(timerEl) {
+      clearInterval(recordInterval);
+      recordInterval = null;
     }
   </script>
 </body>
