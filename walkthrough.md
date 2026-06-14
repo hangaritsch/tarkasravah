@@ -36,20 +36,24 @@ To transition the app from a single hardcoded text to an expandable Sanskrit e-r
 
 We built a gorgeous, zero-dependency, single-page CMS application inside [cms/index.html](file:///opt/homebrew/var/www/app/tarkasravah/cms/index.html) that can be hosted for free on GitHub Pages:
 
-### 1. Key Security Features
+### 1. Key Security & Session Features
 * **Password Protection**: Access requires entering the password **`Tarka@2026`**. The password is validated securely client-side via a SHA-256 cryptographic hash check.
+* **Session Persistence [NEW]**: Login state is saved in the browser's local sandbox so that refreshing the page maintains your authenticated session.
 * **GitHub Personal Access Token (PAT)**: Admin commits are securely sent using a browser-supplied GitHub PAT. The token is stored locally in the browser's sandbox (`localStorage`) and is never sent to any external server other than the GitHub API.
 
-### 2. Rich Administrative Dashboard
-* **Saffron/Maroon Design**: Aesthetic matches the reader app with gold/maroon accents, glassmorphic card layouts, responsive sidebar, and custom animations.
+### 2. Rich Administrative Dashboard & Unified Audio Uploader
+* **Saffron/Maroon Design**: Aesthetic matches the reader app with gold/maroon accents, glassmorphic card layouts, responsive sidebar, glowing focused inputs, and custom transitions.
 * **Grantha Manager**: Add, edit, or delete Granthas. Adding a text commits an updated index file and automatically initializes a new `<grantha_id>.json` file in your repository.
-* **Sutra Editor**: Add, edit, or delete sutras for any chosen Grantha. Modifying a sutra automatically updates its database file and recalculates the central `sutra_count` field in `granthas.json`.
-* **Dictionary Editor**: Search, filter, add, edit, or delete words in `dictionary.json`.
-* **Audio Files Manager [NEW]**: Full binary CRUD capabilities for audio tracks:
+* **Sutra Editor (Unified Audio Management) [UPDATED]**: Add, edit, or delete sutras for any chosen Grantha. Managing audio files is now integrated directly inside the Sutra add/edit modal:
+  * **Select Existing**: Dropdown listing all uploaded files currently in the repository.
+  * **Upload File**: Select a local `.mp3` and upload it directly inside the modal.
+  * **Record Live**: Direct browser voice recording with mic permissions, a live elapsed timer, a preview player, and a "Save & Use" upload action.
+* **Audio Files Manager**: Full binary CRUD capabilities for audio tracks:
   * **Upload MP3**: Choose a local `.mp3` file, set its filename, and upload it directly as base64 binary content.
+  * **Direct Microphone Recording [NEW]**: Pulse-animated microphone recording widget. Audio is recorded using the standard browser `MediaRecorder` API and automatically encoded/saved to the repository.
   * **Preview Player**: Listen to uploaded files directly in the CMS using an HTML5 audio player.
   * **Delete Audio**: Remove audio files from `assets/audio/` directly via the interface.
-  * **Sutra Dropdown Integration**: Adding or editing a sutra now features an audio dropdown list displaying all uploaded files in the repository for easier selection.
+* **Dictionary Editor**: Search, filter, add, edit, or delete words in `dictionary.json`.
 * **Integrated Git Console**: A floating console displays a live log stream of network requests, connection checks, and Git commits (showing successful SHAs).
 
 ---
