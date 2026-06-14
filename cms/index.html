@@ -1752,7 +1752,7 @@
 
     // GET file from repo
     async function fetchRepoFile(path) {
-      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}?ref=${state.branch}`;
+      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}?ref=${state.branch}&t=${Date.now()}`;
       
       const response = await fetch(url, {
         headers: {
@@ -1841,7 +1841,7 @@
     // Fetch Audio files from directory
     async function fetchAudioFiles() {
       if (!state.pat) return;
-      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio?ref=${state.branch}`;
+      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio?ref=${state.branch}&t=${Date.now()}`;
       
       try {
         const response = await fetch(url, {
@@ -2546,7 +2546,7 @@
 
       await uploadAudioFile(fileInput.files[0], filename, submitBtn, () => {
         closeModal("audio-modal-backdrop");
-        fetchAudioFiles();
+        setTimeout(fetchAudioFiles, 1500);
       });
     }
 
@@ -2573,7 +2573,7 @@
           
           let sha = null;
           try {
-            const existingFileResp = await fetch(url + `?ref=${state.branch}`, {
+            const existingFileResp = await fetch(url + `?ref=${state.branch}&t=${Date.now()}`, {
               headers: {
                 "Authorization": `Bearer ${state.pat}`,
                 "Accept": "application/vnd.github+json"
@@ -2691,7 +2691,7 @@
         populateSutraAudioDropdown();
 
         // Background refetch to stay in sync
-        fetchAudioFiles();
+        setTimeout(fetchAudioFiles, 1500);
       } catch (err) {
         logConsole(`Failed to delete audio file: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
@@ -2811,7 +2811,7 @@
         await uploadAudioFile(fileObj, finalName, uploadBtn, (uploadedFilename) => {
           document.getElementById("sutra-audio-input").value = uploadedFilename;
           uploadBtn.classList.add("hidden");
-          fetchAudioFiles();
+          setTimeout(fetchAudioFiles, 1500);
         });
       });
 
@@ -2835,7 +2835,7 @@
 
         await uploadAudioFile(fileObj, filename, uploadBtn, () => {
           closeModal("audio-modal-backdrop");
-          fetchAudioFiles();
+          setTimeout(fetchAudioFiles, 1500);
         });
       });
 
@@ -2880,7 +2880,7 @@
             }
           }
 
-          fetchAudioFiles();
+          setTimeout(fetchAudioFiles, 1500);
         });
       });
 
@@ -2922,7 +2922,7 @@
             }
           }
 
-          fetchAudioFiles();
+          setTimeout(fetchAudioFiles, 1500);
         });
       });
 
@@ -2947,7 +2947,7 @@
         
         await uploadAudioFile(file, filename, uploadBtn, (uploadedName) => {
           filenameInput.value = uploadedName;
-          fetchAudioFiles();
+          setTimeout(fetchAudioFiles, 1500);
         });
       });
     }

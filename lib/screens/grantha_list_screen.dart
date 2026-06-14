@@ -309,6 +309,22 @@ class GranthaListScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(width: 6),
+          IconButton(
+            icon: Icon(Icons.delete_outline_rounded, color: accent, size: 18),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            tooltip: "Delete offline data",
+            onPressed: () {
+              provider.deleteGranthaOfflineCache(grantha);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Deleted offline cache for ${grantha.title}"),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+          ),
         ],
       );
     }

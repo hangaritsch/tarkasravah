@@ -115,19 +115,38 @@ class ReaderProvider extends ChangeNotifier {
       final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      // 1. Load Granthas list (from cache or bundle assets)
-      if (await granthasCacheFile.exists()) {
-        try {
-          final content = await granthasCacheFile.readAsString();
-          final List<dynamic> jsonList = json.decode(content);
-          _granthas = jsonList.map((j) => Grantha.fromJson(j)).toList();
-          debugPrint("Loaded granthas index from local document cache.");
-        } catch (e) {
-          debugPrint("Error loading granthas from cache: $e");
+      final rawUrlPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/data';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      // Try fetching index from CDN first on startup if online
+      try {
+        final gResp = await http.get(Uri.parse('$rawUrlPrefix/granthas.json?t=$timestamp')).timeout(const Duration(seconds: 5));
+        if (gResp.statusCode == 200) {
+          final decoded = json.decode(gResp.body);
+          if (decoded is List) {
+            await granthasCacheFile.writeAsString(gResp.body);
+            _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
+            debugPrint("Successfully fetched latest granthas index from CDN on startup.");
+          }
+        }
+      } catch (e) {
+        debugPrint("CDN fetch for granthas list failed on startup, loading cached/bundle: $e");
+      }
+
+      // Fallback: load index from cache or assets
+      if (_granthas.isEmpty) {
+        if (await granthasCacheFile.exists()) {
+          try {
+            final content = await granthasCacheFile.readAsString();
+            final List<dynamic> jsonList = json.decode(content);
+            _granthas = jsonList.map((j) => Grantha.fromJson(j)).toList();
+            debugPrint("Loaded granthas index from local cache.");
+          } catch (_) {
+            _granthas = await _loadGranthasFromAsset();
+          }
+        } else {
           _granthas = await _loadGranthasFromAsset();
         }
-      } else {
-        _granthas = await _loadGranthasFromAsset();
       }
 
       // Set active grantha (defaults to the first one)
@@ -135,24 +154,43 @@ class ReaderProvider extends ChangeNotifier {
         _activeGrantha = _granthas.first;
       }
 
-      // 2. Load Dictionary
-      if (await dictCacheFile.exists()) {
-        try {
-          final content = await dictCacheFile.readAsString();
-          _dictionary = json.decode(content);
-          debugPrint("Loaded dictionary from local document cache.");
-        } catch (e) {
+      // Update the offline maps before loading active sutras
+      await checkOfflineStatus();
+
+      // Try fetching dictionary from CDN on startup if online
+      try {
+        final dResp = await http.get(Uri.parse('$rawUrlPrefix/dictionary.json?t=$timestamp')).timeout(const Duration(seconds: 5));
+        if (dResp.statusCode == 200) {
+          final decoded = json.decode(dResp.body);
+          if (decoded is Map) {
+            await dictCacheFile.writeAsString(dResp.body);
+            _dictionary = decoded.cast<String, dynamic>();
+            debugPrint("Successfully fetched latest dictionary from CDN on startup.");
+          }
+        }
+      } catch (e) {
+        debugPrint("CDN fetch for dictionary failed on startup, loading cached/bundle: $e");
+      }
+
+      // Fallback: load dictionary from cache or assets
+      if (_dictionary.isEmpty) {
+        if (await dictCacheFile.exists()) {
+          try {
+            final content = await dictCacheFile.readAsString();
+            _dictionary = json.decode(content);
+            debugPrint("Loaded dictionary from local cache.");
+          } catch (_) {
+            _dictionary = await _loadDictionaryFromAsset();
+          }
+        } else {
           _dictionary = await _loadDictionaryFromAsset();
         }
-      } else {
-        _dictionary = await _loadDictionaryFromAsset();
       }
 
       // 3. Load active Grantha's sutras
       await loadSutrasForActiveGrantha();
 
       _isLoading = false;
-      await checkOfflineStatus();
       notifyListeners();
 
       // Trigger background sync with a short delay to let network stack initialize
@@ -182,6 +220,34 @@ class ReaderProvider extends ChangeNotifier {
     if (_activeGrantha == null) return;
     
     final granthaId = _activeGrantha!.id;
+    final isOfflineReady = _isGranthaOfflineReady[granthaId] == true;
+
+    if (!isOfflineReady) {
+      // Online first loading: fetch from CDN directly if not downloaded
+      try {
+        final rawUrlPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/data';
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        final response = await http.get(Uri.parse('$rawUrlPrefix/$granthaId.json?t=$timestamp')).timeout(const Duration(seconds: 6));
+        
+        if (response.statusCode == 200) {
+          final decoded = json.decode(response.body);
+          if (decoded is List) {
+            _sutras = decoded.map((j) => Sutra.fromJson(j)).toList();
+            // Silently cache it locally
+            final directory = await getApplicationDocumentsDirectory();
+            final sutrasCacheFile = File('${directory.path}/${granthaId}_cache.json');
+            await sutrasCacheFile.writeAsString(response.body);
+            debugPrint("Loaded sutras for $granthaId directly from CDN.");
+            notifyListeners();
+            return;
+          }
+        }
+      } catch (e) {
+        debugPrint("CDN fetch failed for $granthaId (falling back to cache/assets): $e");
+      }
+    }
+
+    // Fallback/Offline loading
     try {
       final directory = await getApplicationDocumentsDirectory();
       final sutrasCacheFile = File('${directory.path}/${granthaId}_cache.json');
@@ -585,6 +651,53 @@ class ReaderProvider extends ChangeNotifier {
       _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
       debugPrint("Error downloading grantha offline files: $e");
       notifyListeners();
+    }
+  }
+
+  // Deletes cached offline files for a specific Grantha
+  Future<void> deleteGranthaOfflineCache(Grantha grantha) async {
+    final granthaId = grantha.id;
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      
+      // Load sutras to find audio filenames
+      final gCacheFile = File('${directory.path}/${granthaId}_cache.json');
+      List<Sutra> gSutras = [];
+      
+      if (await gCacheFile.exists()) {
+        try {
+          final content = await gCacheFile.readAsString();
+          final List<dynamic> decodedList = json.decode(content);
+          gSutras = decodedList.map((j) => Sutra.fromJson(j)).toList();
+        } catch (_) {}
+        await gCacheFile.delete();
+        debugPrint("Deleted cached JSON database for $granthaId");
+      }
+
+      // If we couldn't load from cache, fallback to asset to get list of audios to delete
+      if (gSutras.isEmpty) {
+        gSutras = await _loadSutrasFromAsset(granthaId);
+      }
+
+      // Delete audio files
+      for (var sutra in gSutras) {
+        if (sutra.audio.isNotEmpty) {
+          final localAudioFile = File('${directory.path}/${sutra.audio}');
+          if (await localAudioFile.exists()) {
+            await localAudioFile.delete();
+            debugPrint("Deleted cached audio: ${sutra.audio}");
+          }
+        }
+      }
+
+      _isGranthaOfflineReady[granthaId] = false;
+      _granthaDownloadProgress[granthaId] = 0.0;
+      _isGranthaDownloading[granthaId] = false;
+      
+      await checkOfflineStatus();
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Error deleting cached files for $granthaId: $e");
     }
   }
 
