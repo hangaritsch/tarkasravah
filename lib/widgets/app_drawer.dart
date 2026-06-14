@@ -215,29 +215,34 @@ class AppDrawer extends StatelessWidget {
                                  color: text,
                                ),
                              ),
-                             DropdownButton<String>(
-                               value: provider.devanagariFont,
-                               dropdownColor: bg,
-                               style: TextStyle(color: text, fontSize: 13),
-                               underline: Container(
-                                 height: 1.0,
-                                 color: accent.withAlpha(60),
-                                ),
-                               icon: Icon(Icons.arrow_drop_down, color: accent),
-                               onChanged: (String? newFont) {
-                                 if (newFont != null) {
-                                   provider.setDevanagariFont(newFont);
-                                 }
-                               },
-                               items: ReaderProvider.supportedDevanagariFonts
-                                   .map((font) => DropdownMenuItem<String>(
-                                         value: font,
-                                         child: Text(
-                                           font,
-                                           style: TextStyle(color: text),
-                                         ),
-                                       ))
-                                   .toList(),
+                             SizedBox(
+                               width: 140,
+                               child: DropdownButton<String>(
+                                 value: provider.devanagariFont,
+                                 dropdownColor: bg,
+                                 isExpanded: true,
+                                 style: TextStyle(color: text, fontSize: 13),
+                                 underline: Container(
+                                   height: 1.0,
+                                   color: accent.withAlpha(60),
+                                 ),
+                                 icon: Icon(Icons.arrow_drop_down, color: accent),
+                                 onChanged: (String? newFont) {
+                                   if (newFont != null) {
+                                     provider.setDevanagariFont(newFont);
+                                   }
+                                 },
+                                 items: ReaderProvider.supportedDevanagariFonts
+                                     .map((font) => DropdownMenuItem<String>(
+                                           value: font,
+                                           child: Text(
+                                             font,
+                                             style: TextStyle(color: text),
+                                             overflow: TextOverflow.ellipsis,
+                                           ),
+                                         ))
+                                     .toList(),
+                               ),
                              ),
                            ],
                          ),
