@@ -1403,6 +1403,9 @@
       tempManageAudioFilename: "",
       tempManageSutraId: null,
 
+      // Local audio object URLs cache to bypass GitHub raw 5-min caching delay
+      localAudioCache: {},
+
       // Git SHAs for commits (GitHub API requires these to overwrite files)
       shas: {
         granthas: null,
@@ -1961,7 +1964,10 @@
 
       state.audioFiles.forEach(f => {
         const sizeMb = (f.size / (1024 * 1024)).toFixed(2);
-        const audioUrl = f.download_url;
+        let audioUrl = f.download_url;
+        if (state.localAudioCache && state.localAudioCache[f.name]) {
+          audioUrl = state.localAudioCache[f.name];
+        }
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -2231,10 +2237,13 @@
       // Stop voice recorder state if running
       stopVoiceRecording();
 
-      // Set current audio preview player src (using GitHub Raw CDN)
+      // Set current audio preview player src (using GitHub Raw CDN or Local Cache)
       const player = document.getElementById("manage-audio-player");
       if (hasAudio) {
-        const audioUrl = `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/assets/audio/${audioFilename}`;
+        let audioUrl = `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/assets/audio/${audioFilename}`;
+        if (state.localAudioCache && state.localAudioCache[audioFilename]) {
+          audioUrl = state.localAudioCache[audioFilename];
+        }
         player.src = audioUrl;
         player.style.display = "block";
         player.load();
@@ -2540,6 +2549,15 @@
       buttonEl.disabled = true;
       buttonEl.innerText = "Uploading to GitHub...";
       logConsole(`Uploading audio file ${filename} (${(fileObject.size / 1024).toFixed(1)} KB) to GitHub...`, "info");
+
+      // Cache the file locally to bypass GitHub raw CDN 5-minute cache and update players instantly
+      if (!state.localAudioCache) {
+        state.localAudioCache = {};
+      }
+      if (state.localAudioCache[filename]) {
+        try { URL.revokeObjectURL(state.localAudioCache[filename]); } catch (_) {}
+      }
+      state.localAudioCache[filename] = URL.createObjectURL(fileObject);
 
       const reader = new FileReader();
       reader.onload = async () => {
