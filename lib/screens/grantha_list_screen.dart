@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/reader_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/offline_warning_banner.dart';
 import 'library_screen.dart';
 
 class GranthaListScreen extends StatelessWidget {
@@ -77,6 +78,7 @@ class GranthaListScreen extends StatelessWidget {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const OfflineWarningBanner(),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                       child: Column(
@@ -215,16 +217,17 @@ class GranthaListScreen extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 16),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
+                                        _buildDownloadStatus(context, provider, grantha, accent, text, secText),
+                                        const Spacer(),
                                         if (isActive) ...[
-                                          Icon(Icons.check_circle, color: Colors.green, size: 18),
-                                          const SizedBox(width: 6),
+                                          Icon(Icons.check_circle, color: Colors.green, size: 16),
+                                          const SizedBox(width: 4),
                                           Text(
-                                            "Currently Selected",
+                                            "Selected",
                                             style: TextStyle(
                                               color: Colors.green,
-                                              fontSize: 12,
+                                              fontSize: 11,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -250,6 +253,89 @@ class GranthaListScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+    );
+  }
+
+  Widget _buildDownloadStatus(
+    BuildContext context,
+    ReaderProvider provider,
+    dynamic grantha,
+    Color accent,
+    Color textColor,
+    Color secText,
+  ) {
+    final isDownloading = provider.isGranthaDownloading[grantha.id] ?? false;
+    final progress = provider.granthaDownloadProgress[grantha.id] ?? 0.0;
+    final isOfflineReady = provider.isGranthaOfflineReady[grantha.id] ?? false;
+
+    if (isDownloading) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(
+              value: progress,
+              strokeWidth: 2.0,
+              valueColor: AlwaysStoppedAnimation<Color>(accent),
+              backgroundColor: accent.withAlpha(30),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            "Downloading ${(progress * 100).toStringAsFixed(0)}%",
+            style: TextStyle(
+              fontSize: 11,
+              color: secText,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      );
+    }
+
+    if (isOfflineReady) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.cloud_done_rounded, color: Colors.green, size: 16),
+          const SizedBox(width: 4),
+          Text(
+            "Offline Ready",
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return InkWell(
+      onTap: () {
+        provider.downloadGranthaForOffline(grantha);
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.cloud_download_outlined, color: accent, size: 16),
+            const SizedBox(width: 6),
+            Text(
+              "Download Offline",
+              style: TextStyle(
+                fontSize: 11,
+                color: accent,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

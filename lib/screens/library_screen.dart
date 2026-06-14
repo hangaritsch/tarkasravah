@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../providers/reader_provider.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/offline_warning_banner.dart';
 import 'reader_screen.dart';
 import 'search_screen.dart';
 
@@ -88,99 +89,106 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 )
-              : ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  itemCount: provider.sutras.length,
-                  itemBuilder: (context, index) {
-                    final sutra = provider.sutras[index];
-                    final isPlaying = provider.playingSutraId == sutra.id;
-                    final isAudioPlaying = isPlaying && provider.playerState == PlayerState.playing;
+              : Column(
+                  children: [
+                    const OfflineWarningBanner(),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        itemCount: provider.sutras.length,
+                        itemBuilder: (context, index) {
+                          final sutra = provider.sutras[index];
+                          final isPlaying = provider.playingSutraId == sutra.id;
+                          final isAudioPlaying = isPlaying && provider.playerState == PlayerState.playing;
 
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      color: cardBg,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(
-                          color: isPlaying ? accent : accent.withAlpha(20),
-                          width: isPlaying ? 2.0 : 1.0,
-                        ),
-                      ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReaderScreen(initialSutraId: sutra.id),
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            color: cardBg,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: isPlaying ? accent : accent.withAlpha(20),
+                                width: isPlaying ? 2.0 : 1.0,
+                              ),
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReaderScreen(initialSutraId: sutra.id),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        // Sutra Number Badge
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: accent.withAlpha(25),
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            "Sutra ${sutra.sutraNumber}",
+                                            style: TextStyle(
+                                              color: accent,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        // Audio Play / Pause Button
+                                        IconButton(
+                                          icon: Icon(
+                                            isAudioPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
+                                            color: accent,
+                                            size: 32,
+                                          ),
+                                          onPressed: () => provider.playAudio(sutra),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    // Title
+                                    Text(
+                                      sutra.title,
+                                      style: TextStyle(
+                                        color: text,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    // First line of Sanskrit
+                                    Text(
+                                      sutra.sanskrit,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'PragatiNarrow',
+                                        fontSize: 18,
+                                        color: text.withAlpha(220),
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  // Sutra Number Badge
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: accent.withAlpha(25),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      "Sutra ${sutra.sutraNumber}",
-                                      style: TextStyle(
-                                        color: accent,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  // Audio Play / Pause Button
-                                  IconButton(
-                                    icon: Icon(
-                                      isAudioPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
-                                      color: accent,
-                                      size: 32,
-                                    ),
-                                    onPressed: () => provider.playAudio(sutra),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              // Title
-                              Text(
-                                sutra.title,
-                                style: TextStyle(
-                                  color: text,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              // First line of Sanskrit
-                              Text(
-                                sutra.sanskrit,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontFamily: 'PragatiNarrow',
-                                  fontSize: 18,
-                                  color: text.withAlpha(220),
-                                  height: 1.4,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
     );
   }

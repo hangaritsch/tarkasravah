@@ -29,6 +29,12 @@ class ReaderProvider extends ChangeNotifier {
   double _downloadProgress = 0.0;
   bool _isFullyOfflineReady = false;
 
+  // Per-Grantha Caching States
+  final Map<String, double> _granthaDownloadProgress = {};
+  final Map<String, bool> _isGranthaDownloading = {};
+  final Map<String, bool> _isGranthaOfflineReady = {};
+  String? _networkStatusMessage;
+
   // Track latest commit SHA from GitHub to bypass jsDelivr CDN caching
   String _commitSha = 'main';
 
@@ -53,6 +59,10 @@ class ReaderProvider extends ChangeNotifier {
   bool get isDownloadingAll => _isDownloadingAll;
   double get downloadProgress => _downloadProgress;
   bool get isFullyOfflineReady => _isFullyOfflineReady;
+  Map<String, double> get granthaDownloadProgress => _granthaDownloadProgress;
+  Map<String, bool> get isGranthaDownloading => _isGranthaDownloading;
+  Map<String, bool> get isGranthaOfflineReady => _isGranthaOfflineReady;
+  String? get networkStatusMessage => _networkStatusMessage;
   int? get playingSutraId => _playingSutraId;
   PlayerState get playerState => _playerState;
   Duration get duration => _duration;
@@ -91,6 +101,7 @@ class ReaderProvider extends ChangeNotifier {
     _activeGrantha = grantha;
     notifyListeners();
     await loadSutrasForActiveGrantha();
+    syncFromRemote();
   }
 
   // Load local JSON assets & handle cache / background CDN sync
@@ -243,46 +254,30 @@ class ReaderProvider extends ChangeNotifier {
     return false;
   }
 
-  // Background CDN sync
+  // Background remote sync
   Future<void> syncFromRemote() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       
-      // Load cached SHA if available
-      final shaFile = File('${directory.path}/commit_sha.txt');
-      String cachedSha = '';
-      if (await shaFile.exists()) {
-        cachedSha = (await shaFile.readAsString()).trim();
-      }
+      final rawUrlPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/data';
+      final rawAudioPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/audio';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
 
-      await fetchLatestCommitSha();
-
-      // If SHA hasn't changed and we already have cached files, skip sync!
-      if (_commitSha != 'main' && cachedSha == _commitSha) {
-        debugPrint("No remote changes. Already synced at commit: $_commitSha");
-        return;
-      }
-
-      final granthasCacheFile = File('${directory.path}/granthas_cache.json');
-      final dictCacheFile = File('${directory.path}/dictionary_cache.json');
-
-      final cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/data';
-      final cdnAudioPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/audio';
-
-      debugPrint("Attempting background CDN sync at commit $_commitSha...");
+      debugPrint("Attempting background sync from GitHub repository...");
 
       bool granthasUpdated = false;
       bool activeSutrasUpdated = false;
 
       // 1. Sync Granthas index
-      final granthasResponse = await http.get(Uri.parse('$cdnUrlPrefix/granthas.json')).timeout(const Duration(seconds: 8));
+      final granthasResponse = await http.get(Uri.parse('$rawUrlPrefix/granthas.json?t=$timestamp')).timeout(const Duration(seconds: 8));
       if (granthasResponse.statusCode == 200) {
         final decoded = json.decode(granthasResponse.body);
         if (decoded is List) {
+          final granthasCacheFile = File('${directory.path}/granthas_cache.json');
           await granthasCacheFile.writeAsString(granthasResponse.body);
           _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
           granthasUpdated = true;
-          debugPrint("Granthas index successfully synced from CDN and cached.");
+          debugPrint("Granthas index successfully synced from GitHub.");
         }
       }
 
@@ -292,36 +287,35 @@ class ReaderProvider extends ChangeNotifier {
       }
 
       // 2. Sync Dictionary
-      final dictResponse = await http.get(Uri.parse('$cdnUrlPrefix/dictionary.json')).timeout(const Duration(seconds: 8));
+      final dictResponse = await http.get(Uri.parse('$rawUrlPrefix/dictionary.json?t=$timestamp')).timeout(const Duration(seconds: 8));
       if (dictResponse.statusCode == 200) {
         final decoded = json.decode(dictResponse.body);
         if (decoded is Map) {
+          final dictCacheFile = File('${directory.path}/dictionary_cache.json');
           await dictCacheFile.writeAsString(dictResponse.body);
           _dictionary = decoded.cast<String, dynamic>();
-          debugPrint("Dictionary successfully synced from CDN and cached.");
+          debugPrint("Dictionary successfully synced from GitHub.");
         }
       }
 
       // 3. Sync Active Grantha's Sutras
       if (_activeGrantha != null) {
         final activeId = _activeGrantha!.id;
-        final activeCacheFile = File('${directory.path}/${activeId}_cache.json');
-        final activeResponse = await http.get(Uri.parse('$cdnUrlPrefix/$activeId.json')).timeout(const Duration(seconds: 8));
+        final activeResponse = await http.get(Uri.parse('$rawUrlPrefix/$activeId.json?t=$timestamp')).timeout(const Duration(seconds: 8));
         if (activeResponse.statusCode == 200) {
           final decoded = json.decode(activeResponse.body);
           if (decoded is List) {
+            final activeCacheFile = File('${directory.path}/${activeId}_cache.json');
             await activeCacheFile.writeAsString(activeResponse.body);
             _sutras = decoded.map((j) => Sutra.fromJson(j)).toList();
             activeSutrasUpdated = true;
-            debugPrint("Active sutras ($activeId) successfully synced from CDN and cached.");
+            debugPrint("Active sutras ($activeId) successfully synced from GitHub.");
           }
         }
       }
 
-      // Save the newly synced commit SHA
-      if (_commitSha != 'main') {
-        await shaFile.writeAsString(_commitSha);
-      }
+      // If sync was successful, clear any network warnings
+      _networkStatusMessage = null;
 
       // If user had previously enabled "Offline Mode", proactively download 
       // all files (including new Granthas and their audios) in the background.
@@ -331,7 +325,7 @@ class ReaderProvider extends ChangeNotifier {
           final gFile = File('${directory.path}/${grantha.id}_cache.json');
           List<Sutra> gSutras = [];
           if (!await gFile.exists()) {
-            final gResp = await http.get(Uri.parse('$cdnUrlPrefix/${grantha.id}.json')).timeout(const Duration(seconds: 8));
+            final gResp = await http.get(Uri.parse('$rawUrlPrefix/${grantha.id}.json?t=$timestamp')).timeout(const Duration(seconds: 8));
             if (gResp.statusCode == 200) {
               await gFile.writeAsString(gResp.body);
               final decoded = json.decode(gResp.body);
@@ -350,10 +344,10 @@ class ReaderProvider extends ChangeNotifier {
           for (var sutra in gSutras) {
             if (sutra.audio.isEmpty) continue;
             final localAudioFile = File('${directory.path}/${sutra.audio}');
-            final cdnAudioUrl = '$cdnAudioPrefix/${sutra.audio}';
+            final rawAudioUrl = '$rawAudioPrefix/${sutra.audio}';
             
-            if (await _shouldUpdateAudioFile(cdnAudioUrl, localAudioFile)) {
-              await _downloadAndCacheAudio(cdnAudioUrl, localAudioFile);
+            if (await _shouldUpdateAudioFile(rawAudioUrl, localAudioFile)) {
+              await _downloadAndCacheAudio(rawAudioUrl, localAudioFile);
             }
           }
         }
@@ -362,7 +356,10 @@ class ReaderProvider extends ChangeNotifier {
       await checkOfflineStatus();
       notifyListeners();
     } catch (e) {
-      debugPrint("Background CDN sync failed: $e");
+      debugPrint("Background GitHub sync failed (No Internet/Offline Mode): $e");
+      // Set the offline mode status message
+      _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
+      notifyListeners();
     }
   }
 
@@ -428,12 +425,12 @@ class ReaderProvider extends ChangeNotifier {
         debugPrint("Playing audio offline from cache: ${localAudioFile.path}");
         await _audioPlayer.play(DeviceFileSource(localAudioFile.path));
       } else {
-        final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/audio/${sutra.audio}';
-        debugPrint("Streaming audio online from CDN: $cdnAudioUrl");
-        await _audioPlayer.play(UrlSource(cdnAudioUrl));
+        final rawAudioUrl = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/audio/${sutra.audio}';
+        debugPrint("Streaming audio online from GitHub: $rawAudioUrl");
+        await _audioPlayer.play(UrlSource(rawAudioUrl));
 
         // Start background download for caching
-        _downloadAndCacheAudio(cdnAudioUrl, localAudioFile);
+        _downloadAndCacheAudio(rawAudioUrl, localAudioFile);
       }
     } catch (e) {
       debugPrint("Audio Playback Error: $e");
@@ -462,45 +459,121 @@ class ReaderProvider extends ChangeNotifier {
       final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
       
-      if (!await granthasCacheFile.exists() || !await dictCacheFile.exists()) {
-        _isFullyOfflineReady = false;
-        notifyListeners();
-        return;
+      bool globalReady = true;
+      if (!await granthasCacheFile.exists() || !await dictCacheFile.exists() || _granthas.isEmpty) {
+        globalReady = false;
       }
 
-      if (_granthas.isEmpty) {
-        _isFullyOfflineReady = false;
-        notifyListeners();
-        return;
-      }
-
-      bool everythingCached = true;
+      // Check per-Grantha offline status
       for (var grantha in _granthas) {
         final gCacheFile = File('${directory.path}/${grantha.id}_cache.json');
         if (!await gCacheFile.exists()) {
-          everythingCached = false;
-          break;
+          _isGranthaOfflineReady[grantha.id] = false;
+          globalReady = false;
+          continue;
         }
 
-        final content = await gCacheFile.readAsString();
-        final List<dynamic> decodedList = json.decode(content);
-        final listSutras = decodedList.map((j) => Sutra.fromJson(j)).toList();
+        try {
+          final content = await gCacheFile.readAsString();
+          final List<dynamic> decodedList = json.decode(content);
+          final listSutras = decodedList.map((j) => Sutra.fromJson(j)).toList();
 
-        for (var sutra in listSutras) {
-          final localAudioFile = File('${directory.path}/${sutra.audio}');
-          if (!await localAudioFile.exists()) {
-            everythingCached = false;
-            break;
+          bool allAudiosExist = true;
+          for (var sutra in listSutras) {
+            if (sutra.audio.isEmpty) continue;
+            final localAudioFile = File('${directory.path}/${sutra.audio}');
+            if (!await localAudioFile.exists()) {
+              allAudiosExist = false;
+              break;
+            }
           }
+          _isGranthaOfflineReady[grantha.id] = allAudiosExist;
+          if (!allAudiosExist) {
+            globalReady = false;
+          }
+        } catch (e) {
+          _isGranthaOfflineReady[grantha.id] = false;
+          globalReady = false;
         }
-        if (!everythingCached) break;
       }
 
-      _isFullyOfflineReady = everythingCached;
+      _isFullyOfflineReady = globalReady;
       notifyListeners();
     } catch (e) {
       debugPrint("Error checking offline status: $e");
       _isFullyOfflineReady = false;
+      notifyListeners();
+    }
+  }
+
+  // Download and cache files for a specific Grantha
+  Future<void> downloadGranthaForOffline(Grantha grantha) async {
+    final granthaId = grantha.id;
+    if (_isGranthaDownloading[granthaId] == true) return;
+
+    _isGranthaDownloading[granthaId] = true;
+    _granthaDownloadProgress[granthaId] = 0.0;
+    _networkStatusMessage = null;
+    notifyListeners();
+
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      
+      final rawUrlPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/data';
+      final rawAudioPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/audio';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      final gFile = File('${directory.path}/${granthaId}_cache.json');
+      List<Sutra> gSutras = [];
+
+      // Step 1: Download Grantha JSON (approx 10% of progress)
+      final gResp = await http.get(Uri.parse('$rawUrlPrefix/$granthaId.json?t=$timestamp')).timeout(const Duration(seconds: 10));
+      if (gResp.statusCode == 200) {
+        await gFile.writeAsString(gResp.body);
+        final decoded = json.decode(gResp.body);
+        if (decoded is List) {
+          gSutras = decoded.map((j) => Sutra.fromJson(j)).toList();
+        }
+      } else {
+        throw HttpException("Failed to download grantha data. Status: ${gResp.statusCode}");
+      }
+
+      _granthaDownloadProgress[granthaId] = 0.1;
+      notifyListeners();
+
+      // Step 2: Download all audio files for this Grantha (remaining 90%)
+      if (gSutras.isNotEmpty) {
+        double step = 0.9 / gSutras.length;
+        for (int i = 0; i < gSutras.length; i++) {
+          final sutra = gSutras[i];
+          if (sutra.audio.isNotEmpty) {
+            final localAudioFile = File('${directory.path}/${sutra.audio}');
+            final rawAudioUrl = '$rawAudioPrefix/${sutra.audio}';
+
+            if (await _shouldUpdateAudioFile(rawAudioUrl, localAudioFile)) {
+              final response = await http.get(Uri.parse(rawAudioUrl)).timeout(const Duration(seconds: 45));
+              if (response.statusCode == 200) {
+                await localAudioFile.writeAsBytes(response.bodyBytes);
+              } else {
+                throw HttpException("Failed to download audio file ${sutra.audio}");
+              }
+            }
+          }
+          _granthaDownloadProgress[granthaId] = 0.1 + (step * (i + 1));
+          notifyListeners();
+        }
+      }
+
+      _isGranthaDownloading[granthaId] = false;
+      _isGranthaOfflineReady[granthaId] = true;
+      _granthaDownloadProgress[granthaId] = 1.0;
+      await checkOfflineStatus();
+      notifyListeners();
+    } catch (e) {
+      _isGranthaDownloading[granthaId] = false;
+      _granthaDownloadProgress[granthaId] = 0.0;
+      _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
+      debugPrint("Error downloading grantha offline files: $e");
       notifyListeners();
     }
   }
@@ -510,38 +583,43 @@ class ReaderProvider extends ChangeNotifier {
     if (_isDownloadingAll) return;
     _isDownloadingAll = true;
     _downloadProgress = 0.0;
+    _networkStatusMessage = null;
     notifyListeners();
 
     try {
-      await fetchLatestCommitSha();
       final directory = await getApplicationDocumentsDirectory();
       
-      final cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/data';
-      final cdnAudioPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/audio';
+      final rawUrlPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/data';
+      final rawAudioPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/audio';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
 
       final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
       // 1. Fetch latest Granthas index
-      final granthasResponse = await http.get(Uri.parse('$cdnUrlPrefix/granthas.json')).timeout(const Duration(seconds: 8));
+      final granthasResponse = await http.get(Uri.parse('$rawUrlPrefix/granthas.json?t=$timestamp')).timeout(const Duration(seconds: 10));
       if (granthasResponse.statusCode == 200) {
         await granthasCacheFile.writeAsString(granthasResponse.body);
         final decoded = json.decode(granthasResponse.body);
         if (decoded is List) {
           _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
         }
+      } else {
+        throw HttpException("Failed to download granthas list");
       }
       _downloadProgress = 0.05;
       notifyListeners();
 
       // 2. Fetch latest Dictionary
-      final dictResponse = await http.get(Uri.parse('$cdnUrlPrefix/dictionary.json')).timeout(const Duration(seconds: 8));
+      final dictResponse = await http.get(Uri.parse('$rawUrlPrefix/dictionary.json?t=$timestamp')).timeout(const Duration(seconds: 10));
       if (dictResponse.statusCode == 200) {
         await dictCacheFile.writeAsString(dictResponse.body);
         final decoded = json.decode(dictResponse.body);
         if (decoded is Map) {
           _dictionary = decoded.cast<String, dynamic>();
         }
+      } else {
+        throw HttpException("Failed to download dictionary");
       }
       _downloadProgress = 0.1;
       notifyListeners();
@@ -556,13 +634,15 @@ class ReaderProvider extends ChangeNotifier {
           List<Sutra> gSutras = [];
 
           // Download Grantha JSON
-          final gResp = await http.get(Uri.parse('$cdnUrlPrefix/${grantha.id}.json')).timeout(const Duration(seconds: 8));
+          final gResp = await http.get(Uri.parse('$rawUrlPrefix/${grantha.id}.json?t=$timestamp')).timeout(const Duration(seconds: 10));
           if (gResp.statusCode == 200) {
             await gFile.writeAsString(gResp.body);
             final decoded = json.decode(gResp.body);
             if (decoded is List) {
               gSutras = decoded.map((j) => Sutra.fromJson(j)).toList();
             }
+          } else {
+            throw HttpException("Failed to download data for ${grantha.title}");
           }
 
           if (gSutras.isNotEmpty) {
@@ -571,12 +651,14 @@ class ReaderProvider extends ChangeNotifier {
               final sutra = gSutras[j];
               if (sutra.audio.isEmpty) continue;
               final localAudioFile = File('${directory.path}/${sutra.audio}');
-              final cdnAudioUrl = '$cdnAudioPrefix/${sutra.audio}';
+              final rawAudioUrl = '$rawAudioPrefix/${sutra.audio}';
 
-              if (await _shouldUpdateAudioFile(cdnAudioUrl, localAudioFile)) {
-                final response = await http.get(Uri.parse(cdnAudioUrl)).timeout(const Duration(seconds: 30));
+              if (await _shouldUpdateAudioFile(rawAudioUrl, localAudioFile)) {
+                final response = await http.get(Uri.parse(rawAudioUrl)).timeout(const Duration(seconds: 45));
                 if (response.statusCode == 200) {
                   await localAudioFile.writeAsBytes(response.bodyBytes);
+                } else {
+                  throw HttpException("Failed to download audio ${sutra.audio}");
                 }
               }
 
@@ -590,19 +672,15 @@ class ReaderProvider extends ChangeNotifier {
         }
       }
 
-      // Save synced commit SHA
-      if (_commitSha != 'main') {
-        final shaFile = File('${directory.path}/commit_sha.txt');
-        await shaFile.writeAsString(_commitSha);
-      }
-
       _downloadProgress = 1.0;
       _isDownloadingAll = false;
       _isFullyOfflineReady = true;
+      _networkStatusMessage = null;
       await checkOfflineStatus();
       notifyListeners();
     } catch (e) {
       _isDownloadingAll = false;
+      _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
       debugPrint("Error downloading all files for offline mode: $e");
       notifyListeners();
     }
@@ -637,8 +715,12 @@ class ReaderProvider extends ChangeNotifier {
         }
       }
 
+      _isGranthaOfflineReady.clear();
+      _granthaDownloadProgress.clear();
+      _isGranthaDownloading.clear();
       _isFullyOfflineReady = false;
       _activeGrantha = null;
+      _networkStatusMessage = null;
       notifyListeners();
 
       // Reload default bundled assets

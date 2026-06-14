@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tarkaśravaḥ (तर्कश्रावः) - A premium Sanskrit e-reader and audio player for logic texts. Download Android and iOS builds.">
+  <title>Tarkaśravaḥ (तर्कश्रावः) - Sanskrit E-Reader</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Pragati+Narrow:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: hsl(30, 100%, 55%); /* Saffron */
+      --primary-hover: hsl(30, 100%, 48%);
+      --primary-glow: hsla(30, 100%, 55%, 0.2);
+      --secondary: hsl(345, 90%, 28%); /* Maroon */
+      --bg-dark: hsl(220, 24%, 7%);
+      --bg-surface: hsl(220, 24%, 12%);
+      --text-light: hsl(0, 0%, 96%);
+      --text-muted: hsl(220, 12%, 72%);
+      --border-color: hsl(220, 20%, 20%);
+      --glass-bg: rgba(20, 20, 30, 0.75);
+      --glass-border: rgba(255, 153, 51, 0.18);
+      --font-sanskrit: 'Pragati Narrow', sans-serif;
+      --font-sans: 'Outfit', sans-serif;
+      --success: #2ecc71;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% 30%, var(--secondary) 0%, var(--bg-dark) 80%);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 40px 20px;
+      text-align: center;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .logo {
+      font-family: var(--font-sanskrit);
+      font-size: 84px;
+      font-weight: 700;
+      color: var(--primary);
+      text-shadow: 0 0 25px var(--primary-glow);
+      line-height: 1.1;
+      margin-bottom: 15px;
+    }
+
+    .title-sub {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .version-tag {
+      display: inline-block;
+      background: rgba(255, 153, 51, 0.15);
+      border: 1px solid rgba(255, 153, 51, 0.3);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 10px;
+      backdrop-filter: blur(5px);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .detected-device-banner {
+      background: rgba(46, 204, 113, 0.15);
+      border: 1px solid rgba(46, 204, 113, 0.3);
+      padding: 12px 24px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      font-size: 15px;
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .detected-device-banner.visible {
+      display: inline-flex;
+    }
+
+    .detected-device-banner .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      width: 100%;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px 30px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 20px 45px rgba(255, 153, 51, 0.15);
+    }
+
+    .card.highlighted {
+      border: 2px solid var(--primary);
+      box-shadow: 0 20px 50px rgba(255, 153, 51, 0.25);
+    }
+
+    .recommended-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--primary), #ffb266);
+      color: var(--bg-dark);
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(255, 153, 51, 0.4);
+    }
+
+    .card-icon {
+      font-size: 48px;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 30px;
+      flex-grow: 1;
+    }
+
+    .card-footer {
+      margin-top: auto;
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), #ffb266);
+      color: var(--bg-dark);
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 24px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 153, 51, 0.25);
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, var(--primary-hover), var(--primary));
+      box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+      transform: scale(1.02);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-muted);
+      box-shadow: none;
+      transform: scale(1.02);
+    }
+
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      font-size: 14px;
+      color: var(--text-muted);
+      background: rgba(10, 10, 15, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">तर्कश्रावः</div>
+    <h1 class="title-sub">Tarkaśravaḥ Sanskrit Reader</h1>
+    <p class="description">
+      An elegant, premium e-reader and audio player designed for reading logic systems (Nyaya-Vaisheshika), offering full dictionary lookups and offline capability.
+    </p>
+    <span class="version-tag">App Version: v1.0.0+1</span>
+  </header>
+
+  <main>
+    <div id="device-banner" class="detected-device-banner">
+      <span class="dot"></span>
+      <span id="device-text">Detected device: Android. Recommended package highlighted.</span>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Android Card -->
+      <div id="android-card" class="card">
+        <div id="android-badge" class="recommended-badge" style="display: none;">Recommended</div>
+        <div>
+          <div class="card-icon">🤖</div>
+          <h2 class="card-title">Android Package</h2>
+          <p class="card-desc">
+            Installable APK file for Android mobile devices. Enable installation from unknown sources in settings to install this package.
+          </p>
+        </div>
+        <div class="card-footer">
+          <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah.apk" class="btn">Download APK File</a>
+        </div>
+      </div>
+
+      <!-- iOS Card -->
+      <div id="ios-card" class="card">
+        <div id="ios-badge" class="recommended-badge" style="display: none;">Recommended</div>
+        <div>
+          <div class="card-icon">🍎</div>
+          <h2 class="card-title">iOS Simulator</h2>
+          <p class="card-desc">
+            Zipped Simulator application bundle (Runner.app) for developer testing on macOS Simulator environments.
+          </p>
+        </div>
+        <div class="card-footer">
+          <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah-ios.zip" class="btn">Download Simulator Zip</a>
+        </div>
+      </div>
+
+      <!-- CMS Card -->
+      <div class="card">
+        <div>
+          <div class="card-icon">⚙️</div>
+          <h2 class="card-title">Admin Console</h2>
+          <p class="card-desc">
+            Admin dashboard CMS panel to manage dictionary words, edit Granthas, write sutras, and record/upload logic audio files.
+          </p>
+        </div>
+        <div class="card-footer">
+          <a href="./cms/index.html" class="btn btn-secondary">Open CMS Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Tarkaśravaḥ project. Made for Sanskrit Swadhyaya. Powered by GitHub Pages.</p>
+  </footer>
+
+  <script>
+    // Simple OS detection script
+    document.addEventListener("DOMContentLoaded", function() {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const platform = window.navigator.platform.toLowerCase();
+      
+      let os = "other";
+      if (userAgent.indexOf("android") !== -1) {
+        os = "android";
+      } else if (userAgent.indexOf("iphone") !== -1 || userAgent.indexOf("ipad") !== -1 || userAgent.indexOf("ipod") !== -1) {
+        os = "ios";
+      } else if (platform.indexOf("mac") !== -1) {
+        os = "mac"; // Apple ecosystem
+      }
+
+      const banner = document.getElementById("device-banner");
+      const deviceText = document.getElementById("device-text");
+      const androidCard = document.getElementById("android-card");
+      const androidBadge = document.getElementById("android-badge");
+      const iosCard = document.getElementById("ios-card");
+      const iosBadge = document.getElementById("ios-badge");
+
+      if (os === "android") {
+        banner.classList.add("visible");
+        deviceText.innerText = "Detected device: Android. Recommended package highlighted.";
+        androidCard.classList.add("highlighted");
+        androidBadge.style.display = "block";
+      } else if (os === "ios" || os === "mac") {
+        banner.classList.add("visible");
+        deviceText.innerText = `Detected OS: ${os === "mac" ? "macOS" : "iOS"}. Recommended package highlighted.`;
+        iosCard.classList.add("highlighted");
+        iosBadge.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
