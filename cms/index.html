@@ -1515,10 +1515,22 @@
       recycleBin: []
     };
 
+    // Helper to translate Devanagari digits to standard digits
+    function toStandardDigits(str) {
+      if (!str) return '';
+      const devanagariMap = {
+        '०': '0', '१': '1', '२': '2', '३': '3', '४': '4',
+        '५': '5', '६': '6', '७': '7', '८': '8', '९': '9'
+      };
+      return str.toString().replace(/[०-९]/g, d => devanagariMap[d] || d);
+    }
+
     // Helper: Natural sort for sutra numbers (e.g. "1.1", "1.2", "1.10", "2.1")
     function compareSutraNumbers(a, b) {
-      const aParts = (a.sutra_number || '').split('.').map(p => parseFloat(p) || 0);
-      const bParts = (b.sutra_number || '').split('.').map(p => parseFloat(p) || 0);
+      const aNum = toStandardDigits(a.sutra_number || '');
+      const bNum = toStandardDigits(b.sutra_number || '');
+      const aParts = aNum.split('.').map(p => parseFloat(p) || 0);
+      const bParts = bNum.split('.').map(p => parseFloat(p) || 0);
       
       for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
         const aVal = aParts[i] !== undefined ? aParts[i] : -1;
@@ -2246,17 +2258,20 @@
       const searchInput = document.getElementById("sutras-search");
       const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
       if (query) {
+        const standardQuery = toStandardDigits(query);
         displaySutras = displaySutras.filter(s => {
           const title = (s.title || '').toLowerCase();
           const sanskrit = (s.sanskrit || '').toLowerCase();
           const eng = (s.english_meaning || '').toLowerCase();
           const kan = (s.kannada_meaning || '').toLowerCase();
-          const num = (s.sutra_number || '').toLowerCase();
+          const numStandard = toStandardDigits(s.sutra_number || '').toLowerCase();
+          const numOriginal = (s.sutra_number || '').toLowerCase();
           return title.includes(query) || 
                  sanskrit.includes(query) || 
                  eng.includes(query) || 
                  kan.includes(query) ||
-                 num.includes(query);
+                 numStandard.includes(standardQuery) ||
+                 numOriginal.includes(query);
         });
       }
 
