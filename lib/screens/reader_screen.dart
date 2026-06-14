@@ -160,9 +160,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
                               : null,
                         ),
                         child: Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
+                          child: Text.rich(
+                            TextSpan(
                               children: ShabdaSpanBuilder.buildSpans(
                                 context: context,
                                 text: sutra.sanskrit,
@@ -177,6 +176,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                                 },
                               ),
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
