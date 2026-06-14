@@ -319,14 +319,29 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            child: Text(
-              "तर्कश्रावः${provider.activeGrantha != null ? ' • ${provider.activeGrantha!.title}' : ''}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'PragatiNarrow',
-                color: secText.withAlpha(150),
-                fontSize: 14,
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "तर्कश्रावः${provider.activeGrantha != null ? ' • ${provider.activeGrantha!.title}' : ''}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'PragatiNarrow',
+                    color: secText.withAlpha(150),
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Version 1.0.2+3",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: secText.withAlpha(120),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
