@@ -9,6 +9,15 @@
     "audio": "audio_0.mp3"
   },
   {
+    "id": 35,
+    "sutra_number": "२",
+    "title": "उद्देशप्रकरणम् (Seven Categories)",
+    "sanskrit": "द्रव्यगुणकर्मसामान्यविशेषसमवायाभावाः सप्त पदार्थाः ।",
+    "english_meaning": "The categories are seven, namely: substance (dravya), quality (guna), activity (karma), generality (samanya), particularity (visesha), inherence (samavaya), and non-existence (abhava).",
+    "kannada_meaning": "ದ್ರವ್ಯ, ಗುಣ, ಕರ್ಮ, ಸಾಮಾನ್ಯ, ವಿಶೇಷ, ಸಮವಾಯ ಮತ್ತು ಅಭಾವ ಎಂಬ ಏಳು ಪದಾರ್ಥಗಳು ಇರುತ್ತವೆ.",
+    "audio": "audio_tarkasangraha_32.mp3"
+  },
+  {
     "id": 4,
     "sutra_number": "४",
     "title": "गुणनिरूपणम् (Twenty-four Qualities)",
@@ -208,7 +217,7 @@
   },
   {
     "id": 26,
-    "sutra_number": "೨೬",
+    "sutra_number": "26",
     "title": "उपमानप्रमाणम् (Comparison)",
     "sanskrit": "उपमितिकरणमुपमानम् । संज्ञासंज्ञिसम्बन्धज्ञानमुपमितिः ।",
     "english_meaning": "The instrument of comparative knowledge is comparison. Knowledge of the relationship between a name and the object named is Upamiti.",
@@ -286,14 +295,5 @@
     "english_meaning": "The Tarkasangraha was composed by the learned Annambhatta for the easy instruction of beginners in the systems of Kanada and Nyaya.",
     "kannada_meaning": "ಕಣಾದ ಮತ್ತು ನ್ಯಾಯ ದರ್ಶನಗಳಲ್ಲಿ ಬಾಲಕರಿಗೆ ಜ್ಞಾನವಾಗಲಿ ಎಂಬ ಉದ್ದೇಶದಿಂದ ವಿದ್ವಾನ್ ಅನ್ನಂಭಟ್ಟರು ಈ ತರ್ಕಸಂಗ್ರಹವನ್ನು ರಚಿಸಿದ್ದಾರೆ.",
     "audio": "audio_33.mp3"
-  },
-  {
-    "id": 35,
-    "sutra_number": "२",
-    "title": "उद्देशप्रकरणम् (Seven Categories)",
-    "sanskrit": "द्रव्यगुणकर्मसामान्यविशेषसमवायाभावाः सप्त पदार्थाः ।",
-    "english_meaning": "The categories are seven, namely: substance (dravya), quality (guna), activity (karma), generality (samanya), particularity (visesha), inherence (samavaya), and non-existence (abhava).",
-    "kannada_meaning": "ದ್ರವ್ಯ, ಗುಣ, ಕರ್ಮ, ಸಾಮಾನ್ಯ, ವಿಶೇಷ, ಸಮವಾಯ ಮತ್ತು ಅಭಾವ ಎಂಬ ಏಳು ಪದಾರ್ಥಗಳು ಇರುತ್ತವೆ.",
-    "audio": "audio_tarkasangraha_32.mp3"
   }
 ]
