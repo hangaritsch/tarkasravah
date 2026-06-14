@@ -1,0 +1,308 @@
+[
+  {
+    "id": 1,
+    "sutra_number": "१",
+    "title": "मङ्गलाचरणम् (Mangalacharana)",
+    "sanskrit": "निधाय हृदि विश्वेशं विधाय गुरुवन्दनम् । बालानां सुखबोधाय क्रियते तर्कसङ्ग्रहः ॥",
+    "english_meaning": "Having placed the Lord of the Universe in the heart, and having paid obeisance to the preceptor, the Tarkasangraha is written for the easy understanding of beginners.",
+    "kannada_meaning": "ವಿಶ್ವೇಶ್ವರನನ್ನು ಹೃದಯದಲ್ಲಿ ನೆನೆದು, ಗುರುಗಳಿಗೆ ನಮಸ್ಕರಿಸಿ, ಬಾಲಕರಿಗೆ ಸುಲಭವಾಗಿ ತಿಳಿಯಲಿ ಎಂಬ ಉದ್ದೇಶದಿಂದ ತರ್ಕಸಂಗ್ರಹವನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ.",
+    "audio": "audio_0.mp3"
+  },
+  {
+    "id": 2,
+    "sutra_number": "२",
+    "title": "उद्देशप्रकरणम् (Seven Categories)",
+    "sanskrit": "द्रव्यगुणकर्मसामान्यविशेषसमवायाभावाः सप्त पदार्थाः ।",
+    "english_meaning": "The categories are seven, namely: substance (dravya), quality (guna), activity (karma), generality (samanya), particularity (visesha), inherence (samavaya), and non-existence (abhava).",
+    "kannada_meaning": "ದ್ರವ್ಯ, ಗುಣ, ಕರ್ಮ, ಸಾಮಾನ್ಯ, ವಿಶೇಷ, ಸಮವಾಯ ಮತ್ತು ಅಭಾವ ಎಂಬ ಏಳು ಪದಾರ್ಥಗಳು ಇರುತ್ತವೆ.",
+    "audio": "audio_1.mp3"
+  },
+  {
+    "id": 3,
+    "sutra_number": "३",
+    "title": "द्रव्यनिरूपणम् (Nine Substances)",
+    "sanskrit": "तत्र द्रव्याणि पृथिव्यप्तेजोवाय्वाकाशकालदिगात्ममनांसಿ नवैव ।",
+    "english_meaning": "Among those, substances are nine only: earth (prithivi), water (ap), light/fire (tejas), air (vayu), ether (akasha), time (kala), direction (dik), self/soul (atman), and mind (manas).",
+    "kannada_meaning": "ಅವುಗಳಲ್ಲಿ ದ್ರವ್ಯಗಳು ಒಂಬತ್ತು: ಪೃಥಿವೀ (ಭೂಮಿ), ಅಪ್ (ನೀರು), ತೇಜಸ್ಸು (ಬೆಂಕಿ), ವಾಯು (ಗಾಳಿ), ಆಕಾಶ, ಕಾಲ, ದಿಕ್ (ದಿಕ್ಕು), ಆತ್ಮ ಮತ್ತು ಮನಸ್ಸು.",
+    "audio": "audio_2.mp3"
+  },
+  {
+    "id": 4,
+    "sutra_number": "४",
+    "title": "गुणनिरूपणम् (Twenty-four Qualities)",
+    "sanskrit": "रूपरसगन्धस्पर्शसंख्यापरिमाणपृथक्त्वसंयोगविभागपरत्वापरत्वबुद्धिसुखदुःखेच्छाद्वेषप्रयत्नगुरुत्वद्रवत्वस्नेहसंस्कारधर्माधर्मशब्दाः चतुर्विंशतिगुणाः ।",
+    "english_meaning": "Color, taste, smell, touch, number, dimension, distinctness, conjunction, disjunction, priority, posteriority, intellect, pleasure, pain, desire, aversion, effort, gravity, fluidity, viscidity, tendency (impression), merit, demerit, and sound are the twenty-four qualities.",
+    "kannada_meaning": "ರೂಪ, ರಸ, ಗಂಧ, ಸ್ಪರ್ಶ, ಸಂಖ್ಯೆ, ಪರಿಮಾಣ, ಪೃಥಕ್ತ್ವ, ಸಂಯೋಗ, ವಿಭಾಗ, ಪರತ್ವ, ಅಪರತ್ವ, ಬುದ್ಧಿ, ಸುಖ, ದುಃಖ, ಇಚ್ಛೆ, ದ್ವೇಷ, ಪ್ರಯತ್ನ, ಗುರುತ್ವ, ದ್ರವತ್ವ, ಸ್ನೇಹ, ಸಂಸ್ಕಾರ, ಧರ್ಮ, ಅಧರ್ಮ ಮತ್ತು ಶಬ್ದ - ಇವು ಇಪ್ಪತ್ತನಾಲ್ಕು ಗುಣಗಳು.",
+    "audio": "audio_3.mp3"
+  },
+  {
+    "id": 5,
+    "sutra_number": "५",
+    "title": "कर्मनिरूपणम् (Five Actions)",
+    "sanskrit": "उत्क्षेपणावक्षेपणाकुञ्चनप्रसारणगमनानि पञ्च कर्माणि ।",
+    "english_meaning": "Throwing upwards, throwing downwards, contracting, expanding, and going (motion) are the five actions.",
+    "kannada_meaning": "ಉತ್ಕ್ಷೇಪಣ (ಮೇಲಕ್ಕೆ ಎಸೆಯುವುದು), ಅವಕ್ಷೇಪಣ (ಕೆಳಕ್ಕೆ ಎಸೆಯುವುದು), ಆಕುಂಚನ (ಮುದುಡುವುದು), ಪ್ರಸಾರಣ (ಹರಡುವುದು) ಮತ್ತು ಗಮನ (ಚಲನೆ) ಇವು ಐದು ಕರ್ಮಗಳು.",
+    "audio": "audio_4.mp3"
+  },
+  {
+    "id": 6,
+    "sutra_number": "६",
+    "title": "सामान्यनिरूपणम् (Two-fold Generality)",
+    "sanskrit": "परमपरं चेति द्विविधं सामान्यम् ।",
+    "english_meaning": "Generality is of two kinds: higher (para) and lower (apara).",
+    "kannada_meaning": "ಪರ (ಹೆಚ್ಚಿನ ವ್ಯಾಪ್ತಿಯುಳ್ಳದ್ದು) ಮತ್ತು ಅಪರ (ಕಡಿಮೆ ವ್ಯಾಪ್ತಿಯುಳ್ಳದ್ದು) ಎಂದು ಸಾಮಾನ್ಯವು ಎರಡು ವಿಧ.",
+    "audio": "audio_5.mp3"
+  },
+  {
+    "id": 7,
+    "sutra_number": "७",
+    "title": "विशेषनिरूपणम् (Particularity)",
+    "sanskrit": "नित्यद्रव्यवृत्तयो विशेषास्त्वनन्ता एव ।",
+    "english_meaning": "Particularities, residing in eternal substances, are indeed infinite.",
+    "kannada_meaning": "ನಿತ್ಯದ್ರವ್ಯಗಳಲ್ಲಿ ಇರುವ 'ವಿಶೇಷ'ಗಳು ಅನಂತವಾಗಿವೆ.",
+    "audio": "audio_6.mp3"
+  },
+  {
+    "id": 8,
+    "sutra_number": "८",
+    "title": "समवायनिरूपणम् (Inherence)",
+    "sanskrit": "समवायस्त्वेक एव ।",
+    "english_meaning": "Inherence is only one.",
+    "kannada_meaning": "ಸಮವಾಯವು ಒಂದೇ ವಿಧವಾದುದು.",
+    "audio": "audio_7.mp3"
+  },
+  {
+    "id": 9,
+    "sutra_number": "९",
+    "title": "अभावनिरूपणम् (Four types of Non-existence)",
+    "sanskrit": "अभावश्चतुर्विधः प्रागभावः प्रध्वंसाभावः अत्यन्ताभावः अन्योन्याभावश्चेತಿ ।",
+    "english_meaning": "Non-existence is of four kinds: antecedent, subsequent, absolute, and mutual.",
+    "kannada_meaning": "ಅಭಾವವು ನಾಲ್ಕು ವಿಧ: ಪ್ರಾಗಭಾವ, ಪ್ರಧ್ವಂಸಾಭಾವ, ಅತ್ಯಂತಾಭಾವ ಮತ್ತು ಅನ್ಯೋನ್ಯಾಭಾವ.",
+    "audio": "audio_8.mp3"
+  },
+  {
+    "id": 10,
+    "sutra_number": "१०",
+    "title": "पृथिवीनिरूपणम् (Earth)",
+    "sanskrit": "तत्र गन्धवती पृथिवी । सा द्विविधा नित्याऽनित्या च । नित्या परमाणुरूपा । अनित्या कार्यरूपा ।",
+    "english_meaning": "Earth is that which possesses smell. It is of two kinds: eternal (atoms) and non-eternal (products).",
+    "kannada_meaning": "ಗಂಧವನ್ನು ಹೊಂದಿರುವುದು ಪೃಥಿವೀ. ಅದು ನಿತ್ಯ ಮತ್ತು ಅನಿತ್ಯ ಎಂದು ಎರಡು ವಿಧ. ಪರಮಾಣು ರೂಪದಲ್ಲಿರುವುದು ನಿತ್ಯ, ಕಾರ್ಯ ರೂಪದಲ್ಲಿರುವುದು ಅನಿತ್ಯ.",
+    "audio": "audio_9.mp3"
+  },
+  {
+    "id": 11,
+    "sutra_number": "११",
+    "title": "अप्-निरूपणम् (Water)",
+    "sanskrit": "शीतस्पर्शवत्यः आपः । ता द्विविधाः नित्या अनित्याश्च ।",
+    "english_meaning": "Water is that which has a cold touch. It is of two kinds: eternal and non-eternal.",
+    "kannada_meaning": "ತಂಪಾದ ಸ್ಪರ್ಶವನ್ನು ಹೊಂದಿರುವುದು ಜಲ (ಅಪ್). ಅದು ನಿತ್ಯ ಮತ್ತು ಅನಿತ್ಯ ಎಂದು ಎರಡು ವಿಧ.",
+    "audio": "audio_10.mp3"
+  },
+  {
+    "id": 12,
+    "sutra_number": "१२",
+    "title": "तेजोनिरूपणम् (Light/Fire)",
+    "sanskrit": "उष्णस्पर्शवत्तेजः । तच्च द्विविधं नित्यमनित्यं च ।",
+    "english_meaning": "Fire is that which has a hot touch. It is of two kinds: eternal and non-eternal.",
+    "kannada_meaning": "ಬಿಸಿ ಸ್ಪರ್ಶವನ್ನು ಹೊಂದಿರುವುದು ತೇಜಸ್ಸು. ಅದು ನಿತ್ಯ ಮತ್ತು ಅನಿತ್ಯ ಎಂದು ಎರಡು ವಿಧ.",
+    "audio": "audio_11.mp3"
+  },
+  {
+    "id": 13,
+    "sutra_number": "१३",
+    "title": "वायुनिरूपणम् (Air)",
+    "sanskrit": "रूपरहितः स्पर्शवान् वायुः । स द्विविधः नित्योऽनित्यश्च ।",
+    "english_meaning": "Air is that which is devoid of color but possesses touch. It is of two kinds: eternal and non-eternal.",
+    "kannada_meaning": "ರೂಪವಿಲ್ಲದ ಮತ್ತು ಸ್ಪರ್ಶವಿರುವ ದ್ರವ್ಯವೇ ವಾಯು. ಅದು ನಿತ್ಯ ಮತ್ತು ಅನಿತ್ಯ ಎಂದು ಎರಡು ವಿಧ.",
+    "audio": "audio_12.mp3"
+  },
+  {
+    "id": 14,
+    "sutra_number": "१४",
+    "title": "आकाशनिरूपणम् (Ether)",
+    "sanskrit": "शब्दगुणकमाकाशम् । तच्चैकं विभु नित्यञ्च ।",
+    "english_meaning": "Ether is that which has sound as its quality. It is one, all-pervading, and eternal.",
+    "kannada_meaning": "ಶಬ್ದವನ್ನು ಗುಣವಾಗಿ ಹೊಂದಿರುವುದು ಆಕಾಶ. ಅದು ಒಂದೇ, ವಿಭು (ಸರ್ವವ್ಯಾಪಿ) ಮತ್ತು ನಿತ್ಯ.",
+    "audio": "audio_13.mp3"
+  },
+  {
+    "id": 15,
+    "sutra_number": "१५",
+    "title": "कालनिरूपणम् (Time)",
+    "sanskrit": "अतीतादिव्यवहारहेतुः कालः । स चैको विभुर्नित्यश्च ।",
+    "english_meaning": "Time is the cause of usage such as past, present, and future. It is one, all-pervading, and eternal.",
+    "kannada_meaning": "ಭೂತ, ವರ್ತಮಾನ ಮುಂತಾದ ವ್ಯವಹಾರಕ್ಕೆ ಕಾರಣವಾದುದು ಕಾಲ. ಅದು ಒಂದೇ, ವಿಭು ಮತ್ತು ನಿತ್ಯ.",
+    "audio": "audio_14.mp3"
+  },
+  {
+    "id": 16,
+    "sutra_number": "१६",
+    "title": "दिङ्-निरूपणम् (Direction)",
+    "sanskrit": "प्राच्यादिव्यवहारहेतुर्दिक् । सा चैका विभ्वी नित्या च ।",
+    "english_meaning": "Direction is the cause of usage such as East, West, etc. It is one, all-pervading, and eternal.",
+    "kannada_meaning": "ಪೂರ್ವ, ಪಶ್ಚಿಮ ಮುಂತಾದ ದಿಕ್ಕುಗಳ ವ್ಯವಹಾರಕ್ಕೆ ಕಾರಣವಾದುದು ದಿಕ್. ಇದು ಒಂದೇ, ವಿಭು ಮತ್ತು ನಿತ್ಯ.",
+    "audio": "audio_15.mp3"
+  },
+  {
+    "id": 17,
+    "sutra_number": "१७",
+    "title": "ಆತ್ಮ-ನಿರೂಪಣಮ್ (Soul)",
+    "sanskrit": "ज्ञानाधिकरणमात्मा । स द्विविधः परमात्मा जीवात्मा च ।",
+    "english_meaning": "The soul is the substratum of knowledge. It is of two kinds: the Supreme Soul and the individual soul.",
+    "kannada_meaning": "ಜ್ಞಾನಕ್ಕೆ ಆಶ್ರಯವಾದುದು ಆತ್ಮ. ಅದು ಪರಮಾತ್ಮ ಮತ್ತು ಜೀವಾತ್ಮ ಎಂದು ಎರಡು ವಿಧ.",
+    "audio": "audio_16.mp3"
+  },
+  {
+    "id": 18,
+    "sutra_number": "१८",
+    "title": "मनो-निरूपणम् (Mind)",
+    "sanskrit": "सुखाद्युपलब्धिसाधनमिन्द्रियं मनः । तच्च प्रत्यात्मनियतत्वादनन्तं परमाणुरूपं नित्यं च ।",
+    "english_meaning": "The mind is the sense organ that is the instrument for feeling pleasure, etc. It is infinite, atomic in form, and eternal.",
+    "kannada_meaning": "ಸುಖ-ದುಃಖಗಳ ಅನುಭವಕ್ಕೆ ಸಾಧನವಾದ ಇಂದ್ರಿಯವೇ ಮನಸ್ಸು. ಇದು ಪ್ರತಿ ಆತ್ಮನಿಗೂ ಬೇರೆ ಬೇರೆಯಾಗಿದ್ದು ಅನಂತವಾಗಿದೆ ಮತ್ತು ಪರಮಾಣು ರೂಪದಲ್ಲಿದೆ.",
+    "audio": "audio_17.mp3"
+  },
+  {
+    "id": 19,
+    "sutra_number": "१९",
+    "title": "बुद्धिनिरूपणम् (Intellect/Knowledge)",
+    "sanskrit": "सर्वव्यवहारहेतुर्गुणो बुद्धिर्ज्ञानम् । सा द्विविधा स्मृतिरनुभवश्च ।",
+    "english_meaning": "Knowledge, which is the cause of all practical usage, is intellect. It is of two kinds: memory and experience.",
+    "kannada_meaning": "ಸಕಲ ವ್ಯವಹಾರಗಳಿಗೂ ಕಾರಣವಾದ ಗುಣವೇ ಬುದ್ಧಿ ಅಥವಾ ಜ್ಞಾನ. ಇದು ಸ್ಮೃತಿ ಮತ್ತು ಅನುಭವ ಎಂದು ಎರಡು ವಿಧ.",
+    "audio": "audio_18.mp3"
+  },
+  {
+    "id": 20,
+    "sutra_number": "२०",
+    "title": "प्रमाणनिरूपणम् (Means of Knowledge)",
+    "sanskrit": "यथार्थानुभवश्चतुर्विधः प्रत्यक्षानुमित्युपमितिशाब्दभेदात् । तत्करणमपि चतुर्विधं प्रत्यक्षानुमानोपमानशब्दभेदात् ।",
+    "english_meaning": "Valid experience is of four kinds: perception, inference, comparison, and verbal testimony. Their instruments are also four.",
+    "kannada_meaning": "ಯಥಾರ್ಥ ಅನುಭವವು ಪ್ರತ್ಯಕ್ಷ, ಅನುಮಿತಿ, ಉಪಮಿತಿ ಮತ್ತು ಶಾಬ್ದ ಎಂದು ನಾಲ್ಕು ವಿಧ. ಅವುಗಳಿಗೆ ಕಾರಣವಾದ ಪ್ರಮಾಣಗಳೂ ನಾಲ್ಕು.",
+    "audio": "audio_19.mp3"
+  },
+  {
+    "id": 21,
+    "sutra_number": "२१",
+    "title": "करणलक्षणम् (Definition of Instrument)",
+    "sanskrit": "व्यापारवदसाधारणं कारणं करणम् ।",
+    "english_meaning": "The special cause that possesses an intermediate operation is called the instrument (Karana).",
+    "kannada_meaning": "ವ್ಯಾಪಾರವನ್ನು ಹೊಂದಿರುವ ಅಸಾಧಾರಣ ಕಾರಣವೇ ಕರಣ.",
+    "audio": "audio_20.mp3"
+  },
+  {
+    "id": 22,
+    "sutra_number": "२२",
+    "title": "प्रत्यक्षप्रमाणम् (Perception)",
+    "sanskrit": "तत्र प्रत्यक्षज्ञानकरणं प्रत्यक्षम् । इन्द्रियार्थसंनिकर्षजन्यं ज्ञानं प्रत्यक्षम् ।",
+    "english_meaning": "Perception is the instrument of perceptual knowledge. Knowledge produced by the contact of a sense organ with its object is perception.",
+    "kannada_meaning": "ಪ್ರತ್ಯಕ್ಷ ಜ್ಞಾನಕ್ಕೆ ಸಾಧನವಾದುದು ಪ್ರತ್ಯಕ್ಷ ಪ್ರಮಾಣ. ಇಂದ್ರಿಯ ಮತ್ತು ವಿಷಯದ ಸಂಬಂಧದಿಂದ ಹುಟ್ಟುವ ಜ್ಞಾನವೇ ಪ್ರತ್ಯಕ್ಷ.",
+    "audio": "audio_21.mp3"
+  },
+  {
+    "id": 23,
+    "sutra_number": "२३",
+    "title": "अनुमानप्रमाणम् (Inference)",
+    "sanskrit": "अनुमितिकरणमनुमानम् । परामर्शजन्यं ज्ञानमनुमितिः ।",
+    "english_meaning": "Inference is the instrument of inferential knowledge. Inferential knowledge is that which is produced by consideration (Paramarsha).",
+    "kannada_meaning": "ಅನುಮಿತಿ ಜ್ಞಾನಕ್ಕೆ ಸಾಧನವಾದುದು ಅನುಮಾನ. ಪರಾಮರ್ಶದಿಂದ ಹುಟ್ಟುವ ಜ್ಞಾನವೇ ಅನುಮಿತಿ.",
+    "audio": "audio_22.mp3"
+  },
+  {
+    "id": 24,
+    "sutra_number": "२४",
+    "title": "व्याप्तिलक्षणम् (Definition of Concomitance)",
+    "sanskrit": "यत्र यत्र धूमस्तत्र तत्राग्निरिति साहचर्यनियमो व्याप्तिः ।",
+    "english_meaning": "The invariable rule of association, such as 'wherever there is smoke, there is fire', is called Vyapti.",
+    "kannada_meaning": "ಎಲ್ಲಿ ಧೂಮವಿದೆಯೋ ಅಲ್ಲಿ ಅಗ್ನಿಯಿದೆ ಎನ್ನುವ ಸಾಹಚರ್ಯ ನಿಯಮವೇ ವ್ಯಾಪ್ತಿ.",
+    "audio": "audio_23.mp3"
+  },
+  {
+    "id": 25,
+    "sutra_number": "२५",
+    "title": "पञ्चावयववाक्यम् (Five-membered Syllogism)",
+    "sanskrit": "प्रतिज्ञाहेतूदाहरणोपनयनिगमनानि पञ्चावयवाः ।",
+    "english_meaning": "The five members of a syllogism are: Proposition, Reason, Example, Application, and Conclusion.",
+    "kannada_meaning": "ಪ್ರತಿಜ್ಞೆ, ಹೇತು, ಉದಾಹರಣೆ, ಉಪನಯ ಮತ್ತು ನಿಗಮನ ಇವು ಪಂಚಾವಯವ ವಾಕ್ಯಗಳು.",
+    "audio": "audio_24.mp3"
+  },
+  {
+    "id": 26,
+    "sutra_number": "೨೬",
+    "title": "उपमानप्रमाणम् (Comparison)",
+    "sanskrit": "उपमितिकरणमुपमानम् । संज्ञासंज्ञिसम्बन्धज्ञानमुपमितिः ।",
+    "english_meaning": "The instrument of comparative knowledge is comparison. Knowledge of the relationship between a name and the object named is Upamiti.",
+    "kannada_meaning": "ಉಪಮಿತಿ ಜ್ಞಾನಕ್ಕೆ ಸಾಧನವಾದುದು ಉಪಮಾನ. ಹೆಸರು ಮತ್ತು ವಸ್ತುವಿನ ಸಂಬಂಧದ ಜ್ಞಾನವೇ ಉಪಮಿತಿ.",
+    "audio": "audio_25.mp3"
+  },
+  {
+    "id": 27,
+    "sutra_number": "२७",
+    "title": "शब्दप्रमाणम् (Verbal Testimony)",
+    "sanskrit": "आप्तवाक्यं शब्दः । आप्तस्तु यथार्थवक्ता ।",
+    "english_meaning": "The word of a reliable person is verbal testimony. A reliable person is one who speaks the truth.",
+    "kannada_meaning": "ಆಪ್ತರು ಹೇಳಿದ ವಾಕ್ಯವೇ ಶಬ್ದ ಪ್ರಮಾಣ. ಸತ್ಯವನ್ನು ಹೇಳುವವನೇ ಆಪ್ತ.",
+    "audio": "audio_26.mp3"
+  },
+  {
+    "id": 28,
+    "sutra_number": "२८",
+    "title": "शक्तिनिरूपणम् (Power of Words)",
+    "sanskrit": "शक्तं पदम् । अस्मात्पदादयमर्थो बोद्धव्य इतीश्वरसङ्केतः शक्तिः ।",
+    "english_meaning": "A word is that which is capable. 'Power' is the will of the Lord that such-and-such a meaning should be understood from such-and-such a word.",
+    "kannada_meaning": "ಶಕ್ತಿಯುಳ್ಳದ್ದು ಪದ. ಈ ಪದದಿಂದ ಈ ಅರ್ಥವು ತಿಳಿಯಲ್ಪಡಬೇಕು ಎಂಬ ಈಶ್ವರ ಸಂಕೇತವೇ ಶಕ್ತಿ.",
+    "audio": "audio_27.mp3"
+  },
+  {
+    "id": 29,
+    "sutra_number": "२९",
+    "title": "वाक्यार्थज्ञानहेतुः (Conditions for Sentences)",
+    "sanskrit": "आकाङ्क्षा योग्यता संनिधिश्च वाक्यार्थज्ञानहेतुः ।",
+    "english_meaning": "Expectancy (Akanksha), compatibility (Yogyata), and proximity (Sannidhi) are the causes of the knowledge of the meaning of a sentence.",
+    "kannada_meaning": "ಆಕಾಂಕ್ಷೆ, ಯೋಗ್ಯತೆ ಮತ್ತು ಸನ್ನಿಧಿ ಇವು ವಾಕ್ಯದ ಅರ್ಥ ಜ್ಞಾನಕ್ಕೆ ಕಾರಣಗಳು.",
+    "audio": "audio_28.mp3"
+  },
+  {
+    "id": 30,
+    "sutra_number": "३०",
+    "title": "अयथार्थानुभवः (Invalid Experience)",
+    "sanskrit": "अयथार्थानुभवस्त्रिविधः संशयविपर्ययतर्कभेदात् ।",
+    "english_meaning": "Invalid experience is of three kinds: doubt (Samsaya), error (Viparyaya), and hypothetical reasoning (Tarka).",
+    "kannada_meaning": "ಯಥಾರ್ಥವಲ್ಲದ ಅನುಭವವು ಮೂರು ವಿಧ: ಸಂಶಯ, ವಿಪರ್ಯಯ ಮತ್ತು ತರ್ಕ.",
+    "audio": "audio_29.mp3"
+  },
+  {
+    "id": 31,
+    "sutra_number": "३१",
+    "title": "सुखदुःखनिरूपणम् (Pleasure and Pain)",
+    "sanskrit": "सर्वेषामनुकूलतया वेदनीयं सुखम् । प्रतिकूलतया वेदनीयं दुःखम् ।",
+    "english_meaning": "Pleasure is that which is experienced by all as agreeable. Pain is that which is experienced as disagreeable.",
+    "kannada_meaning": "ಎಲ್ಲರಿಗೂ ಅನುಕೂಲವಾಗಿ ತೋರುವ ಅನುಭವವೇ ಸುಖ. ಪ್ರತಿಕೂಲವಾಗಿ ತೋರುವ ಅನುಭವವೇ ದುಃಖ.",
+    "audio": "audio_30.mp3"
+  },
+  {
+    "id": 32,
+    "sutra_number": "३२",
+    "title": "संस्कारनिरूपणम् (Tendencies)",
+    "sanskrit": "संस्कारस्त्रिविधः वेगो भावना स्थितिस्थापकश्चेತಿ ।",
+    "english_meaning": "Tendency (Samskara) is of three kinds: velocity (Vega), impression (Bhavana), and elasticity (Sthitisthapaka).",
+    "kannada_meaning": "ಸಂಸ್ಕಾರವು ಮೂರು ವಿಧ: ವೇಗ, ಭಾವನಾ ಮತ್ತು ಸ್ಥಿತಿಸ್ಥಾಪಕ.",
+    "audio": "audio_31.mp3"
+  },
+  {
+    "id": 33,
+    "sutra_number": "३३",
+    "title": "अयुतसिद्धलक्षणम् (Inseparable Connection)",
+    "sanskrit": "ययोर्द्वयोर्मध्ये एकमविनश्यदपराश्रಿತमेवावतिष्ठते तावयुतसिद्धौ ।",
+    "english_meaning": "Two things are said to be inseparably connected when one of them, as long as it exists, is always dependent on the other.",
+    "kannada_meaning": "ಎರಡು ವಸ್ತುಗಳಲ್ಲಿ ಒಂದು ನಾಶವಾಗುವವರೆಗೆ ಇನ್ನೊಂದನ್ನು ಅವಲಂಬಿಸಿಯೇ ಇರುವುದೋ, ಅವು ಅಯುತಸಿದ್ಧಗಳು.",
+    "audio": "audio_32.mp3"
+  },
+  {
+    "id": 34,
+    "sutra_number": "३४",
+    "title": "उपसंहारः (Conclusion)",
+    "sanskrit": "कणादन्यायमतयोर्बालव्युत्पत्तिसिद्धये । अन्नंभट्टेन विदुषा रचितस्तर्कसङ्ग्रहः ॥",
+    "english_meaning": "The Tarkasangraha was composed by the learned Annambhatta for the easy instruction of beginners in the systems of Kanada and Nyaya.",
+    "kannada_meaning": "ಕಣಾದ ಮತ್ತು ನ್ಯಾಯ ದರ್ಶನಗಳಲ್ಲಿ ಬಾಲಕರಿಗೆ ಜ್ಞಾನವಾಗಲಿ ಎಂಬ ಉದ್ದೇಶದಿಂದ ವಿದ್ವಾನ್ ಅನ್ನಂಭಟ್ಟರು ಈ ತರ್ಕಸಂಗ್ರಹವನ್ನು ರಚಿಸಿದ್ದಾರೆ.",
+    "audio": "audio_33.mp3"
+  }
+]

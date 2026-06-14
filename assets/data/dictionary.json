@@ -1,0 +1,681 @@
+{
+  "निधाय": {
+    "word": "निधाय (nidhāya)",
+    "grammar": "Gerund (Lyap-pratyaya) of ni + dhā",
+    "english": "having placed / keeping in mind",
+    "kannada": "ಹೃದಯದಲ್ಲಿ ಸ್ಥಾಪಿಸಿ / ಇಟ್ಟುಕೊಂಡು"
+  },
+  "हृदि": {
+    "word": "हृदि (hṛdi)",
+    "grammar": "Locative Singular of hṛd (Heart)",
+    "english": "in the heart / mind",
+    "kannada": "ಹೃದಯದಲ್ಲಿ"
+  },
+  "विश्वेशं": {
+    "word": "विश्वेशम् (viśveśam)",
+    "grammar": "Accusative Singular of viśveśa (Lord of Universe)",
+    "english": "the Lord of the Universe",
+    "kannada": "ವಿಶ್ವೇಶ್ವರನನ್ನು (ಜಗನ್ನಾಥನನ್ನು)"
+  },
+  "विश्वेशम्": {
+    "word": "विश्वेशम् (viśveśam)",
+    "grammar": "Accusative Singular of viśveśa",
+    "english": "the Lord of the Universe",
+    "kannada": "ವಿಶ್ವೇಶ್ವರನನ್ನು"
+  },
+  "विधाय": {
+    "word": "विधाय (vidhāya)",
+    "grammar": "Gerund (Lyap-pratyaya) of vi + dhā",
+    "english": "having performed / offered",
+    "kannada": "ಮಾಡಿ / ಅರ್ಪಿಸಿ"
+  },
+  "गुरुवन्दनम्": {
+    "word": "गुरुवन्दनम् (guruvandanam)",
+    "grammar": "Neuter Compound (ṣaṣṭhī-tatpuruṣa)",
+    "english": "salutation to the teacher / guru",
+    "kannada": "ಗುರುವಿಗೆ ನಮಸ್ಕಾರವನ್ನು"
+  },
+  "बालानां": {
+    "word": "बालानाम् (bālānām)",
+    "grammar": "Genitive Plural of bāla (child/beginner)",
+    "english": "of children / beginners",
+    "kannada": "ಬಾಲಕರಿಗೆ (ಸುಲಭವಾಗಿ ಕಲಿಯುವ ಆಸಕ್ತರಿಗೆ)"
+  },
+  "बालानाम्": {
+    "word": "बालानाम् (bālānām)",
+    "grammar": "Genitive Plural of bāla",
+    "english": "of children / beginners",
+    "kannada": "ಬಾಲಕರಿಗೆ"
+  },
+  "सुखबोधाय": {
+    "word": "सुखबोधाय (sukhabodhāya)",
+    "grammar": "Dative Singular of sukhabodha (easy understanding)",
+    "english": "for easy understanding / comprehension",
+    "kannada": "ಸುಲಭ ಜ್ಞಾನಕ್ಕಾಗಿ (ತಿಳಿಯಲು)"
+  },
+  "क्रियते": {
+    "word": "क्रियते (kriyate)",
+    "grammar": "Present Passive Verb, 3rd Person Singular of kṛ",
+    "english": "is being made / composed",
+    "kannada": "ರಚಿಸಲಾಗುತ್ತಿದೆ"
+  },
+  "तर्कसङ्ग्रहः": {
+    "word": "तर्कसङ्ग्रहः (tarkasaṅgrahaḥ)",
+    "grammar": "Masculine Nominative Singular Compound",
+    "english": "the compendium of logic (Tarkasangraha)",
+    "kannada": "ತರ್ಕಶಾಸ್ತ್ರದ ಪ್ರವೇಶಿಕಾ ಗ್ರಂಥ (ತರ್ಕಸಂಗ್ರಹವು)"
+  },
+  "तर्कसंग्रहः": {
+    "word": "तर्कसंग्रहः (tarkasaṅgrahaḥ)",
+    "grammar": "Masculine Nominative Singular Compound",
+    "english": "the compendium of logic",
+    "kannada": "ತರ್ಕಸಂಗ್ರಹವು"
+  },
+  "द्रव्य": {
+    "word": "द्रव्य (dravya)",
+    "grammar": "Substance (Prātipadika)",
+    "english": "Substance (possessing qualities & action)",
+    "kannada": "ದ್ರವ್ಯ - ಗುಣ-ಕರ್ಮಗಳಿಗೆ ಆಧಾರವಾದದ್ದು"
+  },
+  "गुण": {
+    "word": "गुण (guṇa)",
+    "grammar": "Quality (Prātipadika)",
+    "english": "Quality / Attribute",
+    "kannada": "ಗುಣ - ದ್ರವ್ಯದಲ್ಲಿ ಆಶ್ರಯ ಪಡೆದಿರುವುದು"
+  },
+  "कर्म": {
+    "word": "कर्म (karma)",
+    "grammar": "Activity / Motion (Prātipadika)",
+    "english": "Action / Movement",
+    "kannada": "ಕರ್ಮ - ಚಲನೆ"
+  },
+  "सामान्य": {
+    "word": "सामान्य (sāmānya)",
+    "grammar": "Generality (Prātipadika)",
+    "english": "Generality / Universal",
+    "kannada": "ಸಾಮಾನ್ಯ - ಜಾತಿ (ಉದಾ. ಮನುಷ್ಯತ್ವ)"
+  },
+  "विशेष": {
+    "word": "विशेष (viśeṣa)",
+    "grammar": "Particularity (Prātipadika)",
+    "english": "Particularity / Individuality",
+    "kannada": "ವಿಶೇಷ - ನಿತ್ಯದ್ರವ್ಯಗಳಲ್ಲಿರುವ ವಿಶೇಷ ಧರ್ಮ"
+  },
+  "समवाय": {
+    "word": "समवाय (samavāya)",
+    "grammar": "Inherence (Prātipadika)",
+    "english": "Inherence / Inseparable relation",
+    "kannada": "ಸಮವಾಯ - ಅಪೃಥಕ್ ಸಿದ್ಧ ಸಂಬಂಧ (ಅವಿನಾಭಾವ ಸಂಬಂಧ)"
+  },
+  "अभाव": {
+    "word": "अभाव (abhāva)",
+    "grammar": "Non-existence (Prātipadika)",
+    "english": "Non-existence / Negation",
+    "kannada": "ಅಭಾವ - ಇಲ್ಲದಿರುವುದು"
+  },
+  "सप्त": {
+    "word": "सप्त (sapta)",
+    "grammar": "Numeral (Seven)",
+    "english": "seven",
+    "kannada": "ಏಳು"
+  },
+  "पदार्थाः": {
+    "word": "पदार्थाः (padārthāḥ)",
+    "grammar": "Masculine Nominative Plural of padārtha (category)",
+    "english": "categories of reality / meaning of a word",
+    "kannada": "ಪದಾರ್ಥಗಳು (ಜ್ಞೇಯವಾದ ವಸ್ತುಗಳು)"
+  },
+  "तत्र": {
+    "word": "तत्र (tatra)",
+    "grammar": "Indecilnable (Locative adverb)",
+    "english": "among those / there",
+    "kannada": "ಅವುಗಳಲ್ಲಿ"
+  },
+  "द्रव्याणि": {
+    "word": "द्रव्याणि (dravyāṇi)",
+    "grammar": "Neuter Nominative Plural of dravya",
+    "english": "substances",
+    "kannada": "ದ್ರವ್ಯಗಳು"
+  },
+  "नवैव": {
+    "word": "नवैव (navaiva)",
+    "grammar": "Sandhi: nava (nine) + eva (only)",
+    "english": "nine only",
+    "kannada": "ಒಂಬತ್ತೇ (ಒಂಬತ್ತು ಮಾತ್ರ)"
+  },
+  "उत्क्षेपणावक्षेपणाकुञ्चनप्रसारणगमनानि": {
+    "word": "उत्क्षेपण-अवक्षेपण-आकुञ्चन-प्रसारण-गमनानि",
+    "grammar": "Neuter Nominative Plural Compound",
+    "english": "throwing upwards, throwing downwards, contraction, expansion, and motion",
+    "kannada": "ಮೇಲಕ್ಕೆ ಎಸೆಯುವುದು, ಕೆಳಕ್ಕೆ ಎಸೆಯುವುದು, ಮುದುಡುವುದು, ಹರಡುವುದು ಮತ್ತು ಚಲನೆ"
+  },
+  "पञ्च": {
+    "word": "पञ्च (pañca)",
+    "grammar": "Numeral (Five)",
+    "english": "five",
+    "kannada": "ಐದು"
+  },
+  "कर्माणि": {
+    "word": "कर्माणि (karmāṇi)",
+    "grammar": "Neuter Nominative Plural of karma",
+    "english": "actions / movements",
+    "kannada": "ಕರ್ಮಗಳು (ಚಟುವಟಿಕೆಗಳು)"
+  },
+  "द्विविधं": {
+    "word": "द्विविधम् (dvividham)",
+    "grammar": "Nominative Singular (two-fold)",
+    "english": "of two kinds / two-fold",
+    "kannada": "ಎರಡು ವಿಧ"
+  },
+  "सामान्यम्": {
+    "word": "सामान्यम् (sāmānyam)",
+    "grammar": "Nominative Singular of sāmānya",
+    "english": "generality / universal",
+    "kannada": "ಸಾಮಾನ್ಯವು"
+  },
+  "परमपरं": {
+    "word": "परम्-अपरम् (param-aparam)",
+    "grammar": "Sandhi/Compound: para (higher) + apara (lower)",
+    "english": "higher and lower",
+    "kannada": "ಪರ ಮತ್ತು ಅಪರ"
+  },
+  "चेति": {
+    "word": "चेति (ceti)",
+    "grammar": "Sandhi: ca (and) + iti (thus)",
+    "english": "and thus / also",
+    "kannada": "ಎಂದು"
+  },
+  "अतिदूरवृत्त्यादि": {
+    "word": "अतिदूरवृत्त्यादि (ati-dūra-vṛtty-ādi)",
+    "grammar": "Compound Noun (Nominative Plural)",
+    "english": "remote action and others",
+    "kannada": "ಅತಿ ದೂರದ ಕ್ರಿಯೆಗಳು ಇತ್ಯಾದಿ"
+  },
+  "नित्यानि": {
+    "word": "नित्यानि (nityāni)",
+    "grammar": "Neuter Plural Adjective (from nitya)",
+    "english": "eternal / permanent ones",
+    "kannada": "ಶಾಶ್ವತವಾದವುಗಳು"
+  },
+  "अनैमित्तिकानि": {
+    "word": "अनैमित्तिकानि (anaimittikāni)",
+    "grammar": "Neuter Plural Adjective (from anaimittika)",
+    "english": "not caused by previous action / accidental",
+    "kannada": "ಕಾರಣವಿಲ್ಲದ / ಅನಿಯಂತ್ರಿತವಾದವುಗಳು"
+  },
+  "अयुतसिद्धानां": {
+    "word": "अयुतसिद्धानां (ayutasiddhānāṁ)",
+    "grammar": "Genitive Plural (from ayutasiddha)",
+    "english": "of those which are inseparable (ayutasiddha)",
+    "kannada": "ಬೇರೆಯಾಗಲು ಸಾಧ್ಯವಿಲ್ಲದವರಿಂದ (ಅಯುತಸಿದ್ಧ)"
+  },
+  "अनैकान्तिक": {
+    "word": "अनैकान्तिक (anekāntika)",
+    "grammar": "Adjective (Nominative Singular)",
+    "english": "not having a single cause / irregular",
+    "kannada": "ಅನೇಕ ಕಾರಣಗಳಿಂದಾಗುವ / ನಿಯತವಲ್ಲದ"
+  },
+  "शब्दानां": {
+    "word": "शब्दानां (śabdānāṁ)",
+    "grammar": "Genitive Plural of śabda",
+    "english": "of words",
+    "kannada": "ಶಬ್ದಗಳ (ಪದಗಳ)"
+  },
+  "प्रवृत्तौ": {
+    "word": "प्रवृत्तौ (pravṛttau)",
+    "grammar": "Locative Singular of pravṛtti",
+    "english": "in the origination / emergence",
+    "kannada": "ಉದ್ಭವದಲ್ಲಿ (ಆಗುವಲ್ಲಿ)"
+  },
+  "अनेकाधिष्ठानानां": {
+    "word": "अनेकाधिष्ठानानां (anekādhiṣṭhānānāṁ)",
+    "grammar": "Genitive Plural (from anekādhiṣṭhāna)",
+    "english": "of those having many supports",
+    "kannada": "ಅನೇಕ ಆಧಾರಗಳಿರುವವುಗಳಿಂದ"
+  },
+  "नित्यानां": {
+    "word": "नित्यानां (nityānāṁ)",
+    "grammar": "Genitive Plural (from nitya)",
+    "english": "of the permanent ones",
+    "kannada": "ಶಾಶ್ವತವಾದವುಗಳಿಂದ"
+  },
+  "एकाधिष्ठानत्वात्": {
+    "word": "एकाधिष्ठानत्वात् (ekādhiṣṭhāna-tvāt)",
+    "grammar": "Ablative Singular of ekādhiṣṭhānatva",
+    "english": "from having a single support",
+    "kannada": "ಒಂದೇ ಆಧಾರವಿರುವದರಿಂದ"
+  },
+  "सप्तविंशतिः": {
+    "word": "सप्तविंशतिः (saptaviṁśatiḥ)",
+    "grammar": "Feminine Nominative Singular",
+    "english": "twenty-seven",
+    "kannada": "ಇಪ್ಪತ್ತೇಳು"
+  },
+  "भावतत्त्वस्य": {
+    "word": "भावतत्त्वस्य (bhāvatattvasya)",
+    "grammar": "Genitive Singular of bhāvatattva",
+    "english": "of the category 'bhava' / existence",
+    "kannada": "ಭಾವವೆಂಬ ತತ್ವದ"
+  },
+  "विशेषणानां": {
+    "word": "विशेषणानां (viśeṣaṇānāṁ)",
+    "grammar": "Genitive Plural of viśeṣaṇa",
+    "english": "of the attributes / qualifiers",
+    "kannada": "ವಿಶೇಷಣಗಳ (ಗುಣಗಳ)"
+  },
+  "नित्यानां": {
+    "word": "नित्यानां (nityānāṁ)",
+    "grammar": "Genitive Plural of nitya",
+    "english": "of the permanent ones",
+    "kannada": "ಶಾಶ್ವತವಾದವುಗಳಿಂದ"
+  },
+  "अनेकद्रव्याश्रयित्वात्": {
+    "word": "अनेकद्रव्याश्रयित्वात् (aneka-dravya-āśrayitvaat)",
+    "grammar": "Ablative Singular (from aneka-dravya-āśrayitva)",
+    "english": "from being supported by many substances",
+    "kannada": "ಅನೇಕ ದ್ರವ್ಯಗಳಲ್ಲಿ ಆಶ್ರಯ ಪಡೆಯುವುದರಿಂದ"
+  },
+  "अष्ट": {
+    "word": "अष्ट (aṣṭa)",
+    "grammar": "Numeral (Eight)",
+    "english": "eight",
+    "kannada": "ಎಂಟು"
+  },
+  "गुणानां": {
+    "word": "गुणानां (guṇānāṁ)",
+    "grammar": "Genitive Plural of guṇa",
+    "english": "of qualities",
+    "kannada": "ಗುಣಗಳ"
+  },
+  "संख्या": {
+    "word": "संख्या (saṅkhyā)",
+    "grammar": "Feminine Noun (Prātipadika)",
+    "english": "Number",
+    "kannada": "ಸಂಖ್ಯೆ - ಎಣಿಕೆ"
+  },
+  "परिमाण": {
+    "word": "परिमाण (parimāṇa)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "Magnitude / Measure",
+    "kannada": "ಪರಿಮಾಣ - ಅಳತೆ (ದೂರ, ಗಾತ್ರ)"
+  },
+  "पृथक्त्व": {
+    "word": "पृथक्त्व (pṛthaktva)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "Separateness / Diversity",
+    "kannada": "ಪ್ರತ್ಯೇಕತೆ (ಬೇರೆಯಾಗಿರುವುದು)"
+  },
+  "संयोग": {
+    "word": "संयोग (saṁyoga)",
+    "grammar": "Masculine Noun (Prātipadika)",
+    "english": "Conjunction / Contact",
+    "kannada": "ಸಂಯೋಗ - ಎರಡು ವಸ್ತುಗಳು ಸೇರುವುದು"
+  },
+  "विभाग": {
+    "word": "विभाग (vibhāga)",
+    "grammar": "Masculine Noun (Prātipadika)",
+    "english": "Disjunction / Separation",
+    "kannada": "ವಿಭಾಗ - ಬೇರ್ಪಡುವಿಕೆ"
+  },
+  "परत्व": {
+    "word": "परत्व (paratva)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "Remoteness (in space or time)",
+    "kannada": "ಪರತ್ವ - ದೂರವಿರುವುದು"
+  },
+  "अपरत्व": {
+    "word": "अपरत्व (aparatva)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "Nearness",
+    "kannada": "ಅಪರತ್ವ - ಹತ್ತಿರವಿರುವುದು"
+  },
+  "गुरुत्व": {
+    "word": "गुरुत्व (gurutva)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "Heaviness",
+    "kannada": "ಗುರುತ್ವ - ಭಾರವಿರುವುದು"
+  },
+  "द्रवत्व": {
+    "word": "द्रवत्व (dravatva)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "Liquidity",
+    "kannada": "ದ್ರವತ್ವ - ನೀರಿನಂತೆ ಹರಿಯುವ ಗುಣ"
+  },
+  "स्नेह": {
+    "word": "स्नेह (sneha)",
+    "grammar": "Masculine Noun (Prātipadika)",
+    "english": "Stickiness / Affection",
+    "kannada": "ಸ್ನೇಹ - ಅಂಟಿಕೊಳ್ಳುವಿಕೆ"
+  },
+  "संस्कार": {
+    "word": "संस्कार (saṁskāra)",
+    "grammar": "Masculine Noun (Prātipadika)",
+    "english": "Impression / Potency (Unmanifested Potential)",
+    "kannada": "ಸಂಸ್ಕಾರ - ಅವ್ಯಕ್ತ ಶಕ್ತಿ"
+  },
+  "शब्द": {
+    "word": "शब्द (śabda)",
+    "grammar": "Masculine Noun (Prātipadika)",
+    "english": "Sound",
+    "kannada": "ಶಬ್ದ - ಶ್ರವಣಕ್ಕೆ ಬರುವ ನಾದ"
+  },
+  "अष्टदशा": {
+    "word": "अष्टदशा (aṣṭadaśā)",
+    "grammar": "Feminine Noun (Compound)",
+    "english": "Eighteen (Qualities)",
+    "kannada": "ಹದಿನೆಂಟು (ಗುಣಗಳು)"
+  },
+  "यत्र": {
+    "word": "यत्र (yatra)",
+    "grammar": "Indecilnable (Adverb)",
+    "english": "where / in which",
+    "kannada": "ಯಾವುದರಲ್ಲಿ / ಯಾವ ಸ್ಥಳದಲ್ಲಿ"
+  },
+  "अश्रु": {
+    "word": "अश्रु (aśru)",
+    "grammar": "Neuter Singular (Noun)",
+    "english": "tear",
+    "kannada": "ಕಣ್ಣೀರು"
+  },
+  "चक्षुरश्रु": {
+    "word": "चक्षुरश्रु (cakṣu-aśru)",
+    "grammar": "Neuter Compound (Prātipadika)",
+    "english": "tears of the eyes",
+    "kannada": "ಕಣ್ಣಿನಿಂದ ಬರುವ ಕಣ್ಣೀರು"
+  },
+  "चक्षुरश्रु": {
+    "word": "चक्षुरश्रु (cakṣu-aśru)",
+    "grammar": "Neuter Compound",
+    "english": "tears of the eyes",
+    "kannada": "ಕಣ್ಣುനീರು"
+  },
+  "अश्रु": {
+    "word": "अश्रु (aśru)",
+    "grammar": "Neuter Singular",
+    "english": "tear",
+    "kannada": "ಕಣ್ಣೀರು"
+  },
+  "मूर्च्छना": {
+    "word": "मूर्च्छना (mūrcchanā)",
+    "grammar": "Feminine Noun (Prātipadika)",
+    "english": "fainting / swoon / stupor",
+    "kannada": "ಮೈಮರೆವು / ಮೂರ್ಛೆ"
+  },
+  "चतुर्विधा": {
+    "word": "चतुर्विधा (caturvidhā)",
+    "grammar": "Feminine Adjective",
+    "english": "of four kinds",
+    "kannada": "ನಾಲ್ಕು ವಿಧವಾದ"
+  },
+  "इति": {
+    "word": "इति (iti)",
+    "grammar": "Indecilnable (Conjunction)",
+    "english": "thus / so",
+    "kannada": "ಎಂದು"
+  },
+  "द्विविधा": {
+    "word": "द्विविधा (dvividhā)",
+    "grammar": "Feminine Adjective",
+    "english": "of two kinds",
+    "kannada": "ಎರಡು ವಿಧವಾದ"
+  },
+  "उत्कृष्टा": {
+    "word": "उत्कृष्टा (utkṛṣṭā)",
+    "grammar": "Feminine Adjective (from ut-kṛṣṭa)",
+    "english": "excellent / superior",
+    "kannada": "ಉತ್ತಮವಾದ / ಶ್ರೇಷ್ಠವಾದ"
+  },
+  "जरा": {
+    "word": "जरा (jarā)",
+    "grammar": "Feminine Noun (Prātipadika)",
+    "english": "decay / old age",
+    "kannada": "ಜರಾವಸ್ಥೆ / ಮುಪ್ಪು"
+  },
+  "अन्त्य": {
+    "word": "अन्त्य (antya)",
+    "grammar": "Adjective (Singular)",
+    "english": "final / last",
+    "kannada": "ಕೊನೆಯ / ಅಂತಿಮ"
+  },
+  "निमित्त": {
+    "word": "निमित्त (nimitta)",
+    "grammar": "Neuter Noun (Prātipadika)",
+    "english": "cause / occasion / ground",
+    "kannada": "ನಿಮಿತ್ತ / ಕಾರಣ"
+  },
+  "पञ्चविंशतिः": {
+    "word": "पञ्चविंशतिः (pañcaviṁśatiḥ)",
+    "grammar": "Feminine Noun",
+    "english": "twenty-five",
+    "kannada": "ಇಪ್ಪತ್ತೈದು"
+  },
+  "रूपाणि": {
+    "word": "रूपाणि (rūpāṇi)",
+    "grammar": "Neuter Plural of rūpa",
+    "english": "forms",
+    "kannada": "ರೂಪಗಳು"
+  },
+  "पञ्चविंशतिरूपाणि": {
+    "word": "पञ्चविंशतिरूपाणि (pañcaviṁśati-rūpāṇi)",
+    "grammar": "Neuter Plural Compound",
+    "english": "twenty-five forms",
+    "kannada": "ಇಪ್ಪತ್ತೈದು ರೂಪಗಳು"
+  },
+  "नित्यानि": {
+    "word": "नित्यानि (nityāni)",
+    "grammar": "Neuter Plural Adjective",
+    "english": "eternal ones",
+    "kannada": "ಶಾಶ್ವತವಾದವುಗಳು"
+  },
+  "यद्वा": {
+    "word": "यद्वा (yad-vā)",
+    "grammar": "Conjunction",
+    "english": "or else / or",
+    "kannada": "ಅಥವಾ / ಇಲ್ಲದಿದ್ದರೆ"
+  },
+  "आकाशादीनि": {
+    "word": "आकाशादीनि (ākāśādīni)",
+    "grammar": "Neuter Plural Compound",
+    "english": "ether and others (the remaining substances)",
+    "kannada": "ಆಕಾಶಾದಿಗಳನ್ನು (ಆಕಾಶ ಮುಂತಾದವುಗಳನ್ನು)"
+  },
+  "इति": {
+    "word": "इति (iti)",
+    "grammar": "Indecilnable",
+    "english": "thus / so",
+    "kannada": "ಎಂದು"
+  },
+  "तेषु": {
+    "word": "तेषु (teṣu)",
+    "grammar": "Masculine/Neuter Locative Plural (pronoun)",
+    "english": "among them",
+    "kannada": "ಅವುಗಳಲ್ಲಿ"
+  },
+  "संख्या": {
+    "word": "संख्या (saṅkhyā)",
+    "grammar": "Feminine Noun (Prātipadika)",
+    "english": "Number (as a quality)",
+    "kannada": "ಸಂಖ್ಯೆ (ಗುಣ)"
+  },
+  "एका": {
+    "word": "एका (ekā)",
+    "grammar": "Feminine Singular Adjective",
+    "english": "one",
+    "kannada": "ಒಂದು"
+  },
+  "एव": {
+    "word": "एव (eva)",
+    "grammar": "Avyaya (Particle)",
+    "english": "only / indeed",
+    "kannada": "ಮಾತ್ರ"
+  },
+  "अनेकद्रव्याश्रितत्वेऽपि": {
+    "word": "अनेकद्रव्याश्रितत्वेऽपि (aneka-dravya-āśritatve-api)",
+    "grammar": "Locative Singular (Sandhi: tve + api)",
+    "english": "even when supported by many substances",
+    "kannada": "ಅನೇಕ ದ್ರವ್ಯಗಳಲ್ಲಿ ಆಶ್ರಯ ಪಡೆದಿದ್ದರೂ ಕೂಡ"
+  },
+  "विशेषणानां": {
+    "word": "विशेषणानां (viśeṣaṇānāṁ)",
+    "grammar": "Genitive Plural of viśeṣaṇa",
+    "english": "of the attributes",
+    "kannada": "ಗುಣಗಳ (ವಿಶೇಷಣಗಳ)"
+  },
+  "अष्टदशा": {
+    "word": "अष्टदशा (aṣṭadaśā)",
+    "grammar": "Feminine Compound Noun",
+    "english": "eighteen",
+    "kannada": "ಹದಿನೆಂಟು"
+  },
+  "यादृश": { 
+    "word": "यादृश (yādṛśa)", 
+    "grammar": "Prakṛti (root/base form) of adjective", 
+    "english": "such as / of what kind", 
+    "kannada": "ಎಂತಹ / ಹೇಗಿರುವಂತಹುದು"
+  },
+  "यादृशानाम्": { 
+    "word": "यादृशानाम् (yādṛśānām)", 
+    "grammar": "Genitive Plural (from yādṛśa)", 
+    "english": "of those of such kind", 
+    "kannada": "ಎಂತಹವುಗಳದು (ಆ ರೀತಿಯವುಗಳ)"
+  },
+  "अपरत्वं": { 
+    "word": "अपरत्वं (aparatvaṁ)", 
+    "grammar": "Neuter Nominative/Accusative Singular", 
+    "english": "nearness", 
+    "kannada": "ಅಪರತ್ವವು (ಹತ್ತಿರವಿರುವಿಕೆ)"
+  },
+  "गुणानां": { 
+    "word": "गुणानां (guṇānāṁ)", 
+    "grammar": "Genitive Plural of guṇa", 
+    "english": "of qualities", 
+    "kannada": "ಗುಣಗಳ"
+  },
+  "जनके": { 
+    "word": "जनके (janake)", 
+    "grammar": "Locative Singular of janaka (cause)", 
+    "english": "in the cause", 
+    "kannada": "ಕಾರಣದಲ್ಲಿ"
+  },
+  "अजनके": { 
+    "word": "अजनके (ajanake)", 
+    "grammar": "Locative Singular of ajana (not a cause)", 
+    "english": "in that which is not a cause", 
+    "kannada": "ಕಾರಣವಿಲ್ಲದಿರುವುದರಲ್ಲಿ"
+  },
+  "च": { 
+    "word": "च (ca)", 
+    "grammar": "Conjunction", 
+    "english": "and", 
+    "kannada": "ಮತ್ತು / ಕೂಡ"
+  },
+  "इतरेषां": { 
+    "word": "इतरेषाम् (itareṣāṁ)", 
+    "grammar": "Genitive Plural of itara (other)", 
+    "english": "of the others", 
+    "kannada": "ಇತರವುಗಳ (ಇತರೆ ವಸ್ತುಗಳ)"
+  },
+  "जनकेतरत्वम्": { 
+    "word": "जनकेतरत्वम् (janak-itara-tvam)", 
+    "grammar": "Neuter Compound (Sandhi)", 
+    "english": "not being a cause (janaka + itara + tvam)", 
+    "kannada": "ಕಾರಣವಲ್ಲದಿರುವುದು"
+  },
+  "इति": { 
+    "word": "इति (iti)", 
+    "grammar": "Avyaya", 
+    "english": "thus / so", 
+    "kannada": "ಎಂದು"
+  },
+  "गुणानां": { 
+    "word": "गुणानां (guṇānāṁ)", 
+    "grammar": "Genitive Plural of guṇa", 
+    "english": "of qualities", 
+    "kannada": "ಗುಣಗಳ"
+  },
+  "अयुतसिद्धे": { 
+    "word": "अयुतसिद्धे (ayutasiddhe)", 
+    "grammar": "Locative Singular of ayutasiddha", 
+    "english": "in that which is inseparable", 
+    "kannada": "ಅಯುತ್ತಸಿದ್ಧದಲ್ಲಿ (ಬೇರೆಯಾಗಲು ಸಾಧ್ಯವಿಲ್ಲದ ವಸ್ತುಗಳಲ್ಲಿ)"
+  },
+  "नित्यानां": { 
+    "word": "नित्यानां (nityānāṁ)", 
+    "grammar": "Genitive Plural of nitya (eternal)", 
+    "english": "of the eternal ones", 
+    "kannada": "ಶಾಶ್ವತವಾದವುಗಳ (ನಿತ್ಯ ವಸ್ತುಗಳ)"
+  },
+  "नित्यानित्ययोः": { 
+    "word": "नित्यानित्ययोः (nityā-nityayoḥ)", 
+    "grammar": "Dual Genitive/Locative (Sandhi)", 
+    "english": "of the eternal and the non-eternal", 
+    "kannada": "ನಿತ್ಯ ಮತ್ತು ಅನಿತೃ ವಸ್ತುಗಳ (ಎರಡರಲ್ಲೂ)"
+  },
+  "अयुतसिद्धेतरत्वम्": { 
+    "word": "अयुतसिद्धेतरत्वम् (ayutasiddha-itara-tvam)", 
+    "grammar": "Neuter Compound (Sandhi)", 
+    "english": "not being inseparable (other than ayutasiddha)", 
+    "kannada": "ಅಯುತ್ತಸಿದ್ಧವಲ್ಲದಿರುವುದು"
+  },
+  "इति": { 
+    "word": "इति (iti)", 
+    "grammar": "Avyaya", 
+    "english": "thus / so", 
+    "kannada": "ಎಂದು"
+  },
+  "गुणानां": { 
+    "word": "गुणानां (guṇānāṁ)", 
+    "grammar": "Genitive Plural of guṇa", 
+    "english": "of qualities", 
+    "kannada": "ಗುಣಗಳ"
+  },
+  "अयुतसिद्धानाम्": { 
+    "word": "अयुतसिद्धानाम् (ayutasiddhānām)", 
+    "grammar": "Genitive Plural of ayutasiddha", 
+    "english": "of the inseparable ones", 
+    "kannada": "ಅಯುತ್ತಸಿದ್ಧಗಳ (ಬೇರೆಯಾಗಲು ಸಾಧ್ಯವಿಲ್ಲದವುಗಳ)"
+  },
+  "परत्वं": { 
+    "word": "परत्वं (paratvaṁ)", 
+    "grammar": "Neuter Nominative/Accusative Singular", 
+    "english": "remoteness", 
+    "kannada": "ಪರತ್ವವು (ದೂರವಿರುವುದು)"
+  },
+  "परमाण्वन्त्ये": { 
+    "word": "परमाण्वन्त्ये (paramāṇu-antye)", 
+    "grammar": "Locative Singular of paramāṇu-anta (at the end of the atom)", 
+    "english": "at the extremity of the atom", 
+    "kannada": "ಪರಮಾಣುವಿನ ಕೊನೆಯಲ್ಲಿ (ಅಂತیم)"
+  },
+  "आकाशादिष्वपि": { 
+    "word": "आकाशादिष्वपि (ākāśa-ādi-ṣu-api)", 
+    "grammar": "Locative Plural (Sandhi)", 
+    "english": "even in ether and others", 
+    "kannada": "ಆಕಾಶಾದಿಗಳಲ್ಲಿ ಕೂಡ"
+  },
+  "परत्वमस्ति": { 
+    "word": "परत्वमस्ति (paratvam-asti)", 
+    "grammar": "Compound (Sandhi: tvam + asti)", 
+    "english": "remoteness exists", 
+    "kannada": "ಪರತ್ವವಿದೆ"
+  },
+  "नित्यानित्ययोरपि": { 
+    "word": "नित्यानित्ययोरपि (nityā-nityayoḥ-api)", 
+    "grammar": "Dual Locative Plural (Sandhi)", 
+    "english": "even in the eternal and non-eternal", 
+    "kannada": "ನಿತ್ಯ ಮತ್ತು ಅನಿತೃ ವಸ್ತುಗಳಲ್ಲಿ ಕೂಡ"
+  },
+  "अयुतसिद्धेतरयोः": { 
+    "word": "अयुतसिद्धेतरयोः (ayutasiddha-itara-yoḥ)", 
+    "grammar": "Dual Genitive/Locative (Sandhi)", 
+    "english": "in the two which are not inseparable", 
+    "kannada": "ಅಯುತ್ತಸಿದ್ಧವಲ್ಲದ ಎರಡು ವಸ್ತುಗಳಲ್ಲಿ"
+  },
+  "अपरत्वम्": { 
+    "word": "अपरत्वम् (aparatvam)", 
+    "grammar": "Neuter Nominative/Accusative Singular", 
+    "english": "nearness", 
+    "kannada": "ಅಪರತ್ವವು (ಹತ್ತಿರವಿರುವಿಕೆ)" 
+  }
+}
+    
