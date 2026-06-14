@@ -2603,7 +2603,29 @@
             throw new Error(errorJson.message || response.statusText);
           }
 
+          const respData = await response.json();
+          const newSha = respData.content?.sha || "";
+
           logConsole(`Audio file ${filename} uploaded successfully.`, "success");
+
+          // Update local state in real-time
+          const existingIdx = state.audioFiles.findIndex(f => f.name === filename);
+          const newFileMeta = {
+            name: filename,
+            path: `assets/audio/${filename}`,
+            size: fileObject.size,
+            type: "file",
+            sha: newSha,
+            download_url: state.localAudioCache[filename] || `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/assets/audio/${filename}`
+          };
+          if (existingIdx !== -1) {
+            state.audioFiles[existingIdx] = newFileMeta;
+          } else {
+            state.audioFiles.push(newFileMeta);
+          }
+          renderAudioFiles();
+          populateSutraAudioDropdown();
+
           if (successCallback) successCallback(filename);
         } catch (err) {
           logConsole(`Upload failed: ${err.message}`, "error");
@@ -2652,7 +2674,18 @@
         }
 
         logConsole(`Audio file ${filename} deleted successfully.`, "success");
-        await fetchAudioFiles();
+
+        // Update local state in real-time instantly
+        state.audioFiles = state.audioFiles.filter(f => f.name !== filename);
+        if (state.localAudioCache && state.localAudioCache[filename]) {
+          try { URL.revokeObjectURL(state.localAudioCache[filename]); } catch(_) {}
+          delete state.localAudioCache[filename];
+        }
+        renderAudioFiles();
+        populateSutraAudioDropdown();
+
+        // Background refetch to stay in sync
+        fetchAudioFiles();
       } catch (err) {
         logConsole(`Failed to delete audio file: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
