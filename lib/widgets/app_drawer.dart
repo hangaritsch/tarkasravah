@@ -207,14 +207,18 @@ class AppDrawer extends StatelessWidget {
                          Row(
                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                            children: [
-                             Text(
-                               "Sanskrit Font",
-                               style: TextStyle(
-                                 fontSize: 14,
-                                 fontWeight: FontWeight.bold,
-                                 color: text,
+                             Expanded(
+                               child: Text(
+                                 "Sanskrit Font",
+                                 style: TextStyle(
+                                   fontSize: 14,
+                                   fontWeight: FontWeight.bold,
+                                   color: text,
+                                 ),
+                                 overflow: TextOverflow.ellipsis,
                                ),
                              ),
+                             const SizedBox(width: 8),
                              SizedBox(
                                width: 140,
                                child: DropdownButton<String>(
