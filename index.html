@@ -9,24 +9,26 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Pragati+Narrow:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Pragati+Narrow:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --primary: hsl(30, 100%, 55%); /* Saffron */
-      --primary-hover: hsl(30, 100%, 48%);
-      --primary-glow: hsla(30, 100%, 55%, 0.2);
-      --secondary: hsl(345, 90%, 28%); /* Maroon */
-      --bg-dark: hsl(220, 24%, 7%);
-      --bg-surface: hsl(220, 24%, 12%);
-      --text-light: hsl(0, 0%, 96%);
-      --text-muted: hsl(220, 12%, 72%);
-      --border-color: hsl(220, 20%, 20%);
-      --glass-bg: rgba(20, 20, 30, 0.75);
-      --glass-border: rgba(255, 153, 51, 0.18);
+      --bg-dark: #0a0607;
+      --bg-surface: #140d0e;
+      --bg-card: rgba(28, 18, 20, 0.55);
+      --accent-saffron: #f37021;
+      --accent-saffron-light: #ff8e47;
+      --accent-gold: #e2b13c;
+      --accent-maroon: #800020;
+      --accent-crimson: #c21d24;
+      --border-color: rgba(243, 112, 33, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-light: #fdfaf6;
+      --text-muted: #c8bdbe;
+      --success: #00e676;
+      
       --font-sanskrit: 'Pragati Narrow', sans-serif;
       --font-sans: 'Outfit', sans-serif;
-      --success: #2ecc71;
     }
 
     * {
@@ -37,7 +39,11 @@
 
     body {
       background-color: var(--bg-dark);
-      background-image: radial-gradient(circle at 50% 30%, var(--secondary) 0%, var(--bg-dark) 80%);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(194, 29, 36, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(243, 112, 33, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(128, 0, 32, 0.18) 0%, transparent 70%);
+      background-attachment: fixed;
       color: var(--text-light);
       font-family: var(--font-sans);
       min-height: 100vh;
@@ -47,48 +53,102 @@
       overflow-x: hidden;
     }
 
-    header {
-      padding: 40px 20px;
-      text-align: center;
-      animation: fadeInDown 0.8s ease;
+    /* Ambient animated glow backgrounds */
+    .glow-spotlight {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(243, 112, 33, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      top: -100px;
+      left: calc(50% - 200px);
+      filter: blur(50px);
+      pointer-events: none;
+      animation: floatGlow 15s infinite ease-in-out alternate;
     }
 
-    .logo {
+    @keyframes floatGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 30px) scale(1.15); }
+    }
+
+    header {
+      padding: 60px 20px 20px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .sanskrit-logo {
       font-family: var(--font-sanskrit);
-      font-size: 84px;
+      font-size: 96px;
       font-weight: 700;
-      color: var(--primary);
-      text-shadow: 0 0 25px var(--primary-glow);
-      line-height: 1.1;
+      background: linear-gradient(135deg, var(--accent-gold) 10%, var(--accent-saffron) 50%, var(--accent-crimson) 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 15px;
+      filter: drop-shadow(0 4px 15px rgba(243, 112, 33, 0.25));
+      letter-spacing: 1px;
+      animation: zoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .title-sub {
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #ffffff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .description {
       color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 20px auto;
-      font-size: 16px;
+      max-width: 650px;
+      margin: 0 auto 24px auto;
+      font-size: 17px;
       line-height: 1.6;
+      font-weight: 300;
     }
 
-    .version-tag {
-      display: inline-block;
-      background: rgba(255, 153, 51, 0.15);
-      border: 1px solid rgba(255, 153, 51, 0.3);
-      padding: 6px 14px;
+    .version-pill {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(243, 112, 33, 0.08);
+      border: 1px solid rgba(243, 112, 33, 0.35);
+      padding: 6px 16px;
       border-radius: 50px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--primary);
-      margin-top: 10px;
-      backdrop-filter: blur(5px);
+      color: var(--accent-gold);
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 15px rgba(243, 112, 33, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .version-pill:hover {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(226, 177, 60, 0.2);
+    }
+
+    .version-pill .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--success);
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 10px var(--success);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.6; }
     }
 
     main {
@@ -97,265 +157,615 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 20px 40px;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
+      z-index: 5;
     }
 
     .detected-device-banner {
-      background: rgba(46, 204, 113, 0.15);
-      border: 1px solid rgba(46, 204, 113, 0.3);
-      padding: 12px 24px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      font-size: 15px;
-      font-weight: 500;
+      background: rgba(0, 230, 118, 0.06);
+      border: 1px solid rgba(0, 230, 118, 0.25);
+      padding: 12px 28px;
+      border-radius: 100px;
+      margin-bottom: 40px;
+      font-size: 14px;
+      font-weight: 600;
       display: none;
       align-items: center;
-      gap: 10px;
-      animation: fadeInUp 0.6s ease;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0, 230, 118, 0.03);
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .detected-device-banner.visible {
       display: inline-flex;
     }
 
-    .detected-device-banner .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 10px var(--success);
+    .detected-device-banner svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--success);
     }
 
+    /* Container for layout */
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 50px;
+      width: 100%;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+    @media (min-width: 992px) {
+      .hero-layout {
+        grid-template-columns: 55% 45%;
+      }
+    }
+
+    /* CSS Interactive Mockup Showcase */
+    .showcase-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1000px;
+    }
+
+    .phone-mockup {
+      width: 280px;
+      height: 560px;
+      background: #181112;
+      border: 10px solid #2d2022;
+      border-radius: 40px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 30px rgba(243, 112, 33, 0.15);
+      position: relative;
+      overflow: hidden;
+      transform: rotateY(-10deg) rotateX(10deg);
+      transition: all 0.5s ease;
+      animation: floatPhone 6s infinite ease-in-out;
+    }
+
+    .phone-mockup:hover {
+      transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.8), 0 0 40px rgba(243, 112, 33, 0.25);
+    }
+
+    @keyframes floatPhone {
+      0% { transform: rotateY(-10deg) rotateX(10deg) translateY(0px); }
+      50% { transform: rotateY(-10deg) rotateX(10deg) translateY(-12px); }
+      100% { transform: rotateY(-10deg) rotateX(10deg) translateY(0px); }
+    }
+
+    /* Phone Screen Details */
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #fdf5e6; /* Sepia-ish default */
+      display: flex;
+      flex-direction: column;
+      color: #3e2723;
+      font-family: var(--font-sans);
+    }
+
+    .phone-header {
+      height: 60px;
+      background: #800020;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-sanskrit);
+      font-size: 20px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .phone-body {
+      flex: 1;
+      padding: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phone-card {
+      background: #faf2dc;
+      border: 1px solid rgba(128, 0, 32, 0.12);
+      border-radius: 12px;
+      padding: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phone-sutra-num {
+      align-self: flex-start;
+      background: rgba(128, 0, 32, 0.08);
+      color: #800020;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .phone-text-sk {
+      font-family: var(--font-sanskrit);
+      font-size: 17px;
+      line-height: 1.4;
+      font-weight: 700;
+      text-align: center;
+      margin: 10px 0;
+      color: #4a148c;
+    }
+
+    .phone-text-en {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #5d4037;
+      text-align: justify;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .phone-audio-bar {
+      margin-top: 10px;
+      background: #800020;
+      border-radius: 20px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      color: #faf2dc;
+    }
+
+    .phone-play-btn {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+    }
+
+    .phone-play-btn svg {
+      width: 10px;
+      height: 10px;
+      fill: #800020;
+    }
+
+    .phone-timeline {
+      flex: 1;
+      height: 3px;
+      background: rgba(250, 242, 220, 0.3);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .phone-timeline-fill {
+      width: 60%;
+      height: 100%;
+      background: var(--accent-gold);
+      border-radius: 2px;
+    }
+
+    /* Cards Grid */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
+      grid-template-columns: 1fr;
+      gap: 25px;
       width: 100%;
-      margin-bottom: 40px;
-      animation: fadeInUp 0.8s ease;
+    }
+
+    @media (min-width: 600px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 992px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 40px 30px;
-      text-align: center;
+      background: var(--bg-card);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
+      padding: 35px 30px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      transition: all 0.3s ease;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(243, 112, 33, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      top: -75px;
+      right: -75px;
+      transition: all 0.5s ease;
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      border-color: var(--primary);
-      box-shadow: 0 20px 45px rgba(255, 153, 51, 0.15);
+      transform: translateY(-5px);
+      border-color: rgba(243, 112, 33, 0.45);
+      box-shadow: 0 15px 40px rgba(243, 112, 33, 0.12);
+    }
+
+    .card:hover::before {
+      background: radial-gradient(circle, rgba(243, 112, 33, 0.2) 0%, transparent 70%);
+      transform: scale(1.3);
     }
 
     .card.highlighted {
-      border: 2px solid var(--primary);
-      box-shadow: 0 20px 50px rgba(255, 153, 51, 0.25);
+      border: 1.5px solid var(--accent-saffron);
+      box-shadow: 0 15px 45px rgba(243, 112, 33, 0.2);
+      background: linear-gradient(180deg, rgba(28, 18, 20, 0.8) 0%, rgba(20, 10, 11, 0.6) 100%);
     }
 
     .recommended-badge {
       position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, var(--primary), #ffb266);
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-saffron));
       color: var(--bg-dark);
-      padding: 4px 16px;
+      padding: 4px 14px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 12px rgba(255, 153, 51, 0.4);
+      letter-spacing: 0.8px;
+      box-shadow: 0 4px 12px rgba(243, 112, 33, 0.3);
     }
 
-    .card-icon {
-      font-size: 48px;
-      color: var(--primary);
-      margin-bottom: 20px;
+    .card-header-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(243, 112, 33, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      border: 1px solid rgba(243, 112, 33, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover .card-header-icon {
+      background: rgba(243, 112, 33, 0.15);
+      border-color: rgba(243, 112, 33, 0.3);
+      transform: scale(1.05);
+    }
+
+    .card-header-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--accent-saffron);
     }
 
     .card-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      color: var(--text-light);
     }
 
     .card-desc {
       color: var(--text-muted);
       font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 30px;
+      line-height: 1.55;
+      margin-bottom: 28px;
       flex-grow: 1;
-    }
-
-    .card-footer {
-      margin-top: auto;
+      font-weight: 300;
     }
 
     .btn {
       width: 100%;
-      background: linear-gradient(135deg, var(--primary), #ffb266);
+      background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-saffron) 100%);
       color: var(--bg-dark);
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       border: none;
-      border-radius: 12px;
-      padding: 14px 24px;
+      border-radius: 14px;
+      padding: 15px 24px;
       cursor: pointer;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 153, 51, 0.25);
+      box-shadow: 0 4px 15px rgba(243, 112, 33, 0.2);
+    }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--bg-dark);
+      transition: transform 0.3s ease;
     }
 
     .btn:hover {
-      background: linear-gradient(135deg, var(--primary-hover), var(--primary));
-      box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
-      transform: scale(1.02);
+      background: linear-gradient(135deg, var(--accent-saffron-light) 0%, var(--accent-saffron) 100%);
+      box-shadow: 0 6px 22px rgba(243, 112, 33, 0.35);
+    }
+
+    .btn:hover svg {
+      transform: translateY(2px);
     }
 
     .btn-secondary {
       background: transparent;
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--text-light);
       box-shadow: none;
     }
 
+    .btn-secondary svg {
+      fill: var(--text-light);
+    }
+
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.25);
       box-shadow: none;
-      transform: scale(1.02);
+    }
+
+    .btn-secondary:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* Side panels and secondary links */
+    .admin-link-section {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto 10px auto;
+      text-align: center;
+      animation: fadeInUp 0.9s ease;
+    }
+
+    .admin-card {
+      background: rgba(20, 13, 14, 0.4);
+      border: 1px dashed rgba(243, 112, 33, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s ease;
+    }
+
+    @media (min-width: 768px) {
+      .admin-card {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        padding: 20px 30px;
+      }
+    }
+
+    .admin-card:hover {
+      border-color: rgba(243, 112, 33, 0.4);
+      background: rgba(20, 13, 14, 0.6);
+    }
+
+    .admin-info {
+      flex: 1;
+    }
+
+    .admin-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .admin-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .admin-btn-wrap {
+      min-width: 180px;
     }
 
     footer {
       padding: 30px 20px;
       text-align: center;
-      border-top: 1px solid var(--border-color);
-      font-size: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
       color: var(--text-muted);
-      background: rgba(10, 10, 15, 0.6);
+      background: rgba(10, 6, 7, 0.85);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
 
     footer a {
-      color: var(--primary);
+      color: var(--accent-gold);
       text-decoration: none;
       font-weight: 500;
+      transition: color 0.3s ease;
     }
 
     footer a:hover {
+      color: var(--accent-saffron-light);
       text-decoration: underline;
     }
 
-    /* Animations */
+    /* Keyframes */
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
+  <div class="glow-spotlight"></div>
+
   <header>
-    <div class="logo">तर्कश्रावः</div>
+    <div class="sanskrit-logo">तर्कश्रावः</div>
     <h1 class="title-sub">Tarkaśravaḥ Sanskrit Reader</h1>
     <p class="description">
-      An elegant, premium e-reader and audio player designed for reading logic systems (Nyaya-Vaisheshika), offering full dictionary lookups and offline capability.
+      An elegant, premium e-reader and audio player designed for traditional logic systems (Nyāya-Vaiśeṣika), offering full dictionary lookups, voice recordings, and per-text offline caching.
     </p>
-    <span class="version-tag">App Version: v1.0.0+1</span>
+    <span class="version-pill">
+      <span class="pulse-dot"></span>
+      App Version: v1.0.0+1
+    </span>
   </header>
 
   <main>
     <div id="device-banner" class="detected-device-banner">
-      <span class="dot"></span>
-      <span id="device-text">Detected device: Android. Recommended package highlighted.</span>
+      <!-- Checked Circle Icon -->
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      <span id="device-text">Detected device. Recommended package highlighted.</span>
     </div>
 
-    <div class="cards-grid">
-      <!-- Android Card -->
-      <div id="android-card" class="card">
-        <div id="android-badge" class="recommended-badge" style="display: none;">Recommended</div>
-        <div>
-          <div class="card-icon">🤖</div>
-          <h2 class="card-title">Android Package</h2>
-          <p class="card-desc">
-            Installable APK file for Android mobile devices. Enable installation from unknown sources in settings to install this package.
-          </p>
+    <div class="hero-layout">
+      <!-- Left side: Device downloads -->
+      <div class="cards-grid">
+        <!-- Android Card -->
+        <div id="android-card" class="card">
+          <div id="android-badge" class="recommended-badge" style="display: none;">Recommended</div>
+          <div>
+            <div class="card-header-icon">
+              <!-- Android Icon -->
+              <svg viewBox="0 0 24 24">
+                <path d="M17.6 9.48l1.84-3.18c.16-.31.06-.7-.25-.87a.586.586 0 0 0-.84.24l-1.88 3.24c-2.86-1.18-6.09-1.18-8.96 0L5.63 5.67c-.22-.38-.71-.52-1.09-.3-.38.22-.52.71-.3 1.09l1.84 3.18C2.94 12.18 1 15.39 1 18.96h22c0-3.57-1.94-6.78-5-9.48zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/>
+              </svg>
+            </div>
+            <h2 class="card-title">Android Package</h2>
+            <p class="card-desc">
+              Download the release APK file for Android mobile devices. Enable "Install Unknown Apps" in your security settings to run this package.
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah.apk" class="btn">
+              <span>Download APK</span>
+              <!-- Download Arrow Icon -->
+              <svg viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+              </svg>
+            </a>
+          </div>
         </div>
-        <div class="card-footer">
-          <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah.apk" class="btn">Download APK File</a>
+
+        <!-- iOS Card -->
+        <div id="ios-card" class="card">
+          <div id="ios-badge" class="recommended-badge" style="display: none;">Recommended</div>
+          <div>
+            <div class="card-header-icon">
+              <!-- Apple Icon -->
+              <svg viewBox="0 0 24 24">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.56 2.95-1.39z"/>
+              </svg>
+            </div>
+            <h2 class="card-title">iOS Simulator</h2>
+            <p class="card-desc">
+              Download the zipped simulator bundle (Runner.app) for testing inside macOS simulator developer environments.
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah-ios.zip" class="btn">
+              <span>Download ZIP</span>
+              <svg viewBox="0 0 24 24">
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
 
-      <!-- iOS Card -->
-      <div id="ios-card" class="card">
-        <div id="ios-badge" class="recommended-badge" style="display: none;">Recommended</div>
-        <div>
-          <div class="card-icon">🍎</div>
-          <h2 class="card-title">iOS Simulator</h2>
-          <p class="card-desc">
-            Zipped Simulator application bundle (Runner.app) for developer testing on macOS Simulator environments.
-          </p>
-        </div>
-        <div class="card-footer">
-          <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah-ios.zip" class="btn">Download Simulator Zip</a>
+      <!-- Right side: E-Reader Mockup showcase -->
+      <div class="showcase-container">
+        <div class="phone-mockup">
+          <div class="phone-screen">
+            <div class="phone-header">तर्कसङ्ग्रहः</div>
+            <div class="phone-body">
+              <div class="phone-card">
+                <div>
+                  <div class="phone-sutra-num">SUTRA १</div>
+                  <div class="phone-text-sk">
+                    तत्र द्रव्यगुणकर्मसामान्यविशेषसमवायाभावाः सप्त पदार्थाः॥
+                  </div>
+                </div>
+                <div class="phone-text-en">
+                  The categories are seven, namely, substance (dravya), quality (guna), action (karma), generality (samanya), particularity (vishesha), inherence (samavaya), and non-existence (abhava).
+                </div>
+              </div>
+              <div class="phone-audio-bar">
+                <div class="phone-play-btn">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+                <div class="phone-timeline">
+                  <div class="phone-timeline-fill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- CMS Card -->
-      <div class="card">
-        <div>
-          <div class="card-icon">⚙️</div>
-          <h2 class="card-title">Admin Console</h2>
-          <p class="card-desc">
-            Admin dashboard CMS panel to manage dictionary words, edit Granthas, write sutras, and record/upload logic audio files.
-          </p>
+    <!-- Admin dashboard integration -->
+    <div class="admin-link-section">
+      <div class="admin-card">
+        <div class="admin-info">
+          <h3 class="admin-title">Administrative Dashboard</h3>
+          <p class="admin-desc">Manage Granthas, dictionary, upload MP3 files, or record live audio clips directly into Git.</p>
         </div>
-        <div class="card-footer">
-          <a href="./cms/index.html" class="btn btn-secondary">Open CMS Dashboard</a>
+        <div class="admin-btn-wrap">
+          <a href="./cms/index.html" class="btn btn-secondary">
+            <span>Open CMS</span>
+            <!-- Arrow Right Icon -->
+            <svg viewBox="0 0 24 24">
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
   </main>
 
   <footer>
-    <p>&copy; 2026 Tarkaśravaḥ project. Made for Sanskrit Swadhyaya. Powered by GitHub Pages.</p>
+    <p>&copy; 2026 Tarkaśravaḥ Project. Dedicated to Sanskrit Swadhyaya & Logic Studies. Powered by GitHub Pages.</p>
   </footer>
 
   <script>
-    // Simple OS detection script
     document.addEventListener("DOMContentLoaded", function() {
       const userAgent = window.navigator.userAgent.toLowerCase();
       const platform = window.navigator.platform.toLowerCase();
@@ -366,7 +776,7 @@
       } else if (userAgent.indexOf("iphone") !== -1 || userAgent.indexOf("ipad") !== -1 || userAgent.indexOf("ipod") !== -1) {
         os = "ios";
       } else if (platform.indexOf("mac") !== -1) {
-        os = "mac"; // Apple ecosystem
+        os = "mac"; 
       }
 
       const banner = document.getElementById("device-banner");
@@ -378,12 +788,12 @@
 
       if (os === "android") {
         banner.classList.add("visible");
-        deviceText.innerText = "Detected device: Android. Recommended package highlighted.";
+        deviceText.innerText = "Detected Android device. Recommended package highlighted.";
         androidCard.classList.add("highlighted");
         androidBadge.style.display = "block";
       } else if (os === "ios" || os === "mac") {
         banner.classList.add("visible");
-        deviceText.innerText = `Detected OS: ${os === "mac" ? "macOS" : "iOS"}. Recommended package highlighted.`;
+        deviceText.innerText = `Detected ${os === "mac" ? "macOS" : "iOS"} device. Recommended package highlighted.`;
         iosCard.classList.add("highlighted");
         iosBadge.style.display = "block";
       }
