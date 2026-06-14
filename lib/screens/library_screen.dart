@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../providers/reader_provider.dart';
+import '../widgets/app_drawer.dart';
 import 'reader_screen.dart';
 import 'search_screen.dart';
 
@@ -19,9 +20,11 @@ class LibraryScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bg,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: bg,
         elevation: 0,
+        iconTheme: IconThemeData(color: accent),
         title: Text(
           "Tarkaśravaḥ (तर्कश्रावः)",
           style: TextStyle(
