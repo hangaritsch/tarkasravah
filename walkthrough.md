@@ -1,6 +1,6 @@
 # Walkthrough - CMS Audio Deletion & Global Text Scaling Fixes
 
-We have successfully resolved the two remaining bugs in the Sanskrit Reader application and the CMS portal, rebuilt the release artifacts, and pushed them to GitHub.
+We have successfully resolved the remaining bugs in the Sanskrit Reader application and the CMS portal, rebuilt the release artifacts, and pushed them to GitHub.
 
 ---
 
@@ -31,6 +31,10 @@ We have successfully resolved the two remaining bugs in the Sanskrit Reader appl
   )
   ```
   - *Context*: Raw `RichText` widgets in Flutter do not automatically inherit or respect the ambient `textScaler` from `MediaQuery`. By switching to `Text.rich`, the widget automatically responds to the global `textScaler` set in `lib/main.dart`, resolving the bug where font size settings did not scale all texts in the app.
+
+### 3. Settings Drawer Row Layout Fix
+- **File**: [app_drawer.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/widgets/app_drawer.dart)
+- **Modifications**: Wrapped the `"Sanskrit Font"` label text in an `Expanded` widget with `overflow: TextOverflow.ellipsis` inside the dropdown Row. This prevents horizontal layout overflows when dynamic global font scaling is applied.
 
 ---
 
