@@ -1016,6 +1016,22 @@
             <button class="btn btn-sm" id="btn-add-sutra">Add New Sutra</button>
           </div>
 
+          <div class="filters-row" style="display: flex; gap: 16px; margin-bottom: 16px; align-items: center; justify-content: space-between;">
+            <div class="search-box" style="flex: 1; margin-bottom: 0;">
+              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="sutras-search" class="form-control search-control" placeholder="Search by title, Sanskrit text, meaning...">
+            </div>
+            <div class="sort-box" style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 13px; font-weight: 500; color: var(--text-secondary);">Sort by:</span>
+              <select id="sutras-sort" class="form-control" style="width: 170px; font-size: 13px; padding: 6px 12px; border-radius: 8px; background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color);">
+                <option value="num-asc">Num (Ascending)</option>
+                <option value="num-desc">Num (Descending)</option>
+                <option value="title-asc">Title (A-Z)</option>
+                <option value="title-desc">Title (Z-A)</option>
+              </select>
+            </div>
+          </div>
+
           <div class="sutra-table-container">
             <table class="sutra-table" id="sutras-table-el">
               <thead>
@@ -1499,6 +1515,21 @@
       recycleBin: []
     };
 
+    // Helper: Natural sort for sutra numbers (e.g. "1.1", "1.2", "1.10", "2.1")
+    function compareSutraNumbers(a, b) {
+      const aParts = (a.sutra_number || '').split('.').map(p => parseFloat(p) || 0);
+      const bParts = (b.sutra_number || '').split('.').map(p => parseFloat(p) || 0);
+      
+      for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+        const aVal = aParts[i] !== undefined ? aParts[i] : -1;
+        const bVal = bParts[i] !== undefined ? bParts[i] : -1;
+        if (aVal !== bVal) {
+          return aVal - bVal;
+        }
+      }
+      return 0;
+    }
+
     // Recorder Global States
     let recorderStream = null;
     let voiceRecorder = null;
@@ -1647,7 +1678,7 @@
             await loadSutrasForActiveGrantha();
           }
           state.sutras.push(item.payload);
-          state.sutras.sort((a, b) => a.id - b.id);
+          state.sutras.sort((a, b) => compareSutraNumbers(a, b));
           logConsole(`Restoring Sutra '${item.payload.title}' to ${gId}...`, "info");
           const nextSutrasSha = await commitRepoFile(`assets/data/${gId}.json`, state.shas.sutras[gId], state.sutras, `Restore sutra: ${item.payload.title}`);
           state.shas.sutras[gId] = nextSutrasSha;
@@ -1773,10 +1804,15 @@
 
       // Search filters
       document.getElementById("dict-search").addEventListener("input", filterDictionary);
+      document.getElementById("sutras-search").addEventListener("input", renderSutras);
+      document.getElementById("sutras-sort").addEventListener("change", renderSutras);
 
       // Grantha dropdown switcher
       document.getElementById("sutra-grantha-select").addEventListener("change", (e) => {
         state.activeGranthaId = e.target.value;
+        if (document.getElementById("sutras-search")) {
+          document.getElementById("sutras-search").value = "";
+        }
         loadSutrasForActiveGrantha();
       });
 
@@ -2133,7 +2169,8 @@
       
       try {
         const { sha, data } = await fetchRepoFile(`assets/data/${state.activeGranthaId}.json`);
-        state.sutras = data;
+        state.sutras = data || [];
+        state.sutras.sort((a, b) => compareSutraNumbers(a, b));
         state.shas.sutras[state.activeGranthaId] = sha;
         logConsole(`Loaded ${data.length} sutras.`, "success");
         renderSutras();
@@ -2191,7 +2228,44 @@
         return;
       }
 
-      state.sutras.forEach(s => {
+      // 1. Sort state.sutras based on active selection
+      const sortVal = document.getElementById("sutras-sort") ? document.getElementById("sutras-sort").value : "num-asc";
+      let displaySutras = [...state.sutras];
+      
+      if (sortVal === "num-asc") {
+        displaySutras.sort((a, b) => compareSutraNumbers(a, b));
+      } else if (sortVal === "num-desc") {
+        displaySutras.sort((a, b) => compareSutraNumbers(b, a));
+      } else if (sortVal === "title-asc") {
+        displaySutras.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      } else if (sortVal === "title-desc") {
+        displaySutras.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+      }
+
+      // 2. Filter displaySutras based on search input
+      const searchInput = document.getElementById("sutras-search");
+      const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
+      if (query) {
+        displaySutras = displaySutras.filter(s => {
+          const title = (s.title || '').toLowerCase();
+          const sanskrit = (s.sanskrit || '').toLowerCase();
+          const eng = (s.english_meaning || '').toLowerCase();
+          const kan = (s.kannada_meaning || '').toLowerCase();
+          const num = (s.sutra_number || '').toLowerCase();
+          return title.includes(query) || 
+                 sanskrit.includes(query) || 
+                 eng.includes(query) || 
+                 kan.includes(query) ||
+                 num.includes(query);
+        });
+      }
+
+      if (displaySutras.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No matching sutras found.</td></tr>`;
+        return;
+      }
+
+      displaySutras.forEach(s => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td><span class="sutra-num-badge">${s.sutra_number}</span></td>
@@ -2680,6 +2754,8 @@
           state.sutras[idx] = newSutra;
         }
       }
+
+      state.sutras.sort((a, b) => compareSutraNumbers(a, b));
 
       closeModal("sutra-modal-backdrop");
 
