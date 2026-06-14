@@ -532,11 +532,14 @@
       outline: none;
     }
 
+    /* Scrollable Div inside Sutras section */
     .sutra-table-container {
       background-color: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      overflow: hidden;
+      overflow-x: auto;
+      max-height: 550px; /* Make div scrollable */
+      overflow-y: auto;
       box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
@@ -559,6 +562,10 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      position: sticky; /* Sticky headers while scrolling */
+      top: 0;
+      z-index: 10;
+      background-color: var(--bg-surface);
     }
 
     .sutra-table tbody tr {
@@ -1322,6 +1329,53 @@
     </div>
   </div>
 
+  <!-- 5. Dedicated Sutra Audio Manage Modal -->
+  <div class="modal-backdrop" id="sutra-audio-manage-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">Manage Audio: <span id="manage-audio-title-filename" style="font-family: monospace;"></span></h4>
+        <button class="modal-close" onclick="closeModal('sutra-audio-manage-modal-backdrop')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Player Preview -->
+        <div class="form-group">
+          <label>Listen to Current Track</label>
+          <audio id="manage-audio-player" class="audio-player-preview" controls></audio>
+        </div>
+
+        <!-- Upload / Record replacement -->
+        <div class="audio-widget-container">
+          <label style="font-weight:600; margin-bottom:8px; display:block;">Replace Audio File</label>
+          <div class="audio-mode-selector">
+            <button type="button" class="mode-btn active" data-panel="manage-audio-upload-panel">Upload File</button>
+            <button type="button" class="mode-btn" data-panel="manage-audio-record-panel">Record Live</button>
+          </div>
+
+          <!-- Panel 1: Upload -->
+          <div class="audio-panel active" id="manage-audio-upload-panel">
+            <div style="display:flex; gap:10px;">
+              <input type="file" id="manage-audio-file-uploader" class="form-control" accept="audio/mpeg,audio/mp3">
+              <button type="button" class="btn btn-sm btn-secondary" id="btn-manage-audio-upload-action" style="flex-shrink:0;">Upload & Replace</button>
+            </div>
+          </div>
+
+          <!-- Panel 2: Record -->
+          <div class="audio-panel" id="manage-audio-record-panel">
+            <div class="record-status-container">
+              <button type="button" class="btn btn-sm btn-record" id="btn-manage-record-toggle">🎙️ Start Recording</button>
+              <span class="record-timer hidden" id="manage-record-timer">00:00</span>
+              <audio id="manage-record-player" class="audio-player-preview hidden" controls></audio>
+              <button type="button" class="btn btn-sm hidden" id="btn-manage-record-upload" style="background:var(--success); color:white;">Upload & Replace</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('sutra-audio-manage-modal-backdrop')">Close</button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ===================================== -->
   <!-- JAVASCRIPT APP LOGIC                  -->
@@ -1345,6 +1399,10 @@
       dictionary: {},     // From dictionary.json
       audioFiles: [],     // From assets/audio directory
       
+      // Temporary variables for managing individual audio files
+      tempManageAudioFilename: "",
+      tempManageSutraId: null,
+
       // Git SHAs for commits (GitHub API requires these to overwrite files)
       shas: {
         granthas: null,
@@ -1871,7 +1929,12 @@
           <td><span class="sutra-num-badge">${s.sutra_number}</span></td>
           <td style="font-weight: 600;">${s.title}</td>
           <td class="sutra-text-sanskrit">${s.sanskrit}</td>
-          <td style="font-family: monospace; font-size:12px; color: var(--text-muted);">${s.audio}</td>
+          <td>
+            <a href="#" style="color: var(--primary); text-decoration: underline; font-family: monospace; font-size: 12px; font-weight: 600;" 
+               onclick="event.preventDefault(); manageSutraAudioFile('${s.audio}', ${s.id})">
+               ${s.audio}
+            </a>
+          </td>
           <td style="text-align: right;">
             <div style="display: inline-flex; gap: 8px;">
               <button class="btn-icon-only" title="Edit" onclick="openSutraModal('edit', ${s.id})">
@@ -2009,6 +2072,10 @@
     window.closeModal = function(id) {
       document.getElementById(id).classList.remove("open");
       stopVoiceRecording(); // ensure recorder state is reset when closing modal
+      
+      // Stop modal audio players if active
+      const managePlayer = document.getElementById("manage-audio-player");
+      if (managePlayer) managePlayer.pause();
     };
 
     // Grantha Modal Add/Edit
@@ -2155,6 +2222,49 @@
 
       openModal("audio-modal-backdrop");
     }
+
+    // Dedicated Sutra Audio manage modal
+    window.manageSutraAudioFile = function(audioFilename, sutraId) {
+      const hasAudio = audioFilename && audioFilename !== "null" && audioFilename !== "undefined" && audioFilename.trim() !== "";
+      document.getElementById("manage-audio-title-filename").innerText = hasAudio ? audioFilename : "None (Not Set)";
+      
+      // Stop voice recorder state if running
+      stopVoiceRecording();
+
+      // Set current audio preview player src (using GitHub Raw CDN)
+      const player = document.getElementById("manage-audio-player");
+      if (hasAudio) {
+        const audioUrl = `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/assets/audio/${audioFilename}`;
+        player.src = audioUrl;
+        player.style.display = "block";
+        player.load();
+      } else {
+        player.src = "";
+        player.style.display = "none";
+      }
+      
+      // Reset uploader form input
+      document.getElementById("manage-audio-file-uploader").value = "";
+      
+      // Reset record panels
+      const container = document.getElementById("sutra-audio-manage-modal-backdrop");
+      container.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
+      container.querySelector('[data-panel="manage-audio-upload-panel"]').classList.add("active");
+      container.querySelectorAll(".audio-panel").forEach(p => p.classList.remove("active"));
+      container.querySelector("#manage-audio-upload-panel").classList.add("active");
+
+      document.getElementById("manage-record-player").classList.add("hidden");
+      document.getElementById("manage-record-timer").classList.add("hidden");
+      document.getElementById("btn-manage-record-upload").classList.add("hidden");
+      document.getElementById("btn-manage-record-toggle").innerText = "🎙️ Start Recording";
+      document.getElementById("btn-manage-record-toggle").classList.remove("recording-active");
+
+      // Save temporary context
+      state.tempManageAudioFilename = hasAudio ? audioFilename : "";
+      state.tempManageSutraId = sutraId;
+
+      openModal("sutra-audio-manage-modal-backdrop");
+    };
 
     // --- FORM ACTIONS ---
 
@@ -2644,7 +2754,6 @@
         await uploadAudioFile(fileObj, finalName, uploadBtn, (uploadedFilename) => {
           document.getElementById("sutra-audio-input").value = uploadedFilename;
           uploadBtn.classList.add("hidden");
-          // Refresh list of audios in background
           fetchAudioFiles();
         });
       });
@@ -2673,6 +2782,98 @@
         });
       });
 
+      // 3. Dedicated Sutra Audio manage modal uploader
+      document.getElementById("btn-manage-audio-upload-action").addEventListener("click", async () => {
+        const fileInput = document.getElementById("manage-audio-file-uploader");
+        const uploadBtn = document.getElementById("btn-manage-audio-upload-action");
+
+        if (fileInput.files.length === 0) {
+          alert("Please choose a file to upload.");
+          return;
+        }
+
+        const file = fileInput.files[0];
+        const filename = state.tempManageAudioFilename || file.name.toLowerCase().replace(/\s+/g, "_");
+
+        await uploadAudioFile(file, filename, uploadBtn, async () => {
+          // reload the preview player
+          const audioUrl = `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/assets/audio/${filename}?cb=${Date.now()}`;
+          const player = document.getElementById("manage-audio-player");
+          player.src = audioUrl;
+          player.style.display = "block";
+          player.load();
+          
+          // Update sutra metadata if needed
+          const sutra = state.sutras.find(s => s.id === state.tempManageSutraId);
+          if (sutra && sutra.audio !== filename) {
+            sutra.audio = filename;
+            logConsole(`Updating sutra audio field to '${filename}' in ${state.activeGranthaId}.json...`, "info");
+            try {
+              const nextSha = await commitRepoFile(
+                `assets/data/${state.activeGranthaId}.json`,
+                state.shas.sutras[state.activeGranthaId],
+                state.sutras,
+                `Update audio for sutra ${sutra.sutra_number} to ${filename}`
+              );
+              state.shas.sutras[state.activeGranthaId] = nextSha;
+              logConsole("Sutra audio metadata updated on GitHub.", "success");
+              renderSutras();
+            } catch (err) {
+              logConsole(`Failed to update sutra metadata: ${err.message}`, "error");
+            }
+          }
+
+          fetchAudioFiles();
+        });
+      });
+
+      // 4. Dedicated Sutra Audio manage modal recorder uploader
+      document.getElementById("btn-manage-record-upload").addEventListener("click", async () => {
+        if (!recordedBlob) return;
+
+        const uploadBtn = document.getElementById("btn-manage-record-upload");
+        const ext = getSupportedMimeType().includes("mp4") ? "m4a" : "webm";
+        const filename = state.tempManageAudioFilename || `audio_${state.activeGranthaId}_rec_${state.tempManageSutraId}_${Date.now()}.${ext}`;
+        const fileObj = new File([recordedBlob], filename, { type: recordedBlob.type });
+
+        await uploadAudioFile(fileObj, filename, uploadBtn, async () => {
+          // reload the preview player
+          const audioUrl = `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch}/assets/audio/${filename}?cb=${Date.now()}`;
+          const player = document.getElementById("manage-audio-player");
+          player.src = audioUrl;
+          player.style.display = "block";
+          player.load();
+          uploadBtn.classList.add("hidden");
+          
+          // Update sutra metadata if needed
+          const sutra = state.sutras.find(s => s.id === state.tempManageSutraId);
+          if (sutra && sutra.audio !== filename) {
+            sutra.audio = filename;
+            logConsole(`Updating sutra audio field to '${filename}' in ${state.activeGranthaId}.json...`, "info");
+            try {
+              const nextSha = await commitRepoFile(
+                `assets/data/${state.activeGranthaId}.json`,
+                state.shas.sutras[state.activeGranthaId],
+                state.sutras,
+                `Update audio for sutra ${sutra.sutra_number} to ${filename}`
+              );
+              state.shas.sutras[state.activeGranthaId] = nextSha;
+              logConsole("Sutra audio metadata updated on GitHub.", "success");
+              renderSutras();
+            } catch (err) {
+              logConsole(`Failed to update sutra metadata: ${err.message}`, "error");
+            }
+          }
+
+          fetchAudioFiles();
+        });
+      });
+
+      // 5. Dedicated Sutra Audio manage recorder toggle
+      document.getElementById("btn-manage-record-toggle").addEventListener("click", () => {
+        toggleRecording("manage");
+      });
+
       // Inline uploader inside Sutra Modal widget
       document.getElementById("btn-sutra-audio-upload-action").addEventListener("click", async () => {
         const fileInput = document.getElementById("sutra-audio-file-uploader");
@@ -2696,10 +2897,26 @@
 
     async function toggleRecording(context) {
       const isSutra = context === "sutra";
-      const btn = isSutra ? document.getElementById("btn-sutra-record-toggle") : document.getElementById("btn-gen-record-toggle");
-      const timerEl = isSutra ? document.getElementById("sutra-record-timer") : document.getElementById("gen-record-timer");
-      const player = isSutra ? document.getElementById("sutra-record-player") : document.getElementById("gen-record-player");
-      const uploadBtn = isSutra ? document.getElementById("btn-sutra-record-upload") : document.getElementById("btn-gen-record-upload");
+      const isManage = context === "manage";
+      
+      let btn, timerEl, player, uploadBtn;
+
+      if (isSutra) {
+        btn = document.getElementById("btn-sutra-record-toggle");
+        timerEl = document.getElementById("sutra-record-timer");
+        player = document.getElementById("sutra-record-player");
+        uploadBtn = document.getElementById("btn-sutra-record-upload");
+      } else if (isManage) {
+        btn = document.getElementById("btn-manage-record-toggle");
+        timerEl = document.getElementById("manage-record-timer");
+        player = document.getElementById("manage-record-player");
+        uploadBtn = document.getElementById("btn-manage-record-upload");
+      } else {
+        btn = document.getElementById("btn-gen-record-toggle");
+        timerEl = document.getElementById("gen-record-timer");
+        player = document.getElementById("gen-record-player");
+        uploadBtn = document.getElementById("btn-gen-record-upload");
+      }
 
       if (voiceRecorder && voiceRecorder.state === "recording") {
         // Stop recording
@@ -2768,6 +2985,14 @@
       clearInterval(recordInterval);
       recordInterval = null;
       recordedBlob = null;
+      
+      // Stop modal audio players if active
+      const genPlayer = document.getElementById("gen-record-player");
+      if (genPlayer) genPlayer.pause();
+      const sutraRecPlayer = document.getElementById("sutra-record-player");
+      if (sutraRecPlayer) sutraRecPlayer.pause();
+      const manageRecPlayer = document.getElementById("manage-record-player");
+      if (manageRecPlayer) manageRecPlayer.pause();
     }
 
     function startRecordTimer(timerEl) {
