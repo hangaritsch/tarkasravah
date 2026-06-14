@@ -41,7 +41,7 @@ class ReaderProvider extends ChangeNotifier {
   String _commitSha = 'main';
 
   // App Version & Update Check
-  static const String currentAppVersion = "1.0.3+4";
+  static const String currentAppVersion = "1.0.4+5";
   bool _hasCheckedForUpdates = false;
   bool get hasCheckedForUpdates => _hasCheckedForUpdates;
 

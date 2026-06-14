@@ -5,6 +5,7 @@ import '../providers/reader_provider.dart';
 import '../models/sutra.dart';
 import '../widgets/shabda_span.dart';
 import '../widgets/dictionary_bottom_sheet.dart';
+import '../widgets/app_drawer.dart';
 
 class ReaderScreen extends StatefulWidget {
   final int initialSutraId;
@@ -34,271 +35,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
     super.dispose();
   }
 
-  void _showSettingsBottomSheet(BuildContext context) {
-    final provider = Provider.of<ReaderProvider>(context, listen: false);
-    
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            final bg = provider.backgroundColor;
-            final text = provider.textColor;
-            final accent = provider.accentColor;
-            final secText = provider.secondaryTextColor;
 
-            return Container(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 28),
-              decoration: BoxDecoration(
-                color: bg,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                border: Border.all(
-                  color: accent.withAlpha(40),
-                  width: 1.5,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Drag handle
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 20),
-                      decoration: BoxDecoration(
-                        color: secText.withAlpha(80),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-
-                  // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Reader Display Options",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: text,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.close, color: secText),
-                        onPressed: () => Navigator.pop(context),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  const Divider(),
-                  const SizedBox(height: 16),
-
-                  // Font Size adjustment
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Font Size",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: text,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove_circle_outline, color: accent),
-                            onPressed: () {
-                              provider.decreaseFontSize();
-                              setModalState(() {});
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              provider.fontSize.toInt().toString(),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: text,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add_circle_outline, color: accent),
-                            onPressed: () {
-                              provider.increaseFontSize();
-                              setModalState(() {});
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Devanagari Font Selection
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Sanskrit Font",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: text,
-                        ),
-                      ),
-                      DropdownButton<String>(
-                        value: provider.devanagariFont,
-                        dropdownColor: bg,
-                        style: TextStyle(color: text, fontSize: 14),
-                        underline: Container(
-                          height: 1.5,
-                          color: accent.withAlpha(60),
-                        ),
-                        icon: Icon(Icons.arrow_drop_down, color: accent),
-                        onChanged: (String? newFont) {
-                          if (newFont != null) {
-                            provider.setDevanagariFont(newFont);
-                            setModalState(() {});
-                            setState(() {});
-                          }
-                        },
-                        items: ReaderProvider.supportedDevanagariFonts
-                            .map((font) => DropdownMenuItem<String>(
-                                  value: font,
-                                  child: Text(
-                                    font,
-                                    style: TextStyle(color: text),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Theme Selection
-                  Text(
-                    "Theme",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: text,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: ReaderTheme.values.map((themeMode) {
-                      final isSelected = provider.theme == themeMode;
-                      String themeName = '';
-                      Color themeBtnBg = Colors.white;
-                      Color themeBtnText = Colors.black;
-                      Color borderCol = Colors.transparent;
-
-                      switch (themeMode) {
-                        case ReaderTheme.light:
-                          themeName = 'Light';
-                          themeBtnBg = const Color(0xFFFFFFFF);
-                          themeBtnText = const Color(0xFF1E1E1E);
-                          borderCol = Colors.grey.shade300;
-                          break;
-                        case ReaderTheme.dark:
-                          themeName = 'Dark';
-                          themeBtnBg = const Color(0xFF1E1E1E);
-                          themeBtnText = const Color(0xFFECECEC);
-                          borderCol = Colors.grey.shade800;
-                          break;
-                        case ReaderTheme.sepia:
-                          themeName = 'Sepia';
-                          themeBtnBg = const Color(0xFFFBF0D9);
-                          themeBtnText = const Color(0xFF433422);
-                          borderCol = const Color(0xFFE5D5B3);
-                          break;
-                      }
-
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: themeBtnBg,
-                              side: BorderSide(
-                                color: isSelected ? accent : borderCol,
-                                width: isSelected ? 2.0 : 1.0,
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            onPressed: () {
-                              provider.setTheme(themeMode);
-                              setModalState(() {});
-                              // Trigger rebuild of outer screen
-                              setState(() {});
-                            },
-                            child: Text(
-                              themeName,
-                              style: TextStyle(
-                                color: themeBtnText,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Meaning Toggles
-                  Text(
-                    "Translations",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: text,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SwitchListTile(
-                    title: Text("English Meaning", style: TextStyle(color: text)),
-                    value: provider.showEnglish,
-                    activeColor: accent,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (val) {
-                      provider.toggleEnglishVisibility();
-                      setModalState(() {});
-                      setState(() {});
-                    },
-                  ),
-                  SwitchListTile(
-                    title: Text("Kannada Meaning (ಕನ್ನಡ)", style: TextStyle(color: text)),
-                    value: provider.showKannada,
-                    activeColor: accent,
-                    contentPadding: EdgeInsets.zero,
-                    onChanged: (val) {
-                      provider.toggleKannadaVisibility();
-                      setModalState(() {});
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
 
   String _formatDuration(Duration d) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
@@ -329,6 +66,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
     return Scaffold(
       backgroundColor: bg,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: bg,
         elevation: 0,
@@ -345,10 +83,12 @@ class _ReaderScreenState extends State<ReaderScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.format_size, color: accent),
-            tooltip: 'Text Display Settings',
-            onPressed: () => _showSettingsBottomSheet(context),
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.format_size, color: accent),
+              tooltip: 'Text Display Settings',
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
           ),
         ],
         bottom: PreferredSize(

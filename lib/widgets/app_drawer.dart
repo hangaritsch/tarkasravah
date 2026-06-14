@@ -129,9 +129,229 @@ class AppDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 16),
+                 const SizedBox(height: 16),
+                 const Divider(),
+                 const SizedBox(height: 16),
+
+                 // Reader Display Options Panel
+                 Padding(
+                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                   child: Text(
+                     "READER DISPLAY OPTIONS",
+                     style: TextStyle(
+                       fontSize: 11,
+                       fontWeight: FontWeight.bold,
+                       color: accent,
+                       letterSpacing: 1.1,
+                     ),
+                   ),
+                 ),
+                 const SizedBox(height: 12),
+
+                 // Settings Card
+                 Card(
+                   color: cardBg,
+                   elevation: 0,
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(16),
+                     side: BorderSide(
+                       color: accent.withAlpha(20),
+                     ),
+                   ),
+                   child: Padding(
+                     padding: const EdgeInsets.all(16.0),
+                     child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.stretch,
+                       children: [
+                         // Font Size Row
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             Text(
+                               "Font Size",
+                               style: TextStyle(
+                                 fontSize: 14,
+                                 fontWeight: FontWeight.bold,
+                                 color: text,
+                               ),
+                             ),
+                             Row(
+                               children: [
+                                 IconButton(
+                                   icon: Icon(Icons.remove_circle_outline, color: accent, size: 20),
+                                   onPressed: () {
+                                     provider.decreaseFontSize();
+                                   },
+                                 ),
+                                 Text(
+                                   provider.fontSize.toInt().toString(),
+                                   style: TextStyle(
+                                     fontSize: 14,
+                                     fontWeight: FontWeight.bold,
+                                     color: text,
+                                   ),
+                                 ),
+                                 IconButton(
+                                   icon: Icon(Icons.add_circle_outline, color: accent, size: 20),
+                                   onPressed: () {
+                                     provider.increaseFontSize();
+                                   },
+                                 ),
+                               ],
+                             ),
+                           ],
+                         ),
+                         const SizedBox(height: 8),
+                         
+                         // Sanskrit Font Dropdown Row
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             Text(
+                               "Sanskrit Font",
+                               style: TextStyle(
+                                 fontSize: 14,
+                                 fontWeight: FontWeight.bold,
+                                 color: text,
+                               ),
+                             ),
+                             DropdownButton<String>(
+                               value: provider.devanagariFont,
+                               dropdownColor: bg,
+                               style: TextStyle(color: text, fontSize: 13),
+                               underline: Container(
+                                 height: 1.0,
+                                 color: accent.withAlpha(60),
+                                ),
+                               icon: Icon(Icons.arrow_drop_down, color: accent),
+                               onChanged: (String? newFont) {
+                                 if (newFont != null) {
+                                   provider.setDevanagariFont(newFont);
+                                 }
+                               },
+                               items: ReaderProvider.supportedDevanagariFonts
+                                   .map((font) => DropdownMenuItem<String>(
+                                         value: font,
+                                         child: Text(
+                                           font,
+                                           style: TextStyle(color: text),
+                                         ),
+                                       ))
+                                   .toList(),
+                             ),
+                           ],
+                         ),
+                         const SizedBox(height: 12),
+
+                         // Theme Options
+                         Text(
+                           "Theme",
+                           style: TextStyle(
+                             fontSize: 14,
+                             fontWeight: FontWeight.bold,
+                             color: text,
+                           ),
+                         ),
+                         const SizedBox(height: 8),
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                           children: ReaderTheme.values.map((themeMode) {
+                             final isSelected = provider.theme == themeMode;
+                             String themeName = '';
+                             Color themeBtnBg = Colors.white;
+                             Color themeBtnText = Colors.black;
+                             Color borderCol = Colors.transparent;
+
+                             switch (themeMode) {
+                               case ReaderTheme.light:
+                                 themeName = 'Light';
+                                 themeBtnBg = const Color(0xFFFFFFFF);
+                                 themeBtnText = const Color(0xFF1E1E1E);
+                                 borderCol = Colors.grey.shade300;
+                                 break;
+                               case ReaderTheme.dark:
+                                 themeName = 'Dark';
+                                 themeBtnBg = const Color(0xFF1E1E1E);
+                                 themeBtnText = const Color(0xFFECECEC);
+                                 borderCol = Colors.grey.shade800;
+                                 break;
+                               case ReaderTheme.sepia:
+                                 themeName = 'Sepia';
+                                 themeBtnBg = const Color(0xFFFBF0D9);
+                                 themeBtnText = const Color(0xFF433422);
+                                 borderCol = const Color(0xFFE5D5B3);
+                                 break;
+                             }
+
+                             return Expanded(
+                               child: Padding(
+                                 padding: const EdgeInsets.symmetric(horizontal: 2),
+                                 child: OutlinedButton(
+                                   style: OutlinedButton.styleFrom(
+                                     backgroundColor: themeBtnBg,
+                                     side: BorderSide(
+                                       color: isSelected ? accent : borderCol,
+                                       width: isSelected ? 1.5 : 1.0,
+                                     ),
+                                     padding: const EdgeInsets.symmetric(vertical: 8),
+                                     shape: RoundedRectangleBorder(
+                                       borderRadius: BorderRadius.circular(8),
+                                     ),
+                                   ),
+                                   onPressed: () {
+                                     provider.setTheme(themeMode);
+                                   },
+                                   child: Text(
+                                     themeName,
+                                     style: TextStyle(
+                                       color: themeBtnText,
+                                       fontSize: 12,
+                                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                     ),
+                                   ),
+                                 ),
+                               ),
+                             );
+                           }).toList(),
+                         ),
+                         const SizedBox(height: 12),
+
+                         // Translations Toggle
+                         Text(
+                           "Translations",
+                           style: TextStyle(
+                             fontSize: 14,
+                             fontWeight: FontWeight.bold,
+                             color: text,
+                           ),
+                         ),
+                         SwitchListTile(
+                           title: Text("English Meaning", style: TextStyle(color: text, fontSize: 13)),
+                           value: provider.showEnglish,
+                           activeColor: accent,
+                           contentPadding: EdgeInsets.zero,
+                           dense: true,
+                           onChanged: (val) {
+                             provider.toggleEnglishVisibility();
+                           },
+                         ),
+                         SwitchListTile(
+                           title: Text("Kannada Meaning (ಕನ್ನಡ)", style: TextStyle(color: text, fontSize: 13)),
+                           value: provider.showKannada,
+                           activeColor: accent,
+                           contentPadding: EdgeInsets.zero,
+                           dense: true,
+                           onChanged: (val) {
+                             provider.toggleKannadaVisibility();
+                           },
+                         ),
+                       ],
+                     ),
+                   ),
+                 ),
+                 const SizedBox(height: 20),
+                 const Divider(),
+                 const SizedBox(height: 16),
 
                 // Offline Mode Panel
                 Padding(
@@ -331,7 +551,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Version 1.0.3+4",
+                  "Version 1.0.4+5",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: secText.withAlpha(120),
