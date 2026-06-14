@@ -45,6 +45,11 @@ We built a gorgeous, zero-dependency, single-page CMS application inside [cms/in
 * **Grantha Manager**: Add, edit, or delete Granthas. Adding a text commits an updated index file and automatically initializes a new `<grantha_id>.json` file in your repository.
 * **Sutra Editor**: Add, edit, or delete sutras for any chosen Grantha. Modifying a sutra automatically updates its database file and recalculates the central `sutra_count` field in `granthas.json`.
 * **Dictionary Editor**: Search, filter, add, edit, or delete words in `dictionary.json`.
+* **Audio Files Manager [NEW]**: Full binary CRUD capabilities for audio tracks:
+  * **Upload MP3**: Choose a local `.mp3` file, set its filename, and upload it directly as base64 binary content.
+  * **Preview Player**: Listen to uploaded files directly in the CMS using an HTML5 audio player.
+  * **Delete Audio**: Remove audio files from `assets/audio/` directly via the interface.
+  * **Sutra Dropdown Integration**: Adding or editing a sutra now features an audio dropdown list displaying all uploaded files in the repository for easier selection.
 * **Integrated Git Console**: A floating console displays a live log stream of network requests, connection checks, and Git commits (showing successful SHAs).
 
 ---
