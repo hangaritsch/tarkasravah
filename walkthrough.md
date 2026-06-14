@@ -1,57 +1,40 @@
-# Walkthrough - Android Connectivity Fix & Global Fonts
+# Walkthrough - Sidebar settings, iOS versioning, and CMS filtering
 
-We have successfully resolved the "No Internet" issue on physical Android release builds, implemented a dynamic global font theme that applies the user's selected Devanagari font throughout the entire app, expanded the font catalog to support all Google Devanagari fonts, and packaged version `v1.0.3+4` for both Android and iOS.
+We have successfully migrated the Reader display settings to the AppDrawer sidebar, confirmed iOS versioning compliance with `pubspec.yaml`, implemented a natural numeric sorting and searching interface for Sutras in the CMS, and packaged version `v1.0.4+5` for release.
 
 ---
 
 ## 📁 Key Changes & Files Modified
 
-### 1. Permissions & Android Configuration
-- **File**: [AndroidManifest.xml](file:///opt/homebrew/var/www/app/tarkasravah/android/app/src/main/AndroidManifest.xml)
-- **Modifications**: Added the required `<uses-permission android:name="android.permission.INTERNET"/>` and `<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>` tags under the `<manifest>` root node. 
-  - *Context*: While Flutter debug builds automatically inject the internet permission for Hot Reload/debugging, release builds require explicit declarations. Adding these ensures the compiled release APK has full internet access on physical devices.
+### 1. Reader Display Options Migrated to Sidebar
+- **File**: [app_drawer.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/widgets/app_drawer.dart)
+  - **Modifications**: Added the complete "Reader Display Options" control card directly inside the drawer's scrollable list. It includes:
+    - **Font Size adjustment**: Interactive `+` / `-` buttons to scale the Sanskrit text.
+    - **Sanskrit Font dropdown**: Access to the full alphabetized catalog of 47 Devanagari Google Fonts.
+    - **Theme selection**: Clean OutlinedButtons representing Light, Dark, and Sepia modes.
+    - **Translations toggles**: SwitchListTiles to show/hide English and Kannada translation panes.
+  - **Modifications**: Bumped displayed footer version to `Version 1.0.4+5`.
+- **File**: [reader_screen.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/screens/reader_screen.dart)
+  - **Modifications**:
+    - Deleted the local settings modal bottom sheet (`_showSettingsBottomSheet()`) completely to avoid duplicate UI.
+    - Hooked the drawer directly to the reader Scaffold (`drawer: const AppDrawer()`).
+    - Configured the AppBar settings icon button to open the sidebar dynamically using a `Builder` context calling `Scaffold.of(context).openDrawer()`.
 
-### 2. State & Fonts Catalog Expansion
-- **File**: [reader_provider.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/providers/reader_provider.dart)
-- **Modifications**:
-  - **Version Bump**: Incremented `currentAppVersion` to `1.0.3+4`.
-  - **Google Fonts Catalog**: Expanded the `supportedDevanagariFonts` static array to include 47 Google Fonts supporting the Devanagari script (sorted alphabetically from *Amita* to *Yatra One*).
-  - **Update Dialog Font**: Removed the hardcoded `fontFamily: 'PragatiNarrow'` override from the update dialog title text style, allowing it to adapt to the active font.
+### 2. iOS Versioning Alignment
+- **Verification**: Verified that both `CFBundleShortVersionString` and `CFBundleVersion` in `ios/Runner/Info.plist` are mapped to `$(FLUTTER_BUILD_NAME)` and `$(FLUTTER_BUILD_NUMBER)` respectively. This ensures the iOS simulator build automatically inherits version `1.0.4` and build number `5` from `pubspec.yaml` on compilation.
 
-### 3. Dynamic Global Font Application
-- **File**: [main.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/main.dart)
-- **Modifications**:
-  - Replaced the hardcoded `fontFamily: 'PragatiNarrow'` within `ThemeData`.
-  - Configured `ThemeData.textTheme` to build dynamically using `GoogleFonts.getTextTheme` when a Google Font is selected, falling back to local `PragatiNarrow` asset.
-  - This dynamically applies the chosen Devanagari font to all titles, lists, drawers, text snippets, and buttons app-wide.
-
-### 4. Code cleanup (Inherited Font Styling)
-We removed explicit `fontFamily: 'PragatiNarrow'` overrides from the following files so they dynamically inherit the globally configured font theme:
-- **File**: [grantha_list_screen.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/screens/grantha_list_screen.dart) (AppBar title, selection headers, and card titles)
-- **File**: [about_us_screen.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/screens/about_us_screen.dart) (AppBar title and Sanskrit logo header)
-- **File**: [search_screen.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/screens/search_screen.dart) (Sanskrit search result text snippet)
-- **File**: [app_drawer.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/widgets/app_drawer.dart) (Drawer header title, footer title, and version label bumped to `1.0.3+4`)
-
-### 5. Release Packages & Sharing Page
-- **File**: [pubspec.yaml](file:///opt/homebrew/var/www/app/tarkasravah/pubspec.yaml) (Version bumped to `1.0.3+4`)
-- **File**: [index.html](file:///opt/homebrew/var/www/app/tarkasravah/index.html) (Version numbers updated to `v1.0.3+4` and APK/iOS links updated)
-- **iOS Package compression**: 
-  - *Context*: Because debug iOS Simulator binaries (`Runner.app`) contain extensive debug symbol frameworks that push the `.zip` compression format to over 101MB, they exceeded GitHub's 100MB upload limit.
-  - *Resolution*: Packaged the simulator build using `tar` and `gzip` into a `tarkasravah-ios.tar.gz` archive (52MB), which achieves a significantly better compression ratio and fits under the GitHub limit. The download link and button in `index.html` were updated to reflect the new extension.
+### 3. CMS Search and Sort Features
+- **File**: [cms/index.html](file:///opt/homebrew/var/www/app/tarkasravah/cms/index.html)
+  - **Sutras Filters UI**: Added a responsive filter row in the Sutras tab displaying a text search input and a sort dropdown (Ascending Num, Descending Num, A-Z Title, Z-A Title).
+  - **Default Sorting**: Integrated a natural numeric sorting comparison function (`compareSutraNumbers()`) that parses multi-dotted strings (like `1.1`, `1.2`, `1.10`, `2.1`) and sorts them numerically rather than alphabetically. The CMS list is now sorted by `Num (Ascending)` by default.
+  - **Dynamic Re-rendering**: Programmed input and change event listeners to dynamically re-filter and sort the active sutras array in memory on keyup/change and refresh the table rows instantly.
+  - **Database Natural Order**: Sorted the sutras list naturally *before* saving updates to GitHub. This ensures the JSON database files themselves stay naturally sorted, making the mobile app display them in the correct sequence.
 
 ---
 
 ## 📦 Packages Rebuilt & Deployed
 
-1. **Android Release APK**: Compiled and deployed at the root as [tarkasravah-v1.0.3.apk](file:///opt/homebrew/var/www/app/tarkasravah/tarkasravah-v1.0.3.apk) (25.5MB).
+1. **Android Release APK**: Compiled and copied to the root as [tarkasravah-v1.0.4.apk](file:///opt/homebrew/var/www/app/tarkasravah/tarkasravah-v1.0.4.apk) (25.5MB).
 2. **iOS Simulator Package**: Built and packaged as `build/releases/tarkasravah-ios.tar.gz` (51.6MB).
-3. **GitHub Push**: All changes committed and pushed successfully to the `main` branch.
-
----
-
-## 📱 On-Device Verification
-
-We verified the installation directly on the connected physical Android device (`RZCX62F57AV`):
-- Run `adb install -r tarkasravah-v1.0.3.apk` → **Success**.
-- The app launches successfully and fully connects to the internet (no offline-mode warning shows on WiFi/cellular startup).
-- Selecting any Devanagari font from the reader options immediately updates the font globally across all app bars, lists, cards, and menus.
+3. **Download Landing Page**: Updated [index.html](file:///opt/homebrew/var/www/app/tarkasravah/index.html) download links and labels to version `1.0.4+5`.
+4. **GitHub Push**: Committed and pushed all changes successfully.
