@@ -156,6 +156,14 @@
       transform: translateY(0);
     }
 
+    .btn:disabled {
+      background-color: var(--border-color);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .shake {
       animation: shake 0.4s ease-in-out;
     }
@@ -689,6 +697,13 @@
       color: #58a6ff;
     }
 
+    /* Audio Preview Player */
+    .audio-player-preview {
+      width: 100%;
+      height: 32px;
+      outline: none;
+    }
+
     /* Animations */
     @keyframes fadeInUp {
       from {
@@ -757,6 +772,11 @@
           <!-- Inline SVG Icon for List -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
           Sutras (सूत्राणि)
+        </li>
+        <li class="menu-item" data-tab="audio">
+          <!-- Inline SVG Icon for Volume -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          Audio Files (ध्वनिमुद्रणानि)
         </li>
         <li class="menu-item" data-tab="dictionary">
           <!-- Inline SVG Icon for Search -->
@@ -836,7 +856,33 @@
         </section>
 
         <!-- ===================================== -->
-        <!-- TAB 3: DICTIONARY SECTION             -->
+        <!-- TAB 3: AUDIO MANAGER SECTION          -->
+        <!-- ===================================== -->
+        <section id="audio-section" class="tab-section hidden">
+          <div class="section-header">
+            <h3 class="section-title">Audio Files Manager</h3>
+            <button class="btn btn-sm" id="btn-add-audio">Upload Audio</button>
+          </div>
+          
+          <div class="sutra-table-container">
+            <table class="sutra-table">
+              <thead>
+                <tr>
+                  <th>Filename</th>
+                  <th>File Size</th>
+                  <th>Preview Player</th>
+                  <th style="width: 100px; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="audio-list">
+                <!-- Dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===================================== -->
+        <!-- TAB 4: DICTIONARY SECTION             -->
         <!-- ===================================== -->
         <section id="dictionary-section" class="tab-section hidden">
           <div class="section-header">
@@ -869,7 +915,7 @@
         </section>
 
         <!-- ===================================== -->
-        <!-- TAB 4: SETTINGS SECTION               -->
+        <!-- TAB 5: SETTINGS SECTION               -->
         <!-- ===================================== -->
         <section id="settings-section" class="tab-section hidden">
           <div class="section-header">
@@ -1015,8 +1061,14 @@
             <textarea id="sutra-kannada-input" class="form-control" style="height: 80px; resize: none;" placeholder="ವಿಶ್ವೇಶ್ವರನನ್ನು ಹೃದಯದಲ್ಲಿ ನೆನೆದು..." required></textarea>
           </div>
           <div class="form-group">
-            <label for="sutra-audio-input">Audio Filename</label>
-            <input type="text" id="sutra-audio-input" class="form-control" placeholder="audio_0.mp3" required>
+            <label for="sutra-audio-select">Audio File</label>
+            <div style="display: flex; gap: 10px;">
+              <select id="sutra-audio-select" class="form-control" style="flex: 1;">
+                <option value="">-- Select audio --</option>
+              </select>
+              <input type="text" id="sutra-audio-input" class="form-control" style="flex: 1;" placeholder="Or type manually: audio_0.mp3" required>
+            </div>
+            <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Select an existing audio file from your repository, or type a custom filename.</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -1067,6 +1119,33 @@
     </div>
   </div>
 
+  <!-- 4. Audio Upload Modal -->
+  <div class="modal-backdrop" id="audio-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">Upload Audio File</h4>
+        <button class="modal-close" onclick="closeModal('audio-modal-backdrop')">&times;</button>
+      </div>
+      <form id="audio-upload-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="audio-file-input">Select Audio File (.mp3)</label>
+            <input type="file" id="audio-file-input" class="form-control" accept="audio/mpeg" required>
+          </div>
+          <div class="form-group">
+            <label for="audio-filename-input">Filename in Repository</label>
+            <input type="text" id="audio-filename-input" class="form-control" placeholder="e.g. audio_muktavali_0.mp3" required>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:6px;">We recommend using lowercase and underscores, e.g. <code>audio_&lt;grantha_id&gt;_&lt;index&gt;.mp3</code>.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('audio-modal-backdrop')">Cancel</button>
+          <button type="submit" class="btn btn-sm" id="btn-audio-submit">Upload to GitHub</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
   <!-- ===================================== -->
   <!-- JAVASCRIPT APP LOGIC                  -->
@@ -1088,6 +1167,7 @@
       activeGranthaId: "",
       sutras: [],         // From <activeGranthaId>.json
       dictionary: {},     // From dictionary.json
+      audioFiles: [],     // From assets/audio directory
       
       // Git SHAs for commits (GitHub API requires these to overwrite files)
       shas: {
@@ -1162,11 +1242,20 @@
       document.getElementById("btn-add-grantha").addEventListener("click", () => openGranthaModal());
       document.getElementById("btn-add-sutra").addEventListener("click", () => openSutraModal());
       document.getElementById("btn-add-word").addEventListener("click", () => openWordModal());
+      document.getElementById("btn-add-audio").addEventListener("click", () => openAudioModal());
+
+      // File input auto-rename
+      document.getElementById("audio-file-input").addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          document.getElementById("audio-filename-input").value = e.target.files[0].name.toLowerCase().replace(/\s+/g, "_");
+        }
+      });
 
       // Form Submits
       document.getElementById("grantha-form").addEventListener("submit", submitGranthaForm);
       document.getElementById("sutra-form").addEventListener("submit", submitSutraForm);
       document.getElementById("word-form").addEventListener("submit", submitWordForm);
+      document.getElementById("audio-upload-form").addEventListener("submit", submitAudioUploadForm);
 
       // Search filters
       document.getElementById("dict-search").addEventListener("input", filterDictionary);
@@ -1175,6 +1264,11 @@
       document.getElementById("sutra-grantha-select").addEventListener("change", (e) => {
         state.activeGranthaId = e.target.value;
         loadSutrasForActiveGrantha();
+      });
+
+      // Sutra Modal audio dropdown listener
+      document.getElementById("sutra-audio-select").addEventListener("change", (e) => {
+        document.getElementById("sutra-audio-input").value = e.target.value;
       });
 
       // Logout
@@ -1277,10 +1371,16 @@
       const titleMap = {
         granthas: "Granthas (ग्रन्थाः)",
         sutras: "Sutras (सूत्राणि)",
-        dictionary: "Dictionary (शब्दकोशः)",
+        audio: "Audio Files (ध्वनिमुद्रणानि)",
+        dictionary: "Dictionary (शब्दकोಶः)",
         settings: "Settings (विन्यासः)"
       };
       document.getElementById("nav-title").innerText = titleMap[tabId] || "Dashboard";
+      
+      // Auto refresh audio on tab switch
+      if (tabId === "audio" && state.pat) {
+        fetchAudioFiles();
+      }
     }
 
     // GitHub API Test Connection
@@ -1338,6 +1438,7 @@
       
       const gLoaded = await fetchGranthasJson();
       const dLoaded = await fetchDictionaryJson();
+      await fetchAudioFiles();
 
       if (gLoaded) {
         // Build dropdown select options in Sutras tab
@@ -1439,6 +1540,35 @@
       }
     }
 
+    // Fetch Audio files from directory
+    async function fetchAudioFiles() {
+      if (!state.pat) return;
+      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio?ref=${state.branch}`;
+      
+      try {
+        const response = await fetch(url, {
+          headers: {
+            "Authorization": `Bearer ${state.pat}`,
+            "Accept": "application/vnd.github+json"
+          }
+        });
+
+        if (response.ok) {
+          const files = await response.json();
+          state.audioFiles = files.filter(f => f.type === "file");
+          logConsole(`Successfully loaded ${state.audioFiles.length} audio files from repository.`, "success");
+          renderAudioFiles();
+          populateSutraAudioDropdown();
+        } else {
+          throw new Error(response.statusText);
+        }
+      } catch (err) {
+        logConsole(`Error loading audio directory assets/audio: ${err.message}`, "error");
+        state.audioFiles = [];
+        renderAudioFiles();
+      }
+    }
+
     // Load Sutras for Selected Grantha
     async function loadSutrasForActiveGrantha() {
       if (!state.activeGranthaId) return;
@@ -1526,6 +1656,41 @@
       });
     }
 
+    function renderAudioFiles() {
+      const tbody = document.getElementById("audio-list");
+      tbody.innerHTML = "";
+
+      if (state.audioFiles.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No audio files found in assets/audio.</td></tr>`;
+        return;
+      }
+
+      state.audioFiles.forEach(f => {
+        const sizeMb = (f.size / (1024 * 1024)).toFixed(2);
+        
+        // streaming direct URL from github or jsdelivr CDN
+        const audioUrl = f.download_url;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="font-weight: 600; font-family: monospace;">${f.name}</td>
+          <td style="color: var(--text-muted); font-size:13px;">${sizeMb} MB</td>
+          <td>
+            <audio controls class="audio-player-preview" preload="none">
+              <source src="${audioUrl}" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td style="text-align: right;">
+            <button class="btn-icon-only danger" title="Delete Audio" onclick="deleteAudioFile('${f.name}', '${f.sha}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
     function renderDictionary() {
       const tbody = document.getElementById("dict-list");
       tbody.innerHTML = "";
@@ -1572,6 +1737,18 @@
       });
     }
 
+    function populateSutraAudioDropdown() {
+      const select = document.getElementById("sutra-audio-select");
+      select.innerHTML = '<option value="">-- Select audio --</option>';
+      
+      state.audioFiles.forEach(f => {
+        const opt = document.createElement("option");
+        opt.value = f.name;
+        opt.innerText = f.name;
+        select.appendChild(opt);
+      });
+    }
+
     function manageSutrasOf(granthaId) {
       state.activeGranthaId = granthaId;
       document.getElementById("sutra-grantha-select").value = granthaId;
@@ -1600,7 +1777,6 @@
       document.getElementById(id).classList.add("open");
     }
 
-    // Explicitly make this global
     window.closeModal = function(id) {
       document.getElementById(id).classList.remove("open");
     };
@@ -1645,6 +1821,9 @@
       const modeInput = document.getElementById("sutra-form-mode");
       const titleEl = document.getElementById("sutra-modal-title");
 
+      // Populate Audio Dropdown options first
+      populateSutraAudioDropdown();
+
       if (mode === "edit") {
         modeInput.value = "edit";
         titleEl.innerText = "Edit Sutra";
@@ -1658,6 +1837,7 @@
           document.getElementById("sutra-english-input").value = s.english_meaning;
           document.getElementById("sutra-kannada-input").value = s.kannada_meaning;
           document.getElementById("sutra-audio-input").value = s.audio;
+          document.getElementById("sutra-audio-select").value = state.audioFiles.some(f => f.name === s.audio) ? s.audio : "";
         }
       } else {
         modeInput.value = "add";
@@ -1669,8 +1849,11 @@
         
         // Pre-fill next sutra number
         document.getElementById("sutra-num-input").value = (state.sutras.length + 1).toString();
-        // Pre-fill audio format e.g. audio_muktavali_1.mp3
-        document.getElementById("sutra-audio-input").value = `audio_${state.activeGranthaId}_${state.sutras.length}.mp3`;
+        
+        // Auto recommend filename format
+        const nextAudio = `audio_${state.activeGranthaId}_${state.sutras.length}.mp3`;
+        document.getElementById("sutra-audio-input").value = nextAudio;
+        document.getElementById("sutra-audio-select").value = state.audioFiles.some(f => f.name === nextAudio) ? nextAudio : "";
       }
       
       openModal("sutra-modal-backdrop");
@@ -1705,6 +1888,13 @@
       }
       
       openModal("word-modal-backdrop");
+    }
+
+    // Audio Modal Add
+    function openAudioModal() {
+      const form = document.getElementById("audio-upload-form");
+      form.reset();
+      openModal("audio-modal-backdrop");
     }
 
     // --- FORM ACTIONS ---
@@ -1798,7 +1988,7 @@
         state.shas.granthas = nextSha;
         logConsole("Commit successful: granthas.json updated.", "success");
 
-        // 2. We can delete the sutras JSON file.
+        // 2. Delete the sutras JSON file.
         if (state.shas.sutras[id]) {
           logConsole(`Deleting assets/data/${id}.json file from GitHub...`, "info");
           const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/data/${id}.json`;
@@ -1955,6 +2145,131 @@
         logConsole(`Failed to delete Sutra: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
         loadSutrasForActiveGrantha();
+      }
+    }
+
+    // Submit Audio Upload Form (Binary Upload)
+    async function submitAudioUploadForm(e) {
+      e.preventDefault();
+      
+      const fileInput = document.getElementById("audio-file-input");
+      const filename = document.getElementById("audio-filename-input").value.trim();
+      const submitBtn = document.getElementById("btn-audio-submit");
+
+      if (fileInput.files.length === 0) {
+        alert("Please select a file first.");
+        return;
+      }
+
+      const file = fileInput.files[0];
+      
+      // Disable inputs and show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Uploading to GitHub...";
+      logConsole(`Reading audio file: ${file.name} (${(file.size/1024).toFixed(1)} KB)...`, "info");
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64Data = reader.result.split(',')[1]; // Remove data URL prefix
+          const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio/${filename}`;
+          
+          // Check if file exists to get SHA (for overwriting)
+          let sha = null;
+          try {
+            const existingFileResp = await fetch(url + `?ref=${state.branch}`, {
+              headers: {
+                "Authorization": `Bearer ${state.pat}`,
+                "Accept": "application/vnd.github+json"
+              }
+            });
+            if (existingFileResp.ok) {
+              const fileMeta = await existingFileResp.json();
+              sha = fileMeta.sha;
+              logConsole(`Audio file already exists. Will overwrite existing file (SHA: ${sha}).`, "info");
+            }
+          } catch (_) {}
+
+          const body = {
+            message: `Upload audio file: ${filename} via CMS`,
+            content: base64Data,
+            branch: state.branch
+          };
+          if (sha) {
+            body.sha = sha;
+          }
+
+          logConsole(`Committing audio file to assets/audio/${filename}...`, "info");
+          const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+              "Authorization": `Bearer ${state.pat}`,
+              "Accept": "application/vnd.github+json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+          });
+
+          if (!response.ok) {
+            const errorJson = await response.json();
+            throw new Error(errorJson.message || response.statusText);
+          }
+
+          logConsole(`Audio file ${filename} committed successfully!`, "success");
+          closeModal("audio-modal-backdrop");
+          await fetchAudioFiles();
+        } catch (err) {
+          logConsole(`Failed to upload audio: ${err.message}`, "error");
+          alert(`Upload error: ${err.message}`);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Upload to GitHub";
+        }
+      };
+
+      reader.onerror = (err) => {
+        logConsole(`File reading error: ${err.message}`, "error");
+        alert("Failed to read file.");
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Upload to GitHub";
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // Delete Audio File
+    async function deleteAudioFile(filename, sha) {
+      if (!confirm(`Are you absolutely sure you want to delete the audio file '${filename}'?`)) {
+        return;
+      }
+
+      logConsole(`Deleting audio file '${filename}' from repository...`, "info");
+      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio/${filename}`;
+      
+      try {
+        const response = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${state.pat}`,
+            "Accept": "application/vnd.github+json"
+          },
+          body: JSON.stringify({
+            message: `Delete audio file: ${filename} via CMS`,
+            sha: sha,
+            branch: state.branch
+          })
+        });
+
+        if (!response.ok) {
+          const errorJson = await response.json();
+          throw new Error(errorJson.message || response.statusText);
+        }
+
+        logConsole(`Audio file ${filename} deleted successfully.`, "success");
+        await fetchAudioFiles();
+      } catch (err) {
+        logConsole(`Failed to delete audio file: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
       }
     }
 
