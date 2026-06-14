@@ -155,8 +155,10 @@ class ReaderProvider extends ChangeNotifier {
       await checkOfflineStatus();
       notifyListeners();
 
-      // Trigger background sync from remote GitHub CDN (jsDelivr)
-      syncFromRemote();
+      // Trigger background sync with a short delay to let network stack initialize
+      Future.delayed(const Duration(seconds: 2), () {
+        syncFromRemote();
+      });
     } catch (e) {
       _isLoading = false;
       _error = "Error loading data: $e";
@@ -356,9 +358,17 @@ class ReaderProvider extends ChangeNotifier {
       await checkOfflineStatus();
       notifyListeners();
     } catch (e) {
-      debugPrint("Background GitHub sync failed (No Internet/Offline Mode): $e");
-      // Set the offline mode status message
-      _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
+      debugPrint("Background GitHub sync failed: $e");
+      try {
+        final result = await InternetAddress.lookup('github.com').timeout(const Duration(seconds: 3));
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          _networkStatusMessage = null;
+        } else {
+          _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
+        }
+      } catch (_) {
+        _networkStatusMessage = "No internet connection. Operating in Offline Mode.";
+      }
       notifyListeners();
     }
   }
