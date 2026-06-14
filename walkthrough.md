@@ -44,10 +44,10 @@ We built a gorgeous, zero-dependency, single-page CMS application inside [cms/in
 ### 2. Rich Administrative Dashboard & Unified Audio Uploader
 * **Saffron/Maroon Design**: Aesthetic matches the reader app with gold/maroon accents, glassmorphic card layouts, responsive sidebar, glowing focused inputs, and custom transitions.
 * **Grantha Manager**: Add, edit, or delete Granthas. Adding a text commits an updated index file and automatically initializes a new `<grantha_id>.json` file in your repository.
-* **Sutra Editor (Unified Audio Management) [UPDATED]**: Add, edit, or delete sutras for any chosen Grantha. Managing audio files is now integrated directly inside the Sutra add/edit modal:
-  * **Select Existing**: Dropdown listing all uploaded files currently in the repository.
-  * **Upload File**: Select a local `.mp3` and upload it directly inside the modal.
-  * **Record Live**: Direct browser voice recording with mic permissions, a live elapsed timer, a preview player, and a "Save & Use" upload action.
+* **Sutra Editor (Unified Audio Management & Dedicated Modal) [UPDATED]**: Add, edit, or delete sutras for any chosen Grantha.
+  * **Scrollable Sutras List**: The Sutras (सूत्राणि) section list is now wrapped in a scrollable container with a maximum height of 550px and a sticky header, keeping Devanagari text lists organized and readable.
+  * **Inline Audio Hyperlinks**: The filenames in the "Audio File" column of the Sutras table are now clickable links that open a dedicated **Manage Audio Modal**.
+  * **Dedicated Manage Audio Modal**: Displays the current audio track (with a built-in preview player) and allows direct replacement of the audio track via file upload or live voice recording. On successful upload, it automatically updates the corresponding sutra's JSON database file in the repository to keep metadata and media files perfectly in sync.
 * **Audio Files Manager**: Full binary CRUD capabilities for audio tracks:
   * **Upload MP3**: Choose a local `.mp3` file, set its filename, and upload it directly as base64 binary content.
   * **Direct Microphone Recording [NEW]**: Pulse-animated microphone recording widget. Audio is recorded using the standard browser `MediaRecorder` API and automatically encoded/saved to the repository.
