@@ -35,15 +35,22 @@ We have successfully implemented per-Grantha asset caching, built a responsive S
 * **File**: [index.html](file:///opt/homebrew/var/www/app/tarkasravah/index.html)
 * **Description**: A premium, responsive Sanskrit landing page hosted at the repository root:
   * **Device Detection**: Detects Android and iOS/macOS via user-agent sniffing to highlight the recommended download package with a linear gradient border and badge.
-  * **Version Detail**: Prominently shows the current app version `v1.0.0+1`.
+  * **Version Detail**: Prominently shows the current app version `v1.0.1+2`.
   * **Saffron/Maroon Accent styling**: Matching the app design, using glassmorphic cards and glowing hover effects.
   * **Quick Links**: Offers manual selection buttons to download the APK (Android) or Simulator ZIP (iOS), as well as a link to open the CMS administrative console.
+
+### 5. CMS Real-time Update & Caching Fixes
+* **File**: [cms/index.html](file:///opt/homebrew/var/www/app/tarkasravah/cms/index.html)
+* **Modifications**:
+  * **API Cache Busting**: Appended timestamp query parameters (`&t=timestamp`) to all GitHub API GET requests for repository contents, including JSON databases (`granthas.json`, `dictionary.json`, and active sutras lists) and audio file directories, ensuring the browser always queries live data without caching.
+  * **Real-time Propagation**: Introduced a 1.5-second propagation delay using `setTimeout` for background audio list fetches following deletes or uploads. This gives the GitHub API enough time to process changes, preventing the local list from being overwritten with stale API data.
 
 ---
 
 ## 📦 Packages Rebuilt & Pushed
 
 We have re-compiled the release outputs, committed all changes, and pushed them to `origin/main` on GitHub:
-* **Android APK**: `build/releases/tarkasravah.apk` (Compiled in release mode)
-* **iOS Simulator Zip**: `build/releases/tarkasravah-ios.zip` (Runner.app simulator binary)
+* **Android APK**: `build/releases/tarkasravah.apk` (Compiled in release mode, version `1.0.1+2`)
+* **iOS Simulator Zip**: `build/releases/tarkasravah-ios.zip` (Runner.app simulator binary, packaged and zipped)
 * **Commits**: Pushed successfully to [GitHub Repo](https://github.com/hangaritsch/tarkasravah.git).
+
