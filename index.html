@@ -94,6 +94,16 @@
       z-index: 10;
     }
 
+    .app-logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 26px;
+      object-fit: cover;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 32px rgba(243, 112, 33, 0.3), 0 0 0 3px rgba(243,112,33,0.12);
+      animation: zoomIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     .sanskrit-logo {
       font-family: var(--font-sanskrit);
       font-size: 96px;
@@ -690,6 +700,7 @@
   <div class="glow-spotlight"></div>
 
   <header>
+    <img src="assets/logo/tarka_logo.png" alt="Tarkaśravaḥ App Logo" class="app-logo">
     <div class="sanskrit-logo">तर्कश्रवः</div>
     <h1 class="title-sub">Tarkaśravaḥ Sanskrit Reader</h1>
     <p class="description">
@@ -733,8 +744,8 @@
             </p>
           </div>
           <div class="card-footer">
-            <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah.apk" class="btn">
-              <span>Download APK</span>
+            <a href="https://github.com/hangaritsch/tarkasravah/raw/main/tarkasravah-v1.0.2.apk" class="btn" download="tarkasravah-v1.0.2.apk">
+              <span>Download APK  v1.0.2</span>
               <!-- Download Arrow Icon -->
               <svg viewBox="0 0 24 24">
                 <path
