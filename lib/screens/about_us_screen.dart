@@ -61,7 +61,7 @@ class AboutUsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "तर्कश्रावः",
+                    "तर्कश्रवः",
                     style: TextStyle(
                       fontSize: 38,
                       fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class AboutUsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Tarkaśravaḥ (तर्कश्रावः) is a premium digital E-Reader dedicated to the study of Nyaya-Vaisheshika philosophy (Shastras). Our mission is to bridge ancient Sanskrit wisdom with modern interactive technology, making traditional texts accessible, interactive, and easily comprehensible for students and enthusiasts alike.",
+              "तर्कश्रवः is a premium digital E-Reader dedicated to the study of Nyaya-Vaisheshika philosophy (Shastras). Our mission is to bridge ancient Sanskrit wisdom with modern interactive technology, making traditional texts accessible, interactive, and easily comprehensible for students and enthusiasts alike.",
               style: TextStyle(
                 fontSize: 15,
                 color: text,

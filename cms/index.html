@@ -835,6 +835,48 @@
       border-radius: 8px;
     }
 
+    /* Recycle Bin Badge */
+    .menu-item .bin-badge {
+      margin-left: auto;
+      background-color: var(--error);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .menu-item .bin-badge.visible {
+      opacity: 1;
+    }
+
+    /* Recycle Bin Table */
+    .bin-type-label {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .bin-type-grantha { background: rgba(255,153,51,0.15); color: var(--primary); }
+    .bin-type-sutra   { background: rgba(88,166,255,0.15); color: #58a6ff; }
+    .bin-type-word    { background: rgba(56,211,159,0.15); color: #38d39f; }
+    .bin-empty-state  {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .bin-empty-state svg { margin-bottom: 12px; opacity: 0.35; }
+    .bin-empty-state p   { font-size: 15px; }
+
     /* Animations */
     @keyframes fadeInUp {
       from {
@@ -866,7 +908,7 @@
   <!-- ===================================== -->
   <div id="login-view">
     <div class="login-card" id="login-card">
-      <div class="login-logo">तर्कश्रावः</div>
+      <div class="login-logo">तर्कश्रवः</div>
       <h1 class="login-title">Tarkaśravaḥ CMS</h1>
       <p class="login-subtitle">Secure Admin Panel Access</p>
       
@@ -889,7 +931,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-logo">तर्कश्रावः</div>
+        <div class="sidebar-logo">तर्कश्रवः</div>
         <div class="sidebar-title">Admin Dashboard CMS</div>
       </div>
       
@@ -918,6 +960,12 @@
           <!-- Inline SVG Icon for Settings -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           Settings (विन्यासः)
+        </li>
+        <li class="menu-item" data-tab="recycle-bin">
+          <!-- Trash / Recycle Bin Icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Recycle Bin
+          <span class="bin-badge" id="bin-badge">0</span>
         </li>
       </ul>
 
@@ -1046,7 +1094,35 @@
         </section>
 
         <!-- ===================================== -->
-        <!-- TAB 5: SETTINGS SECTION               -->
+        <!-- TAB 5: RECYCLE BIN SECTION            -->
+        <!-- ===================================== -->
+        <section id="recycle-bin-section" class="tab-section hidden">
+          <div class="section-header">
+            <h3 class="section-title">Recycle Bin (कचरापेटी)</h3>
+            <button class="btn btn-sm btn-danger" id="btn-empty-bin">Empty Bin</button>
+          </div>
+          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Deleted items are kept here. Restore them or permanently delete to free space.</p>
+
+          <div class="sutra-table-container">
+            <table class="sutra-table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Item</th>
+                  <th>Details</th>
+                  <th>Deleted At</th>
+                  <th style="width: 160px; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="recycle-bin-list">
+                <!-- Dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===================================== -->
+        <!-- TAB 6: SETTINGS SECTION               -->
         <!-- ===================================== -->
         <section id="settings-section" class="tab-section hidden">
           <div class="section-header">
@@ -1417,7 +1493,10 @@
         granthas: null,
         dictionary: null,
         sutras: {}
-      }
+      },
+
+      // Recycle Bin: array of { id, type, label, detail, deletedAt, payload, extraPayload }
+      recycleBin: []
     };
 
     // Recorder Global States
@@ -1471,8 +1550,174 @@
       consoleEl.scrollTop = consoleEl.scrollHeight;
     }
 
+    // --- RECYCLE BIN HELPERS ---
+
+    function loadBinFromStorage() {
+      try {
+        const saved = localStorage.getItem("tarka_recycle_bin");
+        if (saved) state.recycleBin = JSON.parse(saved);
+      } catch (_) { state.recycleBin = []; }
+    }
+
+    function saveBinToStorage() {
+      localStorage.setItem("tarka_recycle_bin", JSON.stringify(state.recycleBin));
+    }
+
+    function addToBin(type, label, detail, payload, extraPayload = null) {
+      state.recycleBin.unshift({
+        id: Date.now() + Math.random(),
+        type,        // 'grantha' | 'sutra' | 'word'
+        label,       // display name
+        detail,      // secondary info
+        deletedAt: new Date().toLocaleString(),
+        payload,     // main data object
+        extraPayload // e.g. sutra SHA or grantha context
+      });
+      saveBinToStorage();
+      updateBinBadge();
+    }
+
+    function updateBinBadge() {
+      const badge = document.getElementById("bin-badge");
+      const count = state.recycleBin.length;
+      badge.textContent = count;
+      badge.classList.toggle("visible", count > 0);
+    }
+
+    function renderRecycleBin() {
+      const tbody = document.getElementById("recycle-bin-list");
+      tbody.innerHTML = "";
+
+      if (state.recycleBin.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="5">
+            <div class="bin-empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <p>The Recycle Bin is empty</p>
+            </div>
+          </td></tr>`;
+        return;
+      }
+
+      state.recycleBin.forEach((item, idx) => {
+        const typeClass = `bin-type-${item.type}`;
+        const typeLabel = item.type === 'grantha' ? 'Grantha' : item.type === 'sutra' ? 'Sutra' : 'Word';
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="bin-type-label ${typeClass}">${typeLabel}</span></td>
+          <td style="font-weight:600; max-width:180px; word-break:break-word;">${item.label}</td>
+          <td style="color:var(--text-muted); font-size:13px; max-width:200px; word-break:break-word;">${item.detail}</td>
+          <td style="color:var(--text-muted); font-size:12px; white-space:nowrap;">${item.deletedAt}</td>
+          <td style="text-align:right;">
+            <div style="display:inline-flex; gap:8px;">
+              <button class="btn btn-sm btn-secondary" style="padding:6px 12px; font-size:12px;" onclick="restoreFromBin(${idx})">Restore</button>
+              <button class="btn-icon-only danger" title="Permanently Delete" onclick="permanentDeleteFromBin(${idx})">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.restoreFromBin = async function(idx) {
+      const item = state.recycleBin[idx];
+      if (!item) return;
+
+      try {
+        if (item.type === 'grantha') {
+          state.granthas.push(item.payload);
+          logConsole(`Restoring Grantha '${item.payload.id}' from Recycle Bin...`, "info");
+          const nextSha = await commitRepoFile("assets/data/granthas.json", state.shas.granthas, state.granthas, `Restore Grantha: ${item.payload.english_title}`);
+          state.shas.granthas = nextSha;
+          // Restore the sutra file if we have backup data
+          if (item.extraPayload && item.extraPayload.sutrasData !== undefined) {
+            const fileSha = await commitRepoFile(`assets/data/${item.payload.id}.json`, null, item.extraPayload.sutrasData, `Restore sutra file for: ${item.payload.english_title}`);
+            state.shas.sutras[item.payload.id] = fileSha;
+          }
+          renderGranthas();
+          populateSutrasGranthaDropdown();
+          logConsole(`Grantha '${item.payload.id}' restored successfully.`, "success");
+
+        } else if (item.type === 'sutra') {
+          const gId = item.extraPayload.granthaId;
+          if (state.activeGranthaId !== gId) {
+            state.activeGranthaId = gId;
+            document.getElementById("sutra-grantha-select").value = gId;
+            await loadSutrasForActiveGrantha();
+          }
+          state.sutras.push(item.payload);
+          state.sutras.sort((a, b) => a.id - b.id);
+          logConsole(`Restoring Sutra '${item.payload.title}' to ${gId}...`, "info");
+          const nextSutrasSha = await commitRepoFile(`assets/data/${gId}.json`, state.shas.sutras[gId], state.sutras, `Restore sutra: ${item.payload.title}`);
+          state.shas.sutras[gId] = nextSutrasSha;
+          const gIdx = state.granthas.findIndex(x => x.id === gId);
+          if (gIdx !== -1) {
+            state.granthas[gIdx].sutra_count = state.sutras.length;
+            const nextGranthasSha = await commitRepoFile("assets/data/granthas.json", state.shas.granthas, state.granthas, `Update sutra count for ${gId}`);
+            state.shas.granthas = nextGranthasSha;
+          }
+          renderSutras();
+          renderGranthas();
+          logConsole(`Sutra restored successfully.`, "success");
+
+        } else if (item.type === 'word') {
+          const key = item.extraPayload.key;
+          state.dictionary[key] = item.payload;
+          logConsole(`Restoring dictionary word '${key}'...`, "info");
+          const nextSha = await commitRepoFile("assets/data/dictionary.json", state.shas.dictionary, state.dictionary, `Restore dictionary word: ${key}`);
+          state.shas.dictionary = nextSha;
+          renderDictionary();
+          logConsole(`Word '${key}' restored successfully.`, "success");
+        }
+
+        state.recycleBin.splice(idx, 1);
+        saveBinToStorage();
+        updateBinBadge();
+        renderRecycleBin();
+      } catch (err) {
+        logConsole(`Restore failed: ${err.message}`, "error");
+        alert(`Restore error: ${err.message}`);
+      }
+    };
+
+    window.permanentDeleteFromBin = async function(idx) {
+      const item = state.recycleBin[idx];
+      if (!item) return;
+      if (!confirm(`Permanently delete '${item.label}'? This CANNOT be undone.`)) return;
+
+      // For grantha type, also delete the sutra file from GitHub permanently
+      if (item.type === 'grantha') {
+        try {
+          logConsole(`Permanently deleting sutra file assets/data/${item.payload.id}.json from GitHub...`, "info");
+          const sutraFileSha = item.extraPayload?.sutraFileSha;
+          if (sutraFileSha) {
+            const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/data/${item.payload.id}.json`;
+            await fetch(url, {
+              method: "DELETE",
+              headers: { "Authorization": `Bearer ${state.pat}`, "Accept": "application/vnd.github+json" },
+              body: JSON.stringify({ message: `Permanently delete sutra file: ${item.payload.id}.json`, sha: sutraFileSha, branch: state.branch })
+            });
+            logConsole(`Sutra file permanently deleted.`, "success");
+          }
+        } catch (err) {
+          logConsole(`Could not delete sutra file: ${err.message}`, "info");
+        }
+      }
+
+      logConsole(`Permanently deleted '${item.label}' from Recycle Bin.`, "success");
+      state.recycleBin.splice(idx, 1);
+      saveBinToStorage();
+      updateBinBadge();
+      renderRecycleBin();
+    };
+
     // Initial load
     window.addEventListener("DOMContentLoaded", () => {
+      // Load recycle bin from storage
+      loadBinFromStorage();
+      updateBinBadge();
+
       // Setup Login Form
       const loginForm = document.getElementById("login-form");
       loginForm.addEventListener("submit", handleLogin);
@@ -1481,8 +1726,21 @@
       const menuItems = document.querySelectorAll(".menu-item");
       menuItems.forEach(item => {
         item.addEventListener("click", () => {
-          switchTab(item.getAttribute("data-tab"));
+          const tab = item.getAttribute("data-tab");
+          switchTab(tab);
+          if (tab === "recycle-bin") renderRecycleBin();
         });
+      });
+
+      // Empty Bin button
+      document.getElementById("btn-empty-bin").addEventListener("click", () => {
+        if (state.recycleBin.length === 0) return;
+        if (!confirm(`Permanently delete ALL ${state.recycleBin.length} items in the bin? This CANNOT be undone.`)) return;
+        state.recycleBin = [];
+        saveBinToStorage();
+        updateBinBadge();
+        renderRecycleBin();
+        logConsole("Recycle Bin emptied.", "success");
       });
 
       // Settings Save
@@ -1671,7 +1929,8 @@
         sutras: "Sutras (सूत्राणि)",
         audio: "Audio Files (ध्वनिमुद्रणानि)",
         dictionary: "Dictionary (शब्दकोशः)",
-        settings: "Settings (विन्यासः)"
+        settings: "Settings (विन्यासः)",
+        "recycle-bin": "Recycle Bin (कचरापेटी)"
       };
       document.getElementById("nav-title").innerText = titleMap[tabId] || "Dashboard";
       
@@ -2350,49 +2609,31 @@
       }
     }
 
-    // Delete Grantha
+    // Delete Grantha → move to Recycle Bin
     async function deleteGrantha(id) {
-      if (!confirm(`Are you absolutely sure you want to delete the Grantha '${id}'? This deletes its metadata and all associated sutras.`)) {
-        return;
-      }
+      if (!confirm(`Move Grantha '${id}' to the Recycle Bin?`)) return;
 
       const g = state.granthas.find(x => x.id === id);
       const index = state.granthas.findIndex(x => x.id === id);
       if (index === -1) return;
 
-      const englishTitle = g.english_title;
+      // Snapshot current sutras data for this grantha (for restore)
+      let sutrasSnapshot = [];
+      try {
+        const { data } = await fetchRepoFile(`assets/data/${id}.json`);
+        sutrasSnapshot = data;
+      } catch (_) {}
+
+      const sutraFileSha = state.shas.sutras[id] || null;
       state.granthas.splice(index, 1);
 
       try {
-        logConsole(`Deleting Grantha '${id}'...`, "info");
-        
-        // 1. Commit updated granthas.json
-        const nextSha = await commitRepoFile("assets/data/granthas.json", state.shas.granthas, state.granthas, `Delete Grantha: ${englishTitle}`);
+        logConsole(`Moving Grantha '${id}' to Recycle Bin...`, "info");
+        const nextSha = await commitRepoFile("assets/data/granthas.json", state.shas.granthas, state.granthas, `Soft-delete Grantha: ${g.english_title}`);
         state.shas.granthas = nextSha;
-        logConsole("Commit successful: granthas.json updated.", "success");
+        logConsole("granthas.json updated.", "success");
 
-        // 2. Delete the sutras JSON file.
-        if (state.shas.sutras[id]) {
-          logConsole(`Deleting assets/data/${id}.json file from GitHub...`, "info");
-          const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/data/${id}.json`;
-          const response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-              "Authorization": `Bearer ${state.pat}`,
-              "Accept": "application/vnd.github+json"
-            },
-            body: JSON.stringify({
-              message: `Remove sutra file for deleted Grantha: ${englishTitle}`,
-              sha: state.shas.sutras[id],
-              branch: state.branch
-            })
-          });
-          if (response.ok) {
-            logConsole(`File assets/data/${id}.json deleted successfully.`, "success");
-          } else {
-            logConsole(`Could not delete file assets/data/${id}.json (already deleted/missing).`, "info");
-          }
-        }
+        addToBin('grantha', g.title, `${g.english_title} · ${g.author}`, g, { sutraFileSha, sutrasData: sutrasSnapshot });
 
         renderGranthas();
         populateSutrasGranthaDropdown();
@@ -2402,7 +2643,7 @@
           loadSutrasForActiveGrantha();
         }
       } catch (err) {
-        logConsole(`Failed to delete Grantha: ${err.message}`, "error");
+        logConsole(`Failed to move Grantha to bin: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
         fetchGranthasJson();
       }
@@ -2480,52 +2721,47 @@
       }
     }
 
-    // Delete Sutra
+    // Delete Sutra → move to Recycle Bin
     async function deleteSutra(id) {
-      if (!confirm("Are you sure you want to delete this sutra?")) {
-        return;
-      }
+      if (!confirm("Move this Sutra to the Recycle Bin?")) return;
 
       const s = state.sutras.find(x => x.id === id);
       const index = state.sutras.findIndex(x => x.id === id);
       if (index === -1) return;
 
       const sutraTitle = s.title;
+      const granthaCtx = state.activeGranthaId;
       state.sutras.splice(index, 1);
 
       try {
-        logConsole(`Deleting sutra: ${sutraTitle}...`, "info");
-
-        // 1. Commit active Grantha sutras JSON file
+        logConsole(`Moving sutra '${sutraTitle}' to Recycle Bin...`, "info");
         const nextSutrasSha = await commitRepoFile(
-          `assets/data/${state.activeGranthaId}.json`,
-          state.shas.sutras[state.activeGranthaId],
+          `assets/data/${granthaCtx}.json`,
+          state.shas.sutras[granthaCtx],
           state.sutras,
-          `Delete sutra from ${state.activeGranthaId}: ${sutraTitle}`
+          `Soft-delete sutra from ${granthaCtx}: ${sutraTitle}`
         );
-        state.shas.sutras[state.activeGranthaId] = nextSutrasSha;
-        logConsole(`Commit successful: ${state.activeGranthaId}.json updated.`, "success");
+        state.shas.sutras[granthaCtx] = nextSutrasSha;
+        logConsole(`${granthaCtx}.json updated.`, "success");
 
-        // 2. Update count in granthas.json
-        const gIdx = state.granthas.findIndex(x => x.id === state.activeGranthaId);
+        const gIdx = state.granthas.findIndex(x => x.id === granthaCtx);
         if (gIdx !== -1) {
           state.granthas[gIdx].sutra_count = state.sutras.length;
-          
-          logConsole("Updating granthas.json count...", "info");
           const nextGranthasSha = await commitRepoFile(
             "assets/data/granthas.json",
             state.shas.granthas,
             state.granthas,
-            `Update sutra count for ${state.activeGranthaId} to ${state.sutras.length}`
+            `Update sutra count for ${granthaCtx} to ${state.sutras.length}`
           );
           state.shas.granthas = nextGranthasSha;
-          logConsole("Commit successful: granthas.json count updated.", "success");
         }
+
+        addToBin('sutra', sutraTitle, `${s.sutra_number} · ${s.sanskrit.substring(0, 60)}…`, s, { granthaId: granthaCtx });
 
         renderSutras();
         renderGranthas();
       } catch (err) {
-        logConsole(`Failed to delete Sutra: ${err.message}`, "error");
+        logConsole(`Failed to move Sutra to bin: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
         loadSutrasForActiveGrantha();
       }
@@ -2751,27 +2987,29 @@
       }
     }
 
-    // Delete Word from Dictionary
+    // Delete Word → move to Recycle Bin
     async function deleteWord(key) {
-      if (!confirm(`Are you sure you want to delete '${key}' from the dictionary?`)) {
-        return;
-      }
+      if (!confirm(`Move '${key}' to the Recycle Bin?`)) return;
 
+      const wordData = state.dictionary[key];
       delete state.dictionary[key];
 
       try {
-        logConsole(`Deleting dictionary word: ${key}...`, "info");
+        logConsole(`Moving dictionary word '${key}' to Recycle Bin...`, "info");
         const nextSha = await commitRepoFile(
           "assets/data/dictionary.json",
           state.shas.dictionary,
           state.dictionary,
-          `Delete dictionary word: ${key}`
+          `Soft-delete dictionary word: ${key}`
         );
         state.shas.dictionary = nextSha;
-        logConsole("Commit successful: dictionary.json updated.", "success");
+        logConsole("dictionary.json updated.", "success");
+
+        addToBin('word', key, wordData.english, wordData, { key });
+
         renderDictionary();
       } catch (err) {
-        logConsole(`Failed to delete word: ${err.message}`, "error");
+        logConsole(`Failed to move word to bin: ${err.message}`, "error");
         alert(`Error: ${err.message}`);
         fetchDictionaryJson();
       }

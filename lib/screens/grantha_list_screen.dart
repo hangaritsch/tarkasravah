@@ -5,8 +5,23 @@ import '../widgets/app_drawer.dart';
 import '../widgets/offline_warning_banner.dart';
 import 'library_screen.dart';
 
-class GranthaListScreen extends StatelessWidget {
+class GranthaListScreen extends StatefulWidget {
   const GranthaListScreen({super.key});
+
+  @override
+  State<GranthaListScreen> createState() => _GranthaListScreenState();
+}
+
+class _GranthaListScreenState extends State<GranthaListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Check for app updates once per session, after the first frame renders
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<ReaderProvider>(context, listen: false);
+      provider.checkForUpdates(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +40,7 @@ class GranthaListScreen extends StatelessWidget {
         elevation: 0,
         iconTheme: IconThemeData(color: accent),
         title: Text(
-          "Tarkaśravaḥ (तर्कश्रावः)",
+          "तर्कश्रवः",
           style: TextStyle(
             color: accent,
             fontWeight: FontWeight.bold,

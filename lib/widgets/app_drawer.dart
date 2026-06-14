@@ -39,7 +39,7 @@ class AppDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "तर्कश्रावः",
+                  "तर्कश्रवः",
                   style: TextStyle(
                     fontFamily: 'PragatiNarrow',
                     fontSize: 32,
@@ -323,7 +323,7 @@ class AppDrawer extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "तर्कश्रावः${provider.activeGrantha != null ? ' • ${provider.activeGrantha!.title}' : ''}",
+                  "तर्कश्रवः${provider.activeGrantha != null ? ' • ${provider.activeGrantha!.title}' : ''}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'PragatiNarrow',

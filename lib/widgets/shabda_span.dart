@@ -23,10 +23,9 @@ class ShabdaSpanBuilder {
       if (token == '।' || token == '॥') {
         spans.add(TextSpan(
           text: token,
-          style: TextStyle(
-            color: textColor,
+          style: provider.getDevanagariStyle(
             fontSize: fontSize,
-            fontFamily: 'PragatiNarrow',
+            color: textColor,
           ),
         ));
       } else {
@@ -43,17 +42,18 @@ class ShabdaSpanBuilder {
         }
 
         // Add the word span (interactive)
+        final wordStyle = provider.getDevanagariStyle(
+          fontSize: fontSize,
+          color: provider.accentColor,
+          fontWeight: FontWeight.w600,
+        ).copyWith(
+          decoration: TextDecoration.underline,
+          decorationColor: provider.accentColor.withAlpha(80),
+          decorationStyle: TextDecorationStyle.dashed,
+        );
         spans.add(TextSpan(
           text: cleanWord,
-          style: TextStyle(
-            color: provider.accentColor,
-            fontWeight: FontWeight.w600,
-            fontSize: fontSize,
-            fontFamily: 'PragatiNarrow',
-            decoration: TextDecoration.underline,
-            decorationColor: provider.accentColor.withAlpha(80),
-            decorationStyle: TextDecorationStyle.dashed,
-          ),
+          style: wordStyle,
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               onWordTap(cleanWord);
@@ -64,10 +64,9 @@ class ShabdaSpanBuilder {
         if (trailingPunctuation.isNotEmpty) {
           spans.add(TextSpan(
             text: trailingPunctuation,
-            style: TextStyle(
-              color: textColor,
+            style: provider.getDevanagariStyle(
               fontSize: fontSize,
-              fontFamily: 'PragatiNarrow',
+              color: textColor,
             ),
           ));
         }

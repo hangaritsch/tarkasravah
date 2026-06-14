@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/sutra.dart';
 import '../models/grantha.dart';
 
@@ -37,6 +39,24 @@ class ReaderProvider extends ChangeNotifier {
 
   // Track latest commit SHA from GitHub to bypass jsDelivr CDN caching
   String _commitSha = 'main';
+
+  // App Version & Update Check
+  static const String currentAppVersion = "1.0.2+3";
+  bool _hasCheckedForUpdates = false;
+  bool get hasCheckedForUpdates => _hasCheckedForUpdates;
+
+  // Selected Devanagari Font
+  String _devanagariFont = 'Pragati Narrow';
+  String get devanagariFont => _devanagariFont;
+  
+  static const List<String> supportedDevanagariFonts = [
+    'Pragati Narrow',
+    'Noto Sans Devanagari',
+    'Anek Devanagari',
+    'Yatra One',
+    'Rozha One',
+    'Martel',
+  ];
 
   // Audio Playback
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -115,22 +135,17 @@ class ReaderProvider extends ChangeNotifier {
       final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      final rawUrlPrefix = 'https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/assets/data';
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-
-      // Try fetching index from CDN first on startup if online
+      // 1. Try fetching index from GitHub API first on startup if online (real-time)
       try {
-        final gResp = await http.get(Uri.parse('$rawUrlPrefix/granthas.json?t=$timestamp')).timeout(const Duration(seconds: 5));
-        if (gResp.statusCode == 200) {
-          final decoded = json.decode(gResp.body);
-          if (decoded is List) {
-            await granthasCacheFile.writeAsString(gResp.body);
-            _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
-            debugPrint("Successfully fetched latest granthas index from CDN on startup.");
-          }
+        final content = await _fetchRepoFileRealtime('assets/data/granthas.json');
+        final decoded = json.decode(content);
+        if (decoded is List) {
+          await granthasCacheFile.writeAsString(content);
+          _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
+          debugPrint("Successfully loaded latest granthas index on startup.");
         }
       } catch (e) {
-        debugPrint("CDN fetch for granthas list failed on startup, loading cached/bundle: $e");
+        debugPrint("Real-time fetch for granthas list failed on startup: $e");
       }
 
       // Fallback: load index from cache or assets
@@ -157,19 +172,17 @@ class ReaderProvider extends ChangeNotifier {
       // Update the offline maps before loading active sutras
       await checkOfflineStatus();
 
-      // Try fetching dictionary from CDN on startup if online
+      // 2. Try fetching dictionary from GitHub API on startup if online (real-time)
       try {
-        final dResp = await http.get(Uri.parse('$rawUrlPrefix/dictionary.json?t=$timestamp')).timeout(const Duration(seconds: 5));
-        if (dResp.statusCode == 200) {
-          final decoded = json.decode(dResp.body);
-          if (decoded is Map) {
-            await dictCacheFile.writeAsString(dResp.body);
-            _dictionary = decoded.cast<String, dynamic>();
-            debugPrint("Successfully fetched latest dictionary from CDN on startup.");
-          }
+        final content = await _fetchRepoFileRealtime('assets/data/dictionary.json');
+        final decoded = json.decode(content);
+        if (decoded is Map) {
+          await dictCacheFile.writeAsString(content);
+          _dictionary = decoded.cast<String, dynamic>();
+          debugPrint("Successfully loaded latest dictionary on startup.");
         }
       } catch (e) {
-        debugPrint("CDN fetch for dictionary failed on startup, loading cached/bundle: $e");
+        debugPrint("Real-time fetch for dictionary failed on startup: $e");
       }
 
       // Fallback: load dictionary from cache or assets
@@ -202,6 +215,171 @@ class ReaderProvider extends ChangeNotifier {
       _error = "Error loading data: $e";
       notifyListeners();
     }
+  }
+
+  void setDevanagariFont(String font) {
+    _devanagariFont = font;
+    notifyListeners();
+  }
+
+  TextStyle getDevanagariStyle({required double fontSize, Color? color, FontWeight? fontWeight}) {
+    if (_devanagariFont == 'Pragati Narrow' || _devanagariFont == 'PragatiNarrow') {
+      return TextStyle(
+        fontFamily: 'PragatiNarrow',
+        fontSize: fontSize,
+        color: color,
+        fontWeight: fontWeight,
+      );
+    } else {
+      try {
+        return GoogleFonts.getFont(
+          _devanagariFont,
+          fontSize: fontSize,
+          color: color,
+          fontWeight: fontWeight,
+        );
+      } catch (e) {
+        // Fallback to local default PragatiNarrow
+        return TextStyle(
+          fontFamily: 'PragatiNarrow',
+          fontSize: fontSize,
+          color: color,
+          fontWeight: fontWeight,
+        );
+      }
+    }
+  }
+
+  // Version check helpers
+  bool _isNewerVersion(String local, String remote) {
+    try {
+      final localParts = local.split('+');
+      final remoteParts = remote.split('+');
+      
+      final localSemVer = localParts[0].split('.');
+      final remoteSemVer = remoteParts[0].split('.');
+      
+      for (int i = 0; i < 3; i++) {
+        final localVal = int.parse(localSemVer[i]);
+        final remoteVal = int.parse(remoteSemVer[i]);
+        if (remoteVal > localVal) return true;
+        if (remoteVal < localVal) return false;
+      }
+      
+      if (remoteParts.length > 1 && localParts.length > 1) {
+        final localBuild = int.parse(localParts[1]);
+        final remoteBuild = int.parse(remoteParts[1]);
+        return remoteBuild > localBuild;
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  // Triggers checking for remote updates
+  Future<void> checkForUpdates(BuildContext context) async {
+    if (_hasCheckedForUpdates) return;
+    _hasCheckedForUpdates = true;
+    try {
+      final pubspecContent = await _fetchRepoFileRealtime('pubspec.yaml');
+      final regExp = RegExp(r'^version:\s*(\d+\.\d+\.\d+\+\d+)', multiLine: true);
+      final match = regExp.firstMatch(pubspecContent);
+      if (match != null) {
+        final remoteVersion = match.group(1)!;
+        debugPrint("Current version: $currentAppVersion, Remote version: $remoteVersion");
+        if (_isNewerVersion(currentAppVersion, remoteVersion)) {
+          if (context.mounted) {
+            _showUpdateDialog(context, remoteVersion);
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error checking for updates: $e");
+    }
+  }
+
+  void _showUpdateDialog(BuildContext context, String newVersion) {
+    final bg = backgroundColor;
+    final text = textColor;
+    final accent = accentColor;
+    final secText = secondaryTextColor;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: bg,
+          title: Text(
+            "तर्कश्रवः - Update Available",
+            style: TextStyle(color: accent, fontWeight: FontWeight.bold, fontFamily: 'PragatiNarrow'),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "A newer version of Tarkaśravaḥ (v$newVersion) is available for download.",
+                style: TextStyle(color: text),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                "Would you like to visit the website to download the latest updates?",
+                style: TextStyle(color: secText),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text("Later", style: TextStyle(color: secText)),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: accent, foregroundColor: bg),
+              onPressed: () async {
+                Navigator.pop(dialogContext);
+                final url = Uri.parse('https://hangaritsch.github.io/tarkasravah/');
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                }
+              },
+              child: const Text("Download Now"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Real-time file fetch helper to completely bypass CDN caching
+  Future<String> _fetchRepoFileRealtime(String path) async {
+    final apiUri = Uri.parse('https://api.github.com/repos/hangaritsch/tarkasravah/contents/$path');
+    final rawUri = Uri.parse('https://raw.githubusercontent.com/hangaritsch/tarkasravah/main/$path?t=${DateTime.now().millisecondsSinceEpoch}');
+    
+    // 1. Try fetching via GitHub API contents endpoint for real-time data
+    try {
+      final response = await http.get(apiUri).timeout(const Duration(seconds: 4));
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        if (decoded is Map && decoded.containsKey('content')) {
+          final cleanBase64 = decoded['content'].toString().replaceAll('\n', '').replaceAll('\r', '');
+          final decodedBytes = base64.decode(cleanBase64);
+          final content = utf8.decode(decodedBytes);
+          debugPrint("Successfully fetched latest $path from GitHub API.");
+          return content;
+        }
+      }
+    } catch (e) {
+      debugPrint("GitHub API fetch for $path failed: $e. Falling back to raw URL.");
+    }
+
+    // 2. Fallback to raw usercontent URL
+    final response = await http.get(rawUri).timeout(const Duration(seconds: 5));
+    if (response.statusCode == 200) {
+      debugPrint("Fetched $path from raw usercontent fallback.");
+      return response.body;
+    }
+    
+    throw Exception("Failed to fetch $path (status code: ${response.statusCode})");
   }
 
   Future<List<Grantha>> _loadGranthasFromAsset() async {

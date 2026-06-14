@@ -28,11 +28,10 @@ class LibraryScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: accent),
         title: Text(
           provider.activeGrantha?.title ?? "Library",
-          style: TextStyle(
+          style: provider.getDevanagariStyle(
+            fontSize: 24,
             color: accent,
             fontWeight: FontWeight.bold,
-            fontFamily: 'PragatiNarrow',
-            fontSize: 24,
           ),
         ),
         actions: [
@@ -173,12 +172,10 @@ class LibraryScreen extends StatelessWidget {
                                       sutra.sanskrit,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: 'PragatiNarrow',
+                                      style: provider.getDevanagariStyle(
                                         fontSize: 18,
                                         color: text.withAlpha(220),
-                                        height: 1.4,
-                                      ),
+                                      ).copyWith(height: 1.4),
                                     ),
                                   ],
                                 ),

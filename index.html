@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tarkaśravaḥ (तर्कश्रावः) - A premium Sanskrit e-reader and audio player for logic texts. Download Android and iOS builds.">
-  
+  <meta name="description"
+    content="तर्कश्रवः - A premium Sanskrit e-reader and audio player for logic texts. Download Android and iOS builds.">
+
   <!-- Anti-caching Meta Tags to force immediate updates -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <title>Tarkaśravaḥ (तर्कश्रावः) - Sanskrit E-Reader</title>
-  
+  <title>तर्कश्रवः - Sanskrit E-Reader</title>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Pragati+Narrow:wght@400;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Pragati+Narrow:wght@400;700&display=swap"
+    rel="stylesheet">
+
   <style>
     :root {
       --bg-dark: #0a0607;
@@ -32,7 +36,7 @@
       --text-light: #fdfaf6;
       --text-muted: #c8bdbe;
       --success: #00e676;
-      
+
       --font-sanskrit: 'Pragati Narrow', sans-serif;
       --font-sans: 'Outfit', sans-serif;
     }
@@ -45,7 +49,7 @@
 
     body {
       background-color: var(--bg-dark);
-      background-image: 
+      background-image:
         radial-gradient(circle at 10% 20%, rgba(194, 29, 36, 0.15) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(243, 112, 33, 0.12) 0%, transparent 50%),
         radial-gradient(circle at 50% 50%, rgba(128, 0, 32, 0.18) 0%, transparent 70%);
@@ -74,8 +78,13 @@
     }
 
     @keyframes floatGlow {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(50px, 30px) scale(1.15); }
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(50px, 30px) scale(1.15);
+      }
     }
 
     header {
@@ -152,9 +161,20 @@
     }
 
     @keyframes pulse {
-      0% { transform: scale(0.9); opacity: 0.6; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(0.9); opacity: 0.6; }
+      0% {
+        transform: scale(0.9);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0.9);
+        opacity: 0.6;
+      }
     }
 
     main {
@@ -225,7 +245,7 @@
       background: #181112;
       border: 10px solid #2d2022;
       border-radius: 40px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 30px rgba(243, 112, 33, 0.15);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(243, 112, 33, 0.15);
       position: relative;
       overflow: hidden;
       transform: rotateY(-10deg) rotateX(10deg);
@@ -235,20 +255,29 @@
 
     .phone-mockup:hover {
       transform: rotateY(0deg) rotateX(0deg) scale(1.03);
-      box-shadow: 0 30px 70px rgba(0,0,0,0.8), 0 0 40px rgba(243, 112, 33, 0.25);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(243, 112, 33, 0.25);
     }
 
     @keyframes floatPhone {
-      0% { transform: rotateY(-10deg) rotateX(10deg) translateY(0px); }
-      50% { transform: rotateY(-10deg) rotateX(10deg) translateY(-12px); }
-      100% { transform: rotateY(-10deg) rotateX(10deg) translateY(0px); }
+      0% {
+        transform: rotateY(-10deg) rotateX(10deg) translateY(0px);
+      }
+
+      50% {
+        transform: rotateY(-10deg) rotateX(10deg) translateY(-12px);
+      }
+
+      100% {
+        transform: rotateY(-10deg) rotateX(10deg) translateY(0px);
+      }
     }
 
     /* Phone Screen Details */
     .phone-screen {
       width: 100%;
       height: 100%;
-      background: #fdf5e6; /* Sepia-ish default */
+      background: #fdf5e6;
+      /* Sepia-ish default */
       display: flex;
       flex-direction: column;
       color: #3e2723;
@@ -265,7 +294,7 @@
       font-family: var(--font-sanskrit);
       font-size: 20px;
       font-weight: 700;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
     .phone-body {
@@ -619,30 +648,53 @@
 
     /* Keyframes */
     @keyframes zoomIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
 
   <div class="glow-spotlight"></div>
 
   <header>
-    <div class="sanskrit-logo">तर्कश्रावः</div>
+    <div class="sanskrit-logo">तर्कश्रवः</div>
     <h1 class="title-sub">Tarkaśravaḥ Sanskrit Reader</h1>
     <p class="description">
-      An elegant, premium e-reader and audio player designed for traditional logic systems (Nyāya-Vaiśeṣika), offering full dictionary lookups, voice recordings, and per-text offline caching.
+      An elegant, premium e-reader and audio player designed for traditional logic systems (Nyāya-Vaiśeṣika), offering
+      full dictionary lookups, voice recordings, and per-text offline caching.
     </p>
     <span class="version-pill">
       <span class="pulse-dot"></span>
@@ -654,7 +706,8 @@
     <div id="device-banner" class="detected-device-banner">
       <!-- Checked Circle Icon -->
       <svg viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
       </svg>
       <span id="device-text">Detected device. Recommended package highlighted.</span>
     </div>
@@ -669,12 +722,14 @@
             <div class="card-header-icon">
               <!-- Android Icon -->
               <svg viewBox="0 0 24 24">
-                <path d="M17.6 9.48l1.84-3.18c.16-.31.06-.7-.25-.87a.586.586 0 0 0-.84.24l-1.88 3.24c-2.86-1.18-6.09-1.18-8.96 0L5.63 5.67c-.22-.38-.71-.52-1.09-.3-.38.22-.52.71-.3 1.09l1.84 3.18C2.94 12.18 1 15.39 1 18.96h22c0-3.57-1.94-6.78-5-9.48zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/>
+                <path
+                  d="M17.6 9.48l1.84-3.18c.16-.31.06-.7-.25-.87a.586.586 0 0 0-.84.24l-1.88 3.24c-2.86-1.18-6.09-1.18-8.96 0L5.63 5.67c-.22-.38-.71-.52-1.09-.3-.38.22-.52.71-.3 1.09l1.84 3.18C2.94 12.18 1 15.39 1 18.96h22c0-3.57-1.94-6.78-5-9.48zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z" />
               </svg>
             </div>
             <h2 class="card-title">Android Package</h2>
             <p class="card-desc">
-              Download the release APK file for Android mobile devices. Enable "Install Unknown Apps" in your security settings to run this package.
+              Download the release APK file for Android mobile devices. Enable "Install Unknown Apps" in your security
+              settings to run this package.
             </p>
           </div>
           <div class="card-footer">
@@ -682,7 +737,8 @@
               <span>Download APK</span>
               <!-- Download Arrow Icon -->
               <svg viewBox="0 0 24 24">
-                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                <path
+                  d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
               </svg>
             </a>
           </div>
@@ -695,19 +751,23 @@
             <div class="card-header-icon">
               <!-- Apple Icon -->
               <svg viewBox="0 0 24 24">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.56 2.95-1.39z"/>
+                <path
+                  d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.56 2.95-1.39z" />
               </svg>
             </div>
             <h2 class="card-title">iOS Simulator</h2>
             <p class="card-desc">
-              Download the zipped simulator bundle (Runner.app) for testing inside macOS simulator developer environments.
+              Download the zipped simulator bundle (Runner.app) for testing inside macOS simulator developer
+              environments.
             </p>
           </div>
           <div class="card-footer">
-            <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah-ios.zip" class="btn">
+            <a href="https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah-ios.zip"
+              class="btn">
               <span>Download ZIP</span>
               <svg viewBox="0 0 24 24">
-                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                <path
+                  d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" />
               </svg>
             </a>
           </div>
@@ -728,13 +788,14 @@
                   </div>
                 </div>
                 <div class="phone-text-en">
-                  The categories are seven, namely, substance (dravya), quality (guna), action (karma), generality (samanya), particularity (vishesha), inherence (samavaya), and non-existence (abhava).
+                  The categories are seven, namely, substance (dravya), quality (guna), action (karma), generality
+                  (samanya), particularity (vishesha), inherence (samavaya), and non-existence (abhava).
                 </div>
               </div>
               <div class="phone-audio-bar">
                 <div class="phone-play-btn">
                   <svg viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
+                    <path d="M8 5v14l11-7z" />
                   </svg>
                 </div>
                 <div class="phone-timeline">
@@ -752,14 +813,15 @@
       <div class="admin-card">
         <div class="admin-info">
           <h3 class="admin-title">Administrative Dashboard</h3>
-          <p class="admin-desc">Manage Granthas, dictionary, upload MP3 files, or record live audio clips directly into Git.</p>
+          <p class="admin-desc">Manage Granthas, dictionary, upload MP3 files, or record live audio clips directly into
+            Git.</p>
         </div>
         <div class="admin-btn-wrap">
           <a href="./cms/index.html" class="btn btn-secondary">
             <span>Open CMS</span>
             <!-- Arrow Right Icon -->
             <svg viewBox="0 0 24 24">
-              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
             </svg>
           </a>
         </div>
@@ -772,17 +834,17 @@
   </footer>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       const userAgent = window.navigator.userAgent.toLowerCase();
       const platform = window.navigator.platform.toLowerCase();
-      
+
       let os = "other";
       if (userAgent.indexOf("android") !== -1) {
         os = "android";
       } else if (userAgent.indexOf("iphone") !== -1 || userAgent.indexOf("ipad") !== -1 || userAgent.indexOf("ipod") !== -1) {
         os = "ios";
       } else if (platform.indexOf("mac") !== -1) {
-        os = "mac"; 
+        os = "mac";
       }
 
       const banner = document.getElementById("device-banner");
@@ -806,4 +868,5 @@
     });
   </script>
 </body>
+
 </html>

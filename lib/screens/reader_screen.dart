@@ -142,6 +142,48 @@ class _ReaderScreenState extends State<ReaderScreen> {
                   ),
                   const SizedBox(height: 20),
 
+                  // Devanagari Font Selection
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Sanskrit Font",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: text,
+                        ),
+                      ),
+                      DropdownButton<String>(
+                        value: provider.devanagariFont,
+                        dropdownColor: bg,
+                        style: TextStyle(color: text, fontSize: 14),
+                        underline: Container(
+                          height: 1.5,
+                          color: accent.withAlpha(60),
+                        ),
+                        icon: Icon(Icons.arrow_drop_down, color: accent),
+                        onChanged: (String? newFont) {
+                          if (newFont != null) {
+                            provider.setDevanagariFont(newFont);
+                            setModalState(() {});
+                            setState(() {});
+                          }
+                        },
+                        items: ReaderProvider.supportedDevanagariFonts
+                            .map((font) => DropdownMenuItem<String>(
+                                  value: font,
+                                  child: Text(
+                                    font,
+                                    style: TextStyle(color: text),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
                   // Theme Selection
                   Text(
                     "Theme",

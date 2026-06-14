@@ -53,11 +53,10 @@ class DictionaryBottomSheet extends StatelessWidget {
                 Expanded(
                   child: Text(
                     entry['word'] ?? word,
-                    style: TextStyle(
-                      fontFamily: 'PragatiNarrow',
+                    style: provider.getDevanagariStyle(
                       fontSize: 26,
-                      fontWeight: FontWeight.bold,
                       color: accent,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -174,11 +173,10 @@ class DictionaryBottomSheet extends StatelessWidget {
               children: [
                 Text(
                   word,
-                  style: TextStyle(
-                    fontFamily: 'PragatiNarrow',
+                  style: provider.getDevanagariStyle(
                     fontSize: 26,
-                    fontWeight: FontWeight.bold,
                     color: text,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 IconButton(
