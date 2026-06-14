@@ -2847,6 +2847,43 @@
           state.shas.granthas = nextGranthasSha;
         }
 
+        // Delete associated audio file from GitHub immediately
+        if (audioToChange && audioToChange.trim() !== "") {
+          const audioFile = state.audioFiles.find(f => f.name === audioToChange);
+          if (audioFile) {
+            logConsole(`Deleting associated audio file '${audioToChange}' from GitHub...`, "info");
+            const audioUrl = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/audio/${audioToChange}`;
+            try {
+              const audioDelResponse = await fetch(audioUrl, {
+                method: "DELETE",
+                headers: {
+                  "Authorization": `Bearer ${state.pat}`,
+                  "Accept": "application/vnd.github+json"
+                },
+                body: JSON.stringify({
+                  message: `Delete associated audio file: ${audioToChange} on sutra deletion`,
+                  sha: audioFile.sha,
+                  branch: state.branch
+                })
+              });
+              if (audioDelResponse.ok) {
+                logConsole(`Associated audio file ${audioToChange} deleted successfully.`, "success");
+                state.audioFiles = state.audioFiles.filter(f => f.name !== audioToChange);
+                if (state.localAudioCache && state.localAudioCache[audioToChange]) {
+                  try { URL.revokeObjectURL(state.localAudioCache[audioToChange]); } catch(_) {}
+                  delete state.localAudioCache[audioToChange];
+                }
+                renderAudioFiles();
+                populateSutraAudioDropdown();
+              } else {
+                logConsole(`Failed to delete associated audio file ${audioToChange} from GitHub.`, "warning");
+              }
+            } catch (audioErr) {
+              logConsole(`Error deleting associated audio file: ${audioErr.message}`, "warning");
+            }
+          }
+        }
+
         addToBin('sutra', sutraTitle, `${s.sutra_number} · ${s.sanskrit.substring(0, 60)}…`, s, { granthaId: granthaCtx });
 
         renderSutras();

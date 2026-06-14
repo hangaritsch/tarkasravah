@@ -166,7 +166,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                               children: ShabdaSpanBuilder.buildSpans(
                                 context: context,
                                 text: sutra.sanskrit,
-                                fontSize: provider.fontSize + 2.0, // extra font size for Sanskrit
+                                fontSize: 22.0, // base font size for Sanskrit
                                 textColor: text,
                                 onWordTap: (word) {
                                   showModalBottomSheet(
@@ -204,7 +204,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                         Text(
                           sutra.englishMeaning,
                           style: TextStyle(
-                            fontSize: provider.fontSize - 3.0,
+                            fontSize: 17.0,
                             color: text,
                             height: 1.5,
                           ),
@@ -227,7 +227,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                         Text(
                           sutra.kannadaMeaning,
                           style: TextStyle(
-                            fontSize: provider.fontSize - 3.0,
+                            fontSize: 17.0,
                             color: text,
                             height: 1.5,
                           ),

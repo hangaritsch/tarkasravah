@@ -55,6 +55,16 @@ class TarkaSravahApp extends StatelessWidget {
         ),
         textTheme: textTheme,
       ),
+      builder: (context, child) {
+        final mediaQueryData = MediaQuery.of(context);
+        final double scaleFactor = provider.fontSize / 20.0;
+        return MediaQuery(
+          data: mediaQueryData.copyWith(
+            textScaler: TextScaler.linear(scaleFactor),
+          ),
+          child: child!,
+        );
+      },
       home: const GranthaListScreen(),
     );
   }
