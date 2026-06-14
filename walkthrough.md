@@ -26,7 +26,8 @@ We have successfully migrated the Reader display settings to the AppDrawer sideb
 ### 3. CMS Search and Sort Features
 - **File**: [cms/index.html](file:///opt/homebrew/var/www/app/tarkasravah/cms/index.html)
   - **Sutras Filters UI**: Added a responsive filter row in the Sutras tab displaying a text search input and a sort dropdown (Ascending Num, Descending Num, A-Z Title, Z-A Title).
-  - **Default Sorting**: Integrated a natural numeric sorting comparison function (`compareSutraNumbers()`) that parses multi-dotted strings (like `1.1`, `1.2`, `1.10`, `2.1`) and sorts them numerically rather than alphabetically. The CMS list is now sorted by `Num (Ascending)` by default.
+  - **Default Sorting**: Integrated a natural numeric sorting comparison function (`compareSutraNumbers()`) that parses multi-dotted strings (like `1.1`, `1.2`, `1.10`, `2.1`) and sorts them numerically rather than alphabetically. It now translates Devanagari numerals (e.g. `१`, `१०`) to standard digits before parsing, correcting sorting issues for Sanskrit-numbered sutras. The CMS list is now sorted by `Num (Ascending)` by default.
+  - **Natural Search**: Enhanced search matching to translate Devanagari numerals to standard digits, allowing seamless lookups using either digit style.
   - **Dynamic Re-rendering**: Programmed input and change event listeners to dynamically re-filter and sort the active sutras array in memory on keyup/change and refresh the table rows instantly.
   - **Database Natural Order**: Sorted the sutras list naturally *before* saving updates to GitHub. This ensures the JSON database files themselves stay naturally sorted, making the mobile app display them in the correct sequence.
 
