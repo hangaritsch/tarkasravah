@@ -41,7 +41,6 @@ class AppDrawer extends StatelessWidget {
                 Text(
                   "तर्कश्रवः",
                   style: TextStyle(
-                    fontFamily: 'PragatiNarrow',
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: accent,
@@ -326,14 +325,13 @@ class AppDrawer extends StatelessWidget {
                   "तर्कश्रवः${provider.activeGrantha != null ? ' • ${provider.activeGrantha!.title}' : ''}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'PragatiNarrow',
                     color: secText.withAlpha(150),
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Version 1.0.2+3",
+                  "Version 1.0.3+4",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: secText.withAlpha(120),

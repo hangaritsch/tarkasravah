@@ -44,7 +44,6 @@ class _GranthaListScreenState extends State<GranthaListScreen> {
           style: TextStyle(
             color: accent,
             fontWeight: FontWeight.bold,
-            fontFamily: 'PragatiNarrow',
             fontSize: 24,
           ),
         ),
@@ -105,7 +104,6 @@ class _GranthaListScreenState extends State<GranthaListScreen> {
                               color: text,
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
-                              fontFamily: 'PragatiNarrow',
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -167,7 +165,6 @@ class _GranthaListScreenState extends State<GranthaListScreen> {
                                               Text(
                                                 grantha.title,
                                                 style: TextStyle(
-                                                  fontFamily: 'PragatiNarrow',
                                                   fontSize: 24,
                                                   fontWeight: FontWeight.bold,
                                                   color: accent,

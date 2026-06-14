@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'providers/reader_provider.dart';
 import 'screens/grantha_list_screen.dart';
 
@@ -24,6 +25,21 @@ class TarkaSravahApp extends StatelessWidget {
     // Dynamic color scheme matching saffron/maroon accents and Kindle themes
     final MaterialColor primaryColorSeed = Colors.orange;
 
+    final baseTextTheme = provider.theme == ReaderTheme.dark
+        ? ThemeData.dark().textTheme
+        : ThemeData.light().textTheme;
+
+    TextTheme textTheme;
+    if (provider.devanagariFont == 'Pragati Narrow' || provider.devanagariFont == 'PragatiNarrow') {
+      textTheme = baseTextTheme.apply(fontFamily: 'PragatiNarrow');
+    } else {
+      try {
+        textTheme = GoogleFonts.getTextTheme(provider.devanagariFont, baseTextTheme);
+      } catch (_) {
+        textTheme = baseTextTheme.apply(fontFamily: 'PragatiNarrow');
+      }
+    }
+
     return MaterialApp(
       title: 'Tarkaśravaḥ',
       debugShowCheckedModeBanner: false,
@@ -37,7 +53,7 @@ class TarkaSravahApp extends StatelessWidget {
         cardTheme: CardTheme(
           color: provider.cardBackgroundColor,
         ),
-        fontFamily: 'PragatiNarrow',
+        textTheme: textTheme,
       ),
       home: const GranthaListScreen(),
     );

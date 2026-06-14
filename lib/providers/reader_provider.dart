@@ -41,7 +41,7 @@ class ReaderProvider extends ChangeNotifier {
   String _commitSha = 'main';
 
   // App Version & Update Check
-  static const String currentAppVersion = "1.0.2+3";
+  static const String currentAppVersion = "1.0.3+4";
   bool _hasCheckedForUpdates = false;
   bool get hasCheckedForUpdates => _hasCheckedForUpdates;
 
@@ -50,12 +50,53 @@ class ReaderProvider extends ChangeNotifier {
   String get devanagariFont => _devanagariFont;
   
   static const List<String> supportedDevanagariFonts = [
-    'Pragati Narrow',
-    'Noto Sans Devanagari',
+    'Amita',
     'Anek Devanagari',
-    'Yatra One',
-    'Rozha One',
+    'Asar',
+    'Baloo 2',
+    'Biryani',
+    'Cambay',
+    'Dekko',
+    'Eczar',
+    'Farsan',
+    'Gajraj One',
+    'Gotu',
+    'Halant',
+    'Hind',
+    'IBM Plex Sans Devanagari',
+    'Jaldi',
+    'Kadwa',
+    'Kalam',
+    'Karma',
+    'Khand',
+    'Kurale',
+    'Laila',
     'Martel',
+    'Martel Sans',
+    'Modak',
+    'Mukta',
+    'Noto Sans Devanagari',
+    'Noto Serif Devanagari',
+    'Palanquin',
+    'Palanquin Dark',
+    'Playpen Sans',
+    'Poppins',
+    'Pragati Narrow',
+    'Rajdhani',
+    'Ranga',
+    'Rhodium Libre',
+    'Rozha One',
+    'Sahitya',
+    'Sarpanch',
+    'Shrikhand',
+    'Sura',
+    'Teko',
+    'Tiro Devanagari Hindi',
+    'Tiro Devanagari Marathi',
+    'Tiro Devanagari Sanskrit',
+    'Vesper Libre',
+    'Yantramanav',
+    'Yatra One',
   ];
 
   // Audio Playback
@@ -311,7 +352,7 @@ class ReaderProvider extends ChangeNotifier {
           backgroundColor: bg,
           title: Text(
             "तर्कश्रवः - Update Available",
-            style: TextStyle(color: accent, fontWeight: FontWeight.bold, fontFamily: 'PragatiNarrow'),
+            style: TextStyle(color: accent, fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,

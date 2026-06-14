@@ -179,7 +179,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           Text(
                             sutra.sanskrit,
                             style: TextStyle(
-                              fontFamily: 'PragatiNarrow',
                               fontSize: 17,
                               color: text,
                               height: 1.3,

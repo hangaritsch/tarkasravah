@@ -29,7 +29,6 @@ class AboutUsScreen extends StatelessWidget {
           style: TextStyle(
             color: text,
             fontWeight: FontWeight.bold,
-            fontFamily: 'PragatiNarrow',
             fontSize: 22,
           ),
         ),
@@ -66,7 +65,6 @@ class AboutUsScreen extends StatelessWidget {
                       fontSize: 38,
                       fontWeight: FontWeight.bold,
                       color: accent,
-                      fontFamily: 'PragatiNarrow',
                       letterSpacing: 1.2,
                     ),
                   ),
