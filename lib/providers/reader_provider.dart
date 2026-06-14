@@ -29,6 +29,9 @@ class ReaderProvider extends ChangeNotifier {
   double _downloadProgress = 0.0;
   bool _isFullyOfflineReady = false;
 
+  // Track latest commit SHA from GitHub to bypass jsDelivr CDN caching
+  String _commitSha = 'main';
+
   // Audio Playback
   final AudioPlayer _audioPlayer = AudioPlayer();
   int? _playingSutraId;
@@ -201,16 +204,72 @@ class ReaderProvider extends ChangeNotifier {
     }
   }
 
+  // Fetch the latest commit SHA from the GitHub API to bypass CDN caching
+  Future<void> fetchLatestCommitSha() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://api.github.com/repos/hangaritsch/tarkasravah/commits/main'),
+        headers: {'User-Agent': 'Tarkasravah-App'},
+      ).timeout(const Duration(seconds: 4));
+      
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        if (decoded is Map && decoded.containsKey('sha')) {
+          _commitSha = decoded['sha'] as String;
+          debugPrint("Fetched latest commit SHA: $_commitSha");
+        }
+      }
+    } catch (e) {
+      debugPrint("Could not fetch latest commit SHA: $e");
+    }
+  }
+
+  // Check if a remote audio file has changed (different size)
+  Future<bool> _shouldUpdateAudioFile(String cdnAudioUrl, File localAudioFile) async {
+    if (!await localAudioFile.exists()) return true;
+    try {
+      final response = await http.head(Uri.parse(cdnAudioUrl)).timeout(const Duration(seconds: 3));
+      if (response.statusCode == 200) {
+        final remoteLength = int.tryParse(response.headers['content-length'] ?? '');
+        final localLength = await localAudioFile.length();
+        if (remoteLength != null && remoteLength != localLength) {
+          debugPrint("Audio file length mismatch: Remote $remoteLength, Local $localLength. Needs update.");
+          return true;
+        }
+      }
+    } catch (e) {
+      debugPrint("Error checking remote audio file HEAD: $e");
+    }
+    return false;
+  }
+
   // Background CDN sync
   Future<void> syncFromRemote() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
+      
+      // Load cached SHA if available
+      final shaFile = File('${directory.path}/commit_sha.txt');
+      String cachedSha = '';
+      if (await shaFile.exists()) {
+        cachedSha = (await shaFile.readAsString()).trim();
+      }
+
+      await fetchLatestCommitSha();
+
+      // If SHA hasn't changed and we already have cached files, skip sync!
+      if (_commitSha != 'main' && cachedSha == _commitSha) {
+        debugPrint("No remote changes. Already synced at commit: $_commitSha");
+        return;
+      }
+
       final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      const cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data';
+      final cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/data';
+      final cdnAudioPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/audio';
 
-      debugPrint("Attempting background CDN sync...");
+      debugPrint("Attempting background CDN sync at commit $_commitSha...");
 
       bool granthasUpdated = false;
       bool activeSutrasUpdated = false;
@@ -259,6 +318,11 @@ class ReaderProvider extends ChangeNotifier {
         }
       }
 
+      // Save the newly synced commit SHA
+      if (_commitSha != 'main') {
+        await shaFile.writeAsString(_commitSha);
+      }
+
       // If user had previously enabled "Offline Mode", proactively download 
       // all files (including new Granthas and their audios) in the background.
       if ((granthasUpdated || activeSutrasUpdated) && _isFullyOfflineReady) {
@@ -284,9 +348,11 @@ class ReaderProvider extends ChangeNotifier {
           }
 
           for (var sutra in gSutras) {
+            if (sutra.audio.isEmpty) continue;
             final localAudioFile = File('${directory.path}/${sutra.audio}');
-            if (!await localAudioFile.exists()) {
-              final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
+            final cdnAudioUrl = '$cdnAudioPrefix/${sutra.audio}';
+            
+            if (await _shouldUpdateAudioFile(cdnAudioUrl, localAudioFile)) {
               await _downloadAndCacheAudio(cdnAudioUrl, localAudioFile);
             }
           }
@@ -362,7 +428,7 @@ class ReaderProvider extends ChangeNotifier {
         debugPrint("Playing audio offline from cache: ${localAudioFile.path}");
         await _audioPlayer.play(DeviceFileSource(localAudioFile.path));
       } else {
-        final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
+        final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/audio/${sutra.audio}';
         debugPrint("Streaming audio online from CDN: $cdnAudioUrl");
         await _audioPlayer.play(UrlSource(cdnAudioUrl));
 
@@ -447,8 +513,11 @@ class ReaderProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      await fetchLatestCommitSha();
       final directory = await getApplicationDocumentsDirectory();
-      const cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data';
+      
+      final cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/data';
+      final cdnAudioPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@$_commitSha/assets/audio';
 
       final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
@@ -500,10 +569,11 @@ class ReaderProvider extends ChangeNotifier {
             double audioStep = step / gSutras.length;
             for (int j = 0; j < gSutras.length; j++) {
               final sutra = gSutras[j];
+              if (sutra.audio.isEmpty) continue;
               final localAudioFile = File('${directory.path}/${sutra.audio}');
+              final cdnAudioUrl = '$cdnAudioPrefix/${sutra.audio}';
 
-              if (!await localAudioFile.exists()) {
-                final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
+              if (await _shouldUpdateAudioFile(cdnAudioUrl, localAudioFile)) {
                 final response = await http.get(Uri.parse(cdnAudioUrl)).timeout(const Duration(seconds: 30));
                 if (response.statusCode == 200) {
                   await localAudioFile.writeAsBytes(response.bodyBytes);
@@ -520,12 +590,16 @@ class ReaderProvider extends ChangeNotifier {
         }
       }
 
+      // Save synced commit SHA
+      if (_commitSha != 'main') {
+        final shaFile = File('${directory.path}/commit_sha.txt');
+        await shaFile.writeAsString(_commitSha);
+      }
+
       _downloadProgress = 1.0;
       _isDownloadingAll = false;
       _isFullyOfflineReady = true;
-      notifyListeners();
-
-      await Future.delayed(const Duration(milliseconds: 500));
+      await checkOfflineStatus();
       notifyListeners();
     } catch (e) {
       _isDownloadingAll = false;
