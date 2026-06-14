@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/reader_provider.dart';
-import 'screens/library_screen.dart';
+import 'screens/grantha_list_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,7 @@ class TarkaSravahApp extends StatelessWidget {
         ),
         fontFamily: 'PragatiNarrow',
       ),
-      home: const LibraryScreen(),
+      home: const GranthaListScreen(),
     );
   }
 }

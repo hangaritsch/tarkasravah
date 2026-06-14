@@ -6,10 +6,13 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import '../models/sutra.dart';
+import '../models/grantha.dart';
 
 enum ReaderTheme { light, dark, sepia }
 
 class ReaderProvider extends ChangeNotifier {
+  List<Grantha> _granthas = [];
+  Grantha? _activeGrantha;
   List<Sutra> _sutras = [];
   Map<String, dynamic> _dictionary = {};
   bool _isLoading = true;
@@ -34,6 +37,8 @@ class ReaderProvider extends ChangeNotifier {
   Duration _position = Duration.zero;
 
   // Getters
+  List<Grantha> get granthas => _granthas;
+  Grantha? get activeGrantha => _activeGrantha;
   List<Sutra> get sutras => _sutras;
   Map<String, dynamic> get dictionary => _dictionary;
   bool get isLoading => _isLoading;
@@ -78,6 +83,13 @@ class ReaderProvider extends ChangeNotifier {
     });
   }
 
+  // Set the active text and load its sutras dynamically
+  Future<void> setActiveGrantha(Grantha grantha) async {
+    _activeGrantha = grantha;
+    notifyListeners();
+    await loadSutrasForActiveGrantha();
+  }
+
   // Load local JSON assets & handle cache / background CDN sync
   Future<void> loadData() async {
     _isLoading = true;
@@ -86,45 +98,44 @@ class ReaderProvider extends ChangeNotifier {
 
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final sutraCacheFile = File('${directory.path}/tarkasangraha_cache.json');
+      final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      // 1. Load Sutras from local document cache, fallback to bundled assets
-      if (await sutraCacheFile.exists()) {
+      // 1. Load Granthas list (from cache or bundle assets)
+      if (await granthasCacheFile.exists()) {
         try {
-          final content = await sutraCacheFile.readAsString();
-          final List<dynamic> sutraJsonList = json.decode(content);
-          _sutras = sutraJsonList.map((json) => Sutra.fromJson(json)).toList();
-          debugPrint("Loaded sutras from local document cache.");
-        } catch (cacheErr) {
-          debugPrint("Failed to load sutras from cache, loading from assets: $cacheErr");
-          final String sutraJsonString = await rootBundle.loadString('assets/data/tarkasangraha.json');
-          final List<dynamic> sutraJsonList = json.decode(sutraJsonString);
-          _sutras = sutraJsonList.map((json) => Sutra.fromJson(json)).toList();
+          final content = await granthasCacheFile.readAsString();
+          final List<dynamic> jsonList = json.decode(content);
+          _granthas = jsonList.map((j) => Grantha.fromJson(j)).toList();
+          debugPrint("Loaded granthas index from local document cache.");
+        } catch (e) {
+          debugPrint("Error loading granthas from cache: $e");
+          _granthas = await _loadGranthasFromAsset();
         }
       } else {
-        final String sutraJsonString = await rootBundle.loadString('assets/data/tarkasangraha.json');
-        final List<dynamic> sutraJsonList = json.decode(sutraJsonString);
-        _sutras = sutraJsonList.map((json) => Sutra.fromJson(json)).toList();
-        debugPrint("Loaded sutras from bundle assets.");
+        _granthas = await _loadGranthasFromAsset();
       }
 
-      // 2. Load Dictionary from local document cache, fallback to bundled assets
+      // Set active grantha (defaults to the first one)
+      if (_granthas.isNotEmpty && _activeGrantha == null) {
+        _activeGrantha = _granthas.first;
+      }
+
+      // 2. Load Dictionary
       if (await dictCacheFile.exists()) {
         try {
           final content = await dictCacheFile.readAsString();
           _dictionary = json.decode(content);
           debugPrint("Loaded dictionary from local document cache.");
-        } catch (cacheErr) {
-          debugPrint("Failed to load dictionary from cache, loading from assets: $cacheErr");
-          final String dictJsonString = await rootBundle.loadString('assets/data/dictionary.json');
-          _dictionary = json.decode(dictJsonString);
+        } catch (e) {
+          _dictionary = await _loadDictionaryFromAsset();
         }
       } else {
-        final String dictJsonString = await rootBundle.loadString('assets/data/dictionary.json');
-        _dictionary = json.decode(dictJsonString);
-        debugPrint("Loaded dictionary from bundle assets.");
+        _dictionary = await _loadDictionaryFromAsset();
       }
+
+      // 3. Load active Grantha's sutras
+      await loadSutrasForActiveGrantha();
 
       _isLoading = false;
       await checkOfflineStatus();
@@ -139,34 +150,90 @@ class ReaderProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<Grantha>> _loadGranthasFromAsset() async {
+    final String content = await rootBundle.loadString('assets/data/granthas.json');
+    final List<dynamic> jsonList = json.decode(content);
+    return jsonList.map((j) => Grantha.fromJson(j)).toList();
+  }
+
+  Future<Map<String, dynamic>> _loadDictionaryFromAsset() async {
+    final String content = await rootBundle.loadString('assets/data/dictionary.json');
+    return json.decode(content);
+  }
+
+  // Load the sutras for the selected text
+  Future<void> loadSutrasForActiveGrantha() async {
+    if (_activeGrantha == null) return;
+    
+    final granthaId = _activeGrantha!.id;
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final sutrasCacheFile = File('${directory.path}/${granthaId}_cache.json');
+
+      if (await sutrasCacheFile.exists()) {
+        try {
+          final content = await sutrasCacheFile.readAsString();
+          final List<dynamic> jsonList = json.decode(content);
+          _sutras = jsonList.map((j) => Sutra.fromJson(j)).toList();
+          debugPrint("Loaded sutras for $granthaId from local cache.");
+        } catch (e) {
+          _sutras = await _loadSutrasFromAsset(granthaId);
+        }
+      } else {
+        _sutras = await _loadSutrasFromAsset(granthaId);
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Error loading sutras for $granthaId: $e");
+      _sutras = [];
+      notifyListeners();
+    }
+  }
+
+  Future<List<Sutra>> _loadSutrasFromAsset(String granthaId) async {
+    try {
+      final String content = await rootBundle.loadString('assets/data/$granthaId.json');
+      final List<dynamic> jsonList = json.decode(content);
+      return jsonList.map((j) => Sutra.fromJson(j)).toList();
+    } catch (e) {
+      debugPrint("Asset assets/data/$granthaId.json not found, returning empty: $e");
+      return [];
+    }
+  }
+
   // Background CDN sync
   Future<void> syncFromRemote() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final sutraCacheFile = File('${directory.path}/tarkasangraha_cache.json');
+      final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      const cdnSutraUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data/tarkasangraha.json';
-      const cdnDictUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data/dictionary.json';
+      const cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data';
 
       debugPrint("Attempting background CDN sync...");
 
-      bool sutraUpdated = false;
+      bool granthasUpdated = false;
+      bool activeSutrasUpdated = false;
 
-      // Fetch Sutras
-      final sutraResponse = await http.get(Uri.parse(cdnSutraUrl)).timeout(const Duration(seconds: 8));
-      if (sutraResponse.statusCode == 200) {
-        final decoded = json.decode(sutraResponse.body);
+      // 1. Sync Granthas index
+      final granthasResponse = await http.get(Uri.parse('$cdnUrlPrefix/granthas.json')).timeout(const Duration(seconds: 8));
+      if (granthasResponse.statusCode == 200) {
+        final decoded = json.decode(granthasResponse.body);
         if (decoded is List) {
-          await sutraCacheFile.writeAsString(sutraResponse.body);
-          _sutras = decoded.map((json) => Sutra.fromJson(json)).toList();
-          sutraUpdated = true;
-          debugPrint("Sutras successfully synced from CDN and cached.");
+          await granthasCacheFile.writeAsString(granthasResponse.body);
+          _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
+          granthasUpdated = true;
+          debugPrint("Granthas index successfully synced from CDN and cached.");
         }
       }
 
-      // Fetch Dictionary
-      final dictResponse = await http.get(Uri.parse(cdnDictUrl)).timeout(const Duration(seconds: 8));
+      // Set active grantha if it became null
+      if (_granthas.isNotEmpty && _activeGrantha == null) {
+        _activeGrantha = _granthas.first;
+      }
+
+      // 2. Sync Dictionary
+      final dictResponse = await http.get(Uri.parse('$cdnUrlPrefix/dictionary.json')).timeout(const Duration(seconds: 8));
       if (dictResponse.statusCode == 200) {
         final decoded = json.decode(dictResponse.body);
         if (decoded is Map) {
@@ -176,15 +243,52 @@ class ReaderProvider extends ChangeNotifier {
         }
       }
 
-      // If user had previously downloaded everything for offline mode,
-      // proactively fetch any new files automatically.
-      if (sutraUpdated && _isFullyOfflineReady) {
-        debugPrint("Automatic offline sync checking for new audio files...");
-        for (var sutra in _sutras) {
-          final localAudioFile = File('${directory.path}/${sutra.audio}');
-          if (!await localAudioFile.exists()) {
-            final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
-            await _downloadAndCacheAudio(cdnAudioUrl, localAudioFile);
+      // 3. Sync Active Grantha's Sutras
+      if (_activeGrantha != null) {
+        final activeId = _activeGrantha!.id;
+        final activeCacheFile = File('${directory.path}/${activeId}_cache.json');
+        final activeResponse = await http.get(Uri.parse('$cdnUrlPrefix/$activeId.json')).timeout(const Duration(seconds: 8));
+        if (activeResponse.statusCode == 200) {
+          final decoded = json.decode(activeResponse.body);
+          if (decoded is List) {
+            await activeCacheFile.writeAsString(activeResponse.body);
+            _sutras = decoded.map((j) => Sutra.fromJson(j)).toList();
+            activeSutrasUpdated = true;
+            debugPrint("Active sutras ($activeId) successfully synced from CDN and cached.");
+          }
+        }
+      }
+
+      // If user had previously enabled "Offline Mode", proactively download 
+      // all files (including new Granthas and their audios) in the background.
+      if ((granthasUpdated || activeSutrasUpdated) && _isFullyOfflineReady) {
+        debugPrint("Automatic offline sync checking for new Granthas and audio files...");
+        for (var grantha in _granthas) {
+          final gFile = File('${directory.path}/${grantha.id}_cache.json');
+          List<Sutra> gSutras = [];
+          if (!await gFile.exists()) {
+            final gResp = await http.get(Uri.parse('$cdnUrlPrefix/${grantha.id}.json')).timeout(const Duration(seconds: 8));
+            if (gResp.statusCode == 200) {
+              await gFile.writeAsString(gResp.body);
+              final decoded = json.decode(gResp.body);
+              if (decoded is List) {
+                gSutras = decoded.map((j) => Sutra.fromJson(j)).toList();
+              }
+            }
+          } else {
+            final content = await gFile.readAsString();
+            final decoded = json.decode(content);
+            if (decoded is List) {
+              gSutras = decoded.map((j) => Sutra.fromJson(j)).toList();
+            }
+          }
+
+          for (var sutra in gSutras) {
+            final localAudioFile = File('${directory.path}/${sutra.audio}');
+            if (!await localAudioFile.exists()) {
+              final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
+              await _downloadAndCacheAudio(cdnAudioUrl, localAudioFile);
+            }
           }
         }
       }
@@ -192,7 +296,6 @@ class ReaderProvider extends ChangeNotifier {
       await checkOfflineStatus();
       notifyListeners();
     } catch (e) {
-      // Silent error logging to not interrupt offline experience
       debugPrint("Background CDN sync failed: $e");
     }
   }
@@ -290,32 +393,44 @@ class ReaderProvider extends ChangeNotifier {
     try {
       final directory = await getApplicationDocumentsDirectory();
       
-      final sutraCacheFile = File('${directory.path}/tarkasangraha_cache.json');
+      final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
       
-      bool jsonsCached = await sutraCacheFile.exists() && await dictCacheFile.exists();
-      if (!jsonsCached) {
+      if (!await granthasCacheFile.exists() || !await dictCacheFile.exists()) {
         _isFullyOfflineReady = false;
         notifyListeners();
         return;
       }
 
-      if (_sutras.isEmpty) {
+      if (_granthas.isEmpty) {
         _isFullyOfflineReady = false;
         notifyListeners();
         return;
       }
 
-      bool allAudiosCached = true;
-      for (var sutra in _sutras) {
-        final localAudioFile = File('${directory.path}/${sutra.audio}');
-        if (!await localAudioFile.exists()) {
-          allAudiosCached = false;
+      bool everythingCached = true;
+      for (var grantha in _granthas) {
+        final gCacheFile = File('${directory.path}/${grantha.id}_cache.json');
+        if (!await gCacheFile.exists()) {
+          everythingCached = false;
           break;
         }
+
+        final content = await gCacheFile.readAsString();
+        final List<dynamic> decodedList = json.decode(content);
+        final listSutras = decodedList.map((j) => Sutra.fromJson(j)).toList();
+
+        for (var sutra in listSutras) {
+          final localAudioFile = File('${directory.path}/${sutra.audio}');
+          if (!await localAudioFile.exists()) {
+            everythingCached = false;
+            break;
+          }
+        }
+        if (!everythingCached) break;
       }
 
-      _isFullyOfflineReady = allAudiosCached;
+      _isFullyOfflineReady = everythingCached;
       notifyListeners();
     } catch (e) {
       debugPrint("Error checking offline status: $e");
@@ -333,53 +448,75 @@ class ReaderProvider extends ChangeNotifier {
 
     try {
       final directory = await getApplicationDocumentsDirectory();
+      const cdnUrlPrefix = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data';
 
-      // 1. Fetch latest JSON databases from CDN
-      const cdnSutraUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data/tarkasangraha.json';
-      const cdnDictUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/data/dictionary.json';
-
-      final sutraCacheFile = File('${directory.path}/tarkasangraha_cache.json');
+      final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      final sutraResponse = await http.get(Uri.parse(cdnSutraUrl)).timeout(const Duration(seconds: 8));
-      if (sutraResponse.statusCode == 200) {
-        final decoded = json.decode(sutraResponse.body);
+      // 1. Fetch latest Granthas index
+      final granthasResponse = await http.get(Uri.parse('$cdnUrlPrefix/granthas.json')).timeout(const Duration(seconds: 8));
+      if (granthasResponse.statusCode == 200) {
+        await granthasCacheFile.writeAsString(granthasResponse.body);
+        final decoded = json.decode(granthasResponse.body);
         if (decoded is List) {
-          await sutraCacheFile.writeAsString(sutraResponse.body);
-          _sutras = decoded.map((json) => Sutra.fromJson(json)).toList();
+          _granthas = decoded.map((j) => Grantha.fromJson(j)).toList();
+        }
+      }
+      _downloadProgress = 0.05;
+      notifyListeners();
+
+      // 2. Fetch latest Dictionary
+      final dictResponse = await http.get(Uri.parse('$cdnUrlPrefix/dictionary.json')).timeout(const Duration(seconds: 8));
+      if (dictResponse.statusCode == 200) {
+        await dictCacheFile.writeAsString(dictResponse.body);
+        final decoded = json.decode(dictResponse.body);
+        if (decoded is Map) {
+          _dictionary = decoded.cast<String, dynamic>();
         }
       }
       _downloadProgress = 0.1;
       notifyListeners();
 
-      final dictResponse = await http.get(Uri.parse(cdnDictUrl)).timeout(const Duration(seconds: 8));
-      if (dictResponse.statusCode == 200) {
-        final decoded = json.decode(dictResponse.body);
-        if (decoded is Map) {
-          await dictCacheFile.writeAsString(dictResponse.body);
-          _dictionary = decoded.cast<String, dynamic>();
-        }
-      }
-      _downloadProgress = 0.2;
-      notifyListeners();
+      // 3. Fetch all Granthas' JSONs and audio files
+      if (_granthas.isNotEmpty) {
+        double step = 0.9 / _granthas.length;
 
-      // 2. Fetch all missing audio files
-      if (_sutras.isNotEmpty) {
-        double audioStep = 0.8 / _sutras.length;
-        for (int i = 0; i < _sutras.length; i++) {
-          final sutra = _sutras[i];
-          final localAudioFile = File('${directory.path}/${sutra.audio}');
+        for (int i = 0; i < _granthas.length; i++) {
+          final grantha = _granthas[i];
+          final gFile = File('${directory.path}/${grantha.id}_cache.json');
+          List<Sutra> gSutras = [];
 
-          if (!await localAudioFile.exists()) {
-            final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
-            final response = await http.get(Uri.parse(cdnAudioUrl)).timeout(const Duration(seconds: 30));
-            if (response.statusCode == 200) {
-              await localAudioFile.writeAsBytes(response.bodyBytes);
+          // Download Grantha JSON
+          final gResp = await http.get(Uri.parse('$cdnUrlPrefix/${grantha.id}.json')).timeout(const Duration(seconds: 8));
+          if (gResp.statusCode == 200) {
+            await gFile.writeAsString(gResp.body);
+            final decoded = json.decode(gResp.body);
+            if (decoded is List) {
+              gSutras = decoded.map((j) => Sutra.fromJson(j)).toList();
             }
           }
 
-          _downloadProgress = 0.2 + (audioStep * (i + 1));
-          notifyListeners();
+          if (gSutras.isNotEmpty) {
+            double audioStep = step / gSutras.length;
+            for (int j = 0; j < gSutras.length; j++) {
+              final sutra = gSutras[j];
+              final localAudioFile = File('${directory.path}/${sutra.audio}');
+
+              if (!await localAudioFile.exists()) {
+                final cdnAudioUrl = 'https://cdn.jsdelivr.net/gh/hangaritsch/tarkasravah@main/assets/audio/${sutra.audio}';
+                final response = await http.get(Uri.parse(cdnAudioUrl)).timeout(const Duration(seconds: 30));
+                if (response.statusCode == 200) {
+                  await localAudioFile.writeAsBytes(response.bodyBytes);
+                }
+              }
+
+              _downloadProgress = 0.1 + (step * i) + (audioStep * (j + 1));
+              notifyListeners();
+            }
+          } else {
+            _downloadProgress = 0.1 + (step * (i + 1));
+            notifyListeners();
+          }
         }
       }
 
@@ -402,20 +539,32 @@ class ReaderProvider extends ChangeNotifier {
     try {
       final directory = await getApplicationDocumentsDirectory();
       
-      final sutraCacheFile = File('${directory.path}/tarkasangraha_cache.json');
+      final granthasCacheFile = File('${directory.path}/granthas_cache.json');
       final dictCacheFile = File('${directory.path}/dictionary_cache.json');
 
-      if (await sutraCacheFile.exists()) await sutraCacheFile.delete();
+      if (await granthasCacheFile.exists()) await granthasCacheFile.delete();
       if (await dictCacheFile.exists()) await dictCacheFile.delete();
 
-      for (var sutra in _sutras) {
-        final localAudioFile = File('${directory.path}/${sutra.audio}');
-        if (await localAudioFile.exists()) {
-          await localAudioFile.delete();
+      for (var grantha in _granthas) {
+        final gCacheFile = File('${directory.path}/${grantha.id}_cache.json');
+        if (await gCacheFile.exists()) {
+          try {
+            final content = await gCacheFile.readAsString();
+            final List<dynamic> decodedList = json.decode(content);
+            final listSutras = decodedList.map((j) => Sutra.fromJson(j)).toList();
+            for (var sutra in listSutras) {
+              final localAudioFile = File('${directory.path}/${sutra.audio}');
+              if (await localAudioFile.exists()) {
+                await localAudioFile.delete();
+              }
+            }
+          } catch (_) {}
+          await gCacheFile.delete();
         }
       }
 
       _isFullyOfflineReady = false;
+      _activeGrantha = null;
       notifyListeners();
 
       // Reload default bundled assets
@@ -459,7 +608,6 @@ class ReaderProvider extends ChangeNotifier {
 
   // Dictionary Lookup Helper
   Map<String, dynamic>? lookupWord(String rawWord) {
-    // Remove Sanskrit punctuations like । (danda) and ॥ (double danda), spaces, and standard commas/dots
     final cleaned = rawWord
         .replaceAll('।', '')
         .replaceAll('॥', '')
@@ -470,15 +618,10 @@ class ReaderProvider extends ChangeNotifier {
 
     if (cleaned.isEmpty) return null;
 
-    // Direct match
     if (_dictionary.containsKey(cleaned)) {
       return _dictionary[cleaned];
     }
 
-    // Try a case-insensitive check or partial matching if needed, 
-    // but strict direct match is preferred for Sanskrit exact inflections.
-    // However, if the word has virama/anusvara differences, we can try to resolve them.
-    // For now, let's look for keys that match or are substrings to be slightly flexible.
     for (var key in _dictionary.keys) {
       if (key == cleaned) return _dictionary[key];
     }
@@ -521,10 +664,9 @@ class ReaderProvider extends ChangeNotifier {
   }
 
   Color get accentColor {
-    // Elegant Saffron / Maroon Accent
     switch (_theme) {
       case ReaderTheme.light:
-        return const Color(0xFFD35400); // Saffron / Orange-brown
+        return const Color(0xFFD35400); // Saffron
       case ReaderTheme.dark:
         return const Color(0xFFE59866); // Light Saffron
       case ReaderTheme.sepia:

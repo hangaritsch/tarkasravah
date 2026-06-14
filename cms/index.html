@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarkaśravaḥ CMS - Admin Dashboard</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Pragati+Narrow:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Styling & Design System */
+    :root {
+      --primary: hsl(30, 100%, 55%); /* Saffron */
+      --primary-hover: hsl(30, 100%, 48%);
+      --primary-glow: hsla(30, 100%, 55%, 0.15);
+      --secondary: hsl(345, 90%, 28%); /* Maroon */
+      --secondary-hover: hsl(345, 90%, 22%);
+      --bg-dark: hsl(220, 24%, 7%);
+      --bg-surface: hsl(220, 24%, 12%);
+      --bg-card: hsl(220, 24%, 15%);
+      --text-light: hsl(0, 0%, 96%);
+      --text-muted: hsl(220, 12%, 72%);
+      --border-color: hsl(220, 20%, 20%);
+      --success: hsl(142, 72%, 40%);
+      --error: hsl(354, 76%, 50%);
+      --glass-bg: rgba(20, 20, 30, 0.75);
+      --glass-border: rgba(255, 153, 51, 0.18);
+      --font-sanskrit: 'Pragati Narrow', sans-serif;
+      --font-sans: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    input, textarea, select, button {
+      font-family: inherit;
+    }
+
+    /* Screen Transitions */
+    .hidden {
+      display: none !important;
+    }
+
+    /* --- LOGIN VIEW --- */
+    #login-view {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: radial-gradient(circle at center, var(--secondary) 0%, var(--bg-dark) 80%);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .login-logo {
+      font-size: 64px;
+      color: var(--primary);
+      font-family: var(--font-sanskrit);
+      margin-bottom: 12px;
+      text-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-control {
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--text-light);
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: var(--bg-dark);
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    /* Error Text */
+    .error-msg {
+      color: var(--error);
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* --- DASHBOARD VIEW --- */
+    #dashboard-view {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--bg-surface);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .sidebar-header {
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .sidebar-logo {
+      font-family: var(--font-sanskrit);
+      font-size: 36px;
+      color: var(--primary);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .sidebar-menu {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-grow: 1;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .menu-item:hover {
+      background-color: var(--border-color);
+      color: var(--text-light);
+    }
+
+    .menu-item.active {
+      background-color: var(--primary-glow);
+      color: var(--primary);
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-footer {
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .repo-status {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--error);
+    }
+
+    .status-indicator.connected {
+      background-color: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .btn-logout {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-logout:hover {
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    /* Main Area */
+    .main-area {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .top-navbar {
+      height: 70px;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      flex-shrink: 0;
+    }
+
+    .navbar-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .content-container {
+      padding: 40px;
+      flex-grow: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Tab Contents */
+    .tab-section {
+      animation: fadeIn 0.4s ease;
+    }
+
+    /* Grids & Cards */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      font-family: var(--font-sanskrit);
+      color: var(--primary);
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 8px;
+      width: auto;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border-color);
+      box-shadow: none;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .card-title-sanskrit {
+      font-family: var(--font-sanskrit);
+      font-size: 22px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .card-title-english {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .card-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .card-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-icon-only {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-icon-only:hover {
+      color: var(--text-light);
+      border-color: var(--primary);
+    }
+
+    .btn-icon-only.danger:hover {
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    /* Forms */
+    .row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .col {
+      flex: 1;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* --- SUTRAS TAB --- */
+    .grantha-selector-bar {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .selector-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .selector-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .grantha-dropdown {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .sutra-table-container {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .sutra-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .sutra-table th, .sutra-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sutra-table th {
+      background-color: rgba(255,153,51,0.02);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sutra-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .sutra-num-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background-color: var(--primary-glow);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .sutra-text-sanskrit {
+      font-family: var(--font-sanskrit);
+      font-size: 17px;
+      line-height: 1.4;
+      font-weight: bold;
+    }
+
+    /* --- DICTIONARY TAB --- */
+    .search-box {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .search-control {
+      padding-left: 48px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Modal Styling */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 650px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      overflow: hidden;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-backdrop.open .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: var(--text-light);
+    }
+
+    .modal-body {
+      padding: 24px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      background-color: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Console Logs */
+    .git-console {
+      background-color: #0d1117;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 13px;
+      padding: 16px;
+      height: 180px;
+      overflow-y: auto;
+      margin-top: 30px;
+      color: #39ff14; /* Matrix green */
+    }
+
+    .console-line {
+      margin-bottom: 6px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .console-time {
+      color: #8b949e;
+    }
+
+    .console-err {
+      color: var(--error);
+    }
+
+    .console-info {
+      color: #58a6ff;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================================== -->
+  <!-- 1. LOGIN SCREEN                       -->
+  <!-- ===================================== -->
+  <div id="login-view">
+    <div class="login-card" id="login-card">
+      <div class="login-logo">तर्कश्रावः</div>
+      <h1 class="login-title">Tarkaśravaḥ CMS</h1>
+      <p class="login-subtitle">Secure Admin Panel Access</p>
+      
+      <form id="login-form">
+        <div class="input-group">
+          <label for="password-input">Security Password</label>
+          <input type="password" id="password-input" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn">Unlock Dashboard</button>
+      </form>
+      
+      <p class="error-msg" id="login-error">Invalid password. Please try again.</p>
+    </div>
+  </div>
+
+  <!-- ===================================== -->
+  <!-- 2. MAIN DASHBOARD VIEW                -->
+  <!-- ===================================== -->
+  <div id="dashboard-view" class="hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">तर्कश्रावः</div>
+        <div class="sidebar-title">Admin Dashboard CMS</div>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li class="menu-item active" data-tab="granthas">
+          <!-- Inline SVG Icon for Books -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 4z"></path></svg>
+          Granthas (ग्रन्थाः)
+        </li>
+        <li class="menu-item" data-tab="sutras">
+          <!-- Inline SVG Icon for List -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+          Sutras (सूत्राणि)
+        </li>
+        <li class="menu-item" data-tab="dictionary">
+          <!-- Inline SVG Icon for Search -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Dictionary (शब्दकोशः)
+        </li>
+        <li class="menu-item" data-tab="settings">
+          <!-- Inline SVG Icon for Settings -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Settings (विन्यासः)
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="repo-status">
+          <div class="status-indicator" id="git-indicator"></div>
+          <span id="git-status-text">Not configured</span>
+        </div>
+        <button class="btn-logout" id="logout-btn">Log Out</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-area">
+      <header class="top-navbar">
+        <h2 class="navbar-title" id="nav-title">Granthas</h2>
+        <div class="user-info">
+          <span id="user-display">No active session</span>
+        </div>
+      </header>
+
+      <div class="content-container">
+
+        <!-- ===================================== -->
+        <!-- TAB 1: GRANTHAS SECTION               -->
+        <!-- ===================================== -->
+        <section id="granthas-section" class="tab-section">
+          <div class="section-header">
+            <h3 class="section-title">Grantha List</h3>
+            <button class="btn btn-sm" id="btn-add-grantha">Create Grantha</button>
+          </div>
+          <div class="grid-container" id="granthas-grid">
+            <!-- Dynamic cards inject here -->
+          </div>
+        </section>
+
+        <!-- ===================================== -->
+        <!-- TAB 2: SUTRAS SECTION                 -->
+        <!-- ===================================== -->
+        <section id="sutras-section" class="tab-section hidden">
+          <div class="grantha-selector-bar">
+            <div class="selector-left">
+              <span class="selector-label">Grantha Text:</span>
+              <select class="grantha-dropdown" id="sutra-grantha-select">
+                <!-- Dynamic options -->
+              </select>
+            </div>
+            <button class="btn btn-sm" id="btn-add-sutra">Add New Sutra</button>
+          </div>
+
+          <div class="sutra-table-container">
+            <table class="sutra-table" id="sutras-table-el">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">Num</th>
+                  <th>Title</th>
+                  <th>Sanskrit</th>
+                  <th>Audio File</th>
+                  <th style="width: 100px; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sutras-list">
+                <!-- Dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===================================== -->
+        <!-- TAB 3: DICTIONARY SECTION             -->
+        <!-- ===================================== -->
+        <section id="dictionary-section" class="tab-section hidden">
+          <div class="section-header">
+            <h3 class="section-title">Sanskrit Dictionary</h3>
+            <button class="btn btn-sm" id="btn-add-word">Add Word</button>
+          </div>
+          
+          <div class="search-box">
+            <!-- Search icon SVG -->
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="dict-search" class="form-control search-control" placeholder="Search by Sanskrit word or English meaning...">
+          </div>
+
+          <div class="sutra-table-container">
+            <table class="sutra-table">
+              <thead>
+                <tr>
+                  <th>Sanskrit Word</th>
+                  <th>Grammar Analysis</th>
+                  <th>English Translation</th>
+                  <th>Kannada Translation</th>
+                  <th style="width: 100px; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dict-list">
+                <!-- Dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===================================== -->
+        <!-- TAB 4: SETTINGS SECTION               -->
+        <!-- ===================================== -->
+        <section id="settings-section" class="tab-section hidden">
+          <div class="section-header">
+            <h3 class="section-title">GitHub API Settings</h3>
+          </div>
+          
+          <div class="card" style="max-width: 650px;">
+            <form id="settings-form">
+              <div class="form-group">
+                <label for="settings-pat">GitHub Personal Access Token (PAT)</label>
+                <input type="password" id="settings-pat" class="form-control" placeholder="github_pat_...">
+                <p style="font-size:12px; color:var(--text-muted); margin-top:6px;">Your token requires 'repo' permissions to read/write JSON files in your repository.</p>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="settings-owner">Repo Owner</label>
+                    <input type="text" id="settings-owner" class="form-control" value="hangaritsch" required>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label for="settings-repo">Repo Name</label>
+                    <input type="text" id="settings-repo" class="form-control" value="tarkasravah" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="settings-branch">Branch</label>
+                <input type="text" id="settings-branch" class="form-control" value="main" required>
+              </div>
+              <div style="display:flex; gap:12px;">
+                <button type="submit" class="btn btn-sm">Save Configuration</button>
+                <button type="button" class="btn btn-sm btn-secondary" id="btn-test-connection">Test Connection</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- Dynamic logs console -->
+        <div class="git-console" id="console-log">
+          <div class="console-line">
+            <span class="console-time">[18:03:00]</span>
+            <span class="console-info">System ready. Locked. Enter security password to load dashboard.</span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ===================================== -->
+  <!-- MODALS (ADD/EDIT DIALOGS)             -->
+  <!-- ===================================== -->
+  
+  <!-- 1. Grantha Modal -->
+  <div class="modal-backdrop" id="grantha-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="grantha-modal-title">Create New Grantha</h4>
+        <button class="modal-close" onclick="closeModal('grantha-modal-backdrop')">&times;</button>
+      </div>
+      <form id="grantha-form">
+        <input type="hidden" id="grantha-form-mode" value="add"> <!-- add or edit -->
+        <input type="hidden" id="grantha-original-id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="grantha-id-input">Unique ID (lowercase alphanumeric/slug)</label>
+                <input type="text" id="grantha-id-input" class="form-control" placeholder="e.g. karikavali" required>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="grantha-title-input">Title (Sanskrit Devanagari)</label>
+                <input type="text" id="grantha-title-input" class="form-control" placeholder="तर्कसङ्ग्रहः" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="grantha-engtitle-input">Title (English / Romanized)</label>
+                <input type="text" id="grantha-engtitle-input" class="form-control" placeholder="Tarkasangraha" required>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="grantha-author-input">Author</label>
+                <input type="text" id="grantha-author-input" class="form-control" placeholder="अन्नम्भट्टः" required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="grantha-desc-input">Description</label>
+            <textarea id="grantha-desc-input" class="form-control" style="height: 100px; resize: none;" placeholder="Provide a brief historical and philosophical overview..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('grantha-modal-backdrop')">Cancel</button>
+          <button type="submit" class="btn btn-sm">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Sutra Modal -->
+  <div class="modal-backdrop" id="sutra-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="sutra-modal-title">Add New Sutra</h4>
+        <button class="modal-close" onclick="closeModal('sutra-modal-backdrop')">&times;</button>
+      </div>
+      <form id="sutra-form">
+        <input type="hidden" id="sutra-form-mode" value="add"> <!-- add or edit -->
+        <input type="hidden" id="sutra-original-id">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col" style="flex: 0 0 120px;">
+              <div class="form-group">
+                <label for="sutra-num-input">Sutra Number</label>
+                <input type="text" id="sutra-num-input" class="form-control" placeholder="१" required>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="sutra-title-input">Title / Subject</label>
+                <input type="text" id="sutra-title-input" class="form-control" placeholder="मङ्गलाचरणम्" required>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="sutra-sanskrit-input">Sanskrit Devanagari (Single line)</label>
+            <textarea id="sutra-sanskrit-input" class="form-control" style="height: 80px; resize: none;" placeholder="निधाय हृदि विश्वेशं..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="sutra-english-input">English Translation</label>
+            <textarea id="sutra-english-input" class="form-control" style="height: 80px; resize: none;" placeholder="Having placed the Lord of the Universe in the heart..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="sutra-kannada-input">Kannada Translation</label>
+            <textarea id="sutra-kannada-input" class="form-control" style="height: 80px; resize: none;" placeholder="ವಿಶ್ವೇಶ್ವರನನ್ನು ಹೃದಯದಲ್ಲಿ ನೆನೆದು..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="sutra-audio-input">Audio Filename</label>
+            <input type="text" id="sutra-audio-input" class="form-control" placeholder="audio_0.mp3" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('sutra-modal-backdrop')">Cancel</button>
+          <button type="submit" class="btn btn-sm">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Dictionary Word Modal -->
+  <div class="modal-backdrop" id="word-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="word-modal-title">Add Word to Dictionary</h4>
+        <button class="modal-close" onclick="closeModal('word-modal-backdrop')">&times;</button>
+      </div>
+      <form id="word-form">
+        <input type="hidden" id="word-form-mode" value="add"> <!-- add or edit -->
+        <input type="hidden" id="word-original-key">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="word-key-input">Sanskrit Key (Exactly as found in text)</label>
+            <input type="text" id="word-key-input" class="form-control" placeholder="निधाय" required>
+          </div>
+          <div class="form-group">
+            <label for="word-desc-input">Standard Word Header (Word + IAST Romanized)</label>
+            <input type="text" id="word-desc-input" class="form-control" placeholder="निधाय (nidhāya)" required>
+          </div>
+          <div class="form-group">
+            <label for="word-grammar-input">Grammatical Parsing</label>
+            <input type="text" id="word-grammar-input" class="form-control" placeholder="Gerund (Lyap-pratyaya) of ni + dhā" required>
+          </div>
+          <div class="form-group">
+            <label for="word-english-input">English Meaning</label>
+            <input type="text" id="word-english-input" class="form-control" placeholder="having placed / keeping in mind" required>
+          </div>
+          <div class="form-group">
+            <label for="word-kannada-input">Kannada Meaning</label>
+            <input type="text" id="word-kannada-input" class="form-control" placeholder="ಹೃದಯದಲ್ಲಿ ಸ್ಥಾಪಿಸಿ / ಇಟ್ಟುಕೊಂಡು" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal('word-modal-backdrop')">Cancel</button>
+          <button type="submit" class="btn btn-sm">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ===================================== -->
+  <!-- JAVASCRIPT APP LOGIC                  -->
+  <!-- ===================================== -->
+  <script>
+    // Configuration & State
+    const AUTH_HASH = "e847a13be6f2226df9899ba60d5cc207a698e0b17bf9ab9e77e18f050ab87559"; // SHA-256 for Tarka@2026
+    
+    let state = {
+      isAuthenticated: false,
+      pat: "",
+      owner: "hangaritsch",
+      repo: "tarkasravah",
+      branch: "main",
+      user: null,
+      
+      // Loaded datasets
+      granthas: [],       // From granthas.json
+      activeGranthaId: "",
+      sutras: [],         // From <activeGranthaId>.json
+      dictionary: {},     // From dictionary.json
+      
+      // Git SHAs for commits (GitHub API requires these to overwrite files)
+      shas: {
+        granthas: null,
+        dictionary: null,
+        sutras: {}
+      }
+    };
+
+    // Helper: SHA-256 hash using Web Cryptography API
+    async function sha256(str) {
+      const msgUint8 = new TextEncoder().encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    }
+
+    // Helper: Base64 UTF-8 dec/enc
+    function b64DecodeUnicode(str) {
+      return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+    }
+
+    // Correct Unicode Base64 encoding
+    function b64EncodeUnicode(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function(toReplace, byte) {
+          return String.fromCharCode('0x' + byte);
+        }));
+    }
+
+    // Logger
+    function logConsole(message, type = "info") {
+      const consoleEl = document.getElementById("console-log");
+      if (!consoleEl) return;
+      
+      const timeStr = new Date().toLocaleTimeString();
+      const div = document.createElement("div");
+      div.className = "console-line";
+      
+      let textClass = "";
+      if (type === "error") textClass = "console-err";
+      if (type === "success") textClass = ""; // default green
+      if (type === "info") textClass = "console-info";
+
+      div.innerHTML = `<span class="console-time">[${timeStr}]</span><span class="${textClass}">${message}</span>`;
+      consoleEl.appendChild(div);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    // Initial load
+    window.addEventListener("DOMContentLoaded", () => {
+      // Setup Login Form
+      const loginForm = document.getElementById("login-form");
+      loginForm.addEventListener("submit", handleLogin);
+      
+      // Setup Tab switcher
+      const menuItems = document.querySelectorAll(".menu-item");
+      menuItems.forEach(item => {
+        item.addEventListener("click", () => {
+          switchTab(item.getAttribute("data-tab"));
+        });
+      });
+
+      // Settings Save
+      document.getElementById("settings-form").addEventListener("submit", saveSettings);
+      document.getElementById("btn-test-connection").addEventListener("click", () => testConnection(true));
+
+      // Modal Triggers
+      document.getElementById("btn-add-grantha").addEventListener("click", () => openGranthaModal());
+      document.getElementById("btn-add-sutra").addEventListener("click", () => openSutraModal());
+      document.getElementById("btn-add-word").addEventListener("click", () => openWordModal());
+
+      // Form Submits
+      document.getElementById("grantha-form").addEventListener("submit", submitGranthaForm);
+      document.getElementById("sutra-form").addEventListener("submit", submitSutraForm);
+      document.getElementById("word-form").addEventListener("submit", submitWordForm);
+
+      // Search filters
+      document.getElementById("dict-search").addEventListener("input", filterDictionary);
+
+      // Grantha dropdown switcher
+      document.getElementById("sutra-grantha-select").addEventListener("change", (e) => {
+        state.activeGranthaId = e.target.value;
+        loadSutrasForActiveGrantha();
+      });
+
+      // Logout
+      document.getElementById("logout-btn").addEventListener("click", logOut);
+
+      // Load config from LocalStorage if present
+      loadSettingsFromStorage();
+    });
+
+    // Check Password & Login
+    async function handleLogin(e) {
+      e.preventDefault();
+      const pwdInput = document.getElementById("password-input");
+      const errorMsg = document.getElementById("login-error");
+      const card = document.getElementById("login-card");
+      
+      const pwd = pwdInput.value;
+      const hash = await sha256(pwd);
+
+      if (hash === AUTH_HASH) {
+        state.isAuthenticated = true;
+        document.getElementById("login-view").classList.add("hidden");
+        document.getElementById("dashboard-view").classList.remove("hidden");
+        logConsole("Authentication successful. Dashboard unlocked.", "success");
+        
+        // Auto pull data if credentials exist
+        if (state.pat) {
+          testConnection(false).then(success => {
+            if (success) {
+              fetchAllData();
+            }
+          });
+        } else {
+          switchTab("settings");
+          logConsole("GitHub PAT not set. Please configure settings tab.", "info");
+        }
+      } else {
+        card.classList.add("shake");
+        errorMsg.style.display = "block";
+        logConsole("Failed authentication attempt.", "error");
+        setTimeout(() => card.classList.remove("shake"), 400);
+      }
+    }
+
+    function logOut() {
+      state.isAuthenticated = false;
+      document.getElementById("password-input").value = "";
+      document.getElementById("login-error").style.display = "none";
+      document.getElementById("dashboard-view").classList.add("hidden");
+      document.getElementById("login-view").classList.remove("hidden");
+      logConsole("Logged out.", "info");
+    }
+
+    // Save Settings
+    function saveSettings(e) {
+      e.preventDefault();
+      state.pat = document.getElementById("settings-pat").value.trim();
+      state.owner = document.getElementById("settings-owner").value.trim();
+      state.repo = document.getElementById("settings-repo").value.trim();
+      state.branch = document.getElementById("settings-branch").value.trim();
+
+      localStorage.setItem("tarka_pat", state.pat);
+      localStorage.setItem("tarka_owner", state.owner);
+      localStorage.setItem("tarka_repo", state.repo);
+      localStorage.setItem("tarka_branch", state.branch);
+
+      logConsole("Settings saved to local storage.", "success");
+      testConnection(true).then(success => {
+        if (success) {
+          fetchAllData();
+        }
+      });
+    }
+
+    function loadSettingsFromStorage() {
+      state.pat = localStorage.getItem("tarka_pat") || "";
+      state.owner = localStorage.getItem("tarka_owner") || "hangaritsch";
+      state.repo = localStorage.getItem("tarka_repo") || "tarkasravah";
+      state.branch = localStorage.getItem("tarka_branch") || "main";
+
+      document.getElementById("settings-pat").value = state.pat;
+      document.getElementById("settings-owner").value = state.owner;
+      document.getElementById("settings-repo").value = state.repo;
+      document.getElementById("settings-branch").value = state.branch;
+    }
+
+    // Tab Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll(".menu-item").forEach(item => {
+        item.classList.remove("active");
+        if (item.getAttribute("data-tab") === tabId) {
+          item.classList.add("active");
+        }
+      });
+
+      document.querySelectorAll(".tab-section").forEach(sec => sec.classList.add("hidden"));
+      document.getElementById(`${tabId}-section`).classList.remove("hidden");
+
+      // Update Top Nav Title
+      const titleMap = {
+        granthas: "Granthas (ग्रन्थाः)",
+        sutras: "Sutras (सूत्राणि)",
+        dictionary: "Dictionary (शब्दकोशः)",
+        settings: "Settings (विन्यासः)"
+      };
+      document.getElementById("nav-title").innerText = titleMap[tabId] || "Dashboard";
+    }
+
+    // GitHub API Test Connection
+    async function testConnection(notifyUser = true) {
+      if (!state.pat) {
+        if (notifyUser) alert("GitHub Personal Access Token is required.");
+        updateGitStatus(false, "No PAT token");
+        return false;
+      }
+
+      if (notifyUser) logConsole("Testing GitHub connection...", "info");
+      
+      try {
+        const response = await fetch("https://api.github.com/user", {
+          headers: {
+            "Authorization": `Bearer ${state.pat}`,
+            "Accept": "application/vnd.github+json"
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          state.user = userData.login;
+          document.getElementById("user-display").innerText = `Admin: ${state.user}`;
+          updateGitStatus(true, `Connected as ${state.user}`);
+          if (notifyUser) logConsole(`GitHub Connection Successful! Connected as ${state.user}`, "success");
+          return true;
+        } else {
+          updateGitStatus(false, "Invalid credentials");
+          if (notifyUser) logConsole(`GitHub Authentication Failed: ${response.statusText}`, "error");
+          return false;
+        }
+      } catch (err) {
+        updateGitStatus(false, "Network error");
+        if (notifyUser) logConsole(`Connection test failed: ${err.message}`, "error");
+        return false;
+      }
+    }
+
+    function updateGitStatus(connected, text) {
+      const indicator = document.getElementById("git-indicator");
+      const textEl = document.getElementById("git-status-text");
+      
+      if (connected) {
+        indicator.classList.add("connected");
+      } else {
+        indicator.classList.remove("connected");
+      }
+      textEl.innerText = text;
+    }
+
+    // Fetch All Data from Git Repository
+    async function fetchAllData() {
+      logConsole("Fetching database files from repository...", "info");
+      
+      const gLoaded = await fetchGranthasJson();
+      const dLoaded = await fetchDictionaryJson();
+
+      if (gLoaded) {
+        // Build dropdown select options in Sutras tab
+        populateSutrasGranthaDropdown();
+        // Load initial sutras
+        if (state.granthas.length > 0) {
+          state.activeGranthaId = state.granthas[0].id;
+          document.getElementById("sutra-grantha-select").value = state.activeGranthaId;
+          await loadSutrasForActiveGrantha();
+        }
+      }
+    }
+
+    // GET file from repo
+    async function fetchRepoFile(path) {
+      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}?ref=${state.branch}`;
+      
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${state.pat}`,
+          "Accept": "application/vnd.github+json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load ${path}: ${response.statusText}`);
+      }
+
+      const fileData = await response.json();
+      const contentRaw = b64DecodeUnicode(fileData.content);
+      return {
+        sha: fileData.sha,
+        data: JSON.parse(contentRaw)
+      };
+    }
+
+    // PUT file back to repo
+    async function commitRepoFile(path, sha, contentObj, commitMessage) {
+      const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${path}`;
+      const contentStr = JSON.stringify(contentObj, null, 2);
+      const contentBase64 = b64EncodeUnicode(contentStr);
+
+      const body = {
+        message: commitMessage,
+        content: contentBase64,
+        branch: state.branch
+      };
+
+      if (sha) {
+        body.sha = sha;
+      }
+
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${state.pat}`,
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errorJson = await response.json();
+        throw new Error(`Git commit failed: ${errorJson.message || response.statusText}`);
+      }
+
+      const resData = await response.json();
+      return resData.content.sha;
+    }
+
+    // Load Granthas JSON
+    async function fetchGranthasJson() {
+      try {
+        const { sha, data } = await fetchRepoFile("assets/data/granthas.json");
+        state.granthas = data;
+        state.shas.granthas = sha;
+        logConsole(`Successfully loaded ${data.length} Granthas from repository.`, "success");
+        renderGranthas();
+        return true;
+      } catch (err) {
+        logConsole(`Error loading granthas.json: ${err.message}`, "error");
+        return false;
+      }
+    }
+
+    // Load Dictionary JSON
+    async function fetchDictionaryJson() {
+      try {
+        const { sha, data } = await fetchRepoFile("assets/data/dictionary.json");
+        state.dictionary = data;
+        state.shas.dictionary = sha;
+        logConsole(`Successfully loaded dictionary entries from repository.`, "success");
+        renderDictionary();
+        return true;
+      } catch (err) {
+        logConsole(`Error loading dictionary.json: ${err.message}`, "error");
+        return false;
+      }
+    }
+
+    // Load Sutras for Selected Grantha
+    async function loadSutrasForActiveGrantha() {
+      if (!state.activeGranthaId) return;
+      logConsole(`Fetching sutras for Grantha: ${state.activeGranthaId}...`, "info");
+      
+      try {
+        const { sha, data } = await fetchRepoFile(`assets/data/${state.activeGranthaId}.json`);
+        state.sutras = data;
+        state.shas.sutras[state.activeGranthaId] = sha;
+        logConsole(`Loaded ${data.length} sutras for ${state.activeGranthaId}.`, "success");
+        renderSutras();
+      } catch (err) {
+        logConsole(`Error loading ${state.activeGranthaId}.json (might be empty/new): ${err.message}`, "error");
+        state.sutras = [];
+        state.shas.sutras[state.activeGranthaId] = null;
+        renderSutras();
+      }
+    }
+
+    // --- RENDER METHODS ---
+
+    function renderGranthas() {
+      const grid = document.getElementById("granthas-grid");
+      grid.innerHTML = "";
+
+      state.granthas.forEach(g => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-title-sanskrit">${g.title}</div>
+          <div class="card-title-english">${g.english_title}</div>
+          <div class="card-meta">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              ${g.author}
+            </span>
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line></svg>
+              ${g.sutra_count} Sutras
+            </span>
+          </div>
+          <p class="card-desc">${g.description}</p>
+          <div class="card-actions">
+            <button class="btn btn-sm btn-secondary" onclick="manageSutrasOf('${g.id}')">Manage Sutras</button>
+            <button class="btn-icon-only" title="Edit Grantha Info" onclick="openGranthaModal('edit', '${g.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </button>
+            <button class="btn-icon-only danger" title="Delete Grantha" onclick="deleteGrantha('${g.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderSutras() {
+      const tbody = document.getElementById("sutras-list");
+      tbody.innerHTML = "";
+
+      if (state.sutras.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No sutras found for this Grantha. Add a new sutra to get started!</td></tr>`;
+        return;
+      }
+
+      state.sutras.forEach(s => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="sutra-num-badge">${s.sutra_number}</span></td>
+          <td style="font-weight: 600;">${s.title}</td>
+          <td class="sutra-text-sanskrit">${s.sanskrit}</td>
+          <td style="font-family: monospace; font-size:12px; color: var(--text-muted);">${s.audio}</td>
+          <td style="text-align: right;">
+            <div style="display: inline-flex; gap: 8px;">
+              <button class="btn-icon-only" title="Edit" onclick="openSutraModal('edit', ${s.id})">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+              <button class="btn-icon-only danger" title="Delete" onclick="deleteSutra(${s.id})">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderDictionary() {
+      const tbody = document.getElementById("dict-list");
+      tbody.innerHTML = "";
+
+      const keys = Object.keys(state.dictionary);
+      if (keys.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No entries in dictionary.</td></tr>`;
+        return;
+      }
+
+      keys.forEach(key => {
+        const item = state.dictionary[key];
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-key", key.toLowerCase());
+        tr.setAttribute("data-meaning", (item.english + " " + item.kannada).toLowerCase());
+        tr.innerHTML = `
+          <td style="font-weight: 700; color: var(--primary); font-family: var(--font-sanskrit); font-size:16px;">${key}</td>
+          <td style="font-family: monospace; font-size: 13px;">${item.grammar}</td>
+          <td>${item.english}</td>
+          <td>${item.kannada}</td>
+          <td style="text-align: right;">
+            <div style="display: inline-flex; gap: 8px;">
+              <button class="btn-icon-only" title="Edit" onclick="openWordModal('edit', '${key}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              </button>
+              <button class="btn-icon-only danger" title="Delete" onclick="deleteWord('${key}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function populateSutrasGranthaDropdown() {
+      const select = document.getElementById("sutra-grantha-select");
+      select.innerHTML = "";
+      state.granthas.forEach(g => {
+        const opt = document.createElement("option");
+        opt.value = g.id;
+        opt.innerText = `${g.english_title} (${g.title})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function manageSutrasOf(granthaId) {
+      state.activeGranthaId = granthaId;
+      document.getElementById("sutra-grantha-select").value = granthaId;
+      switchTab("sutras");
+      loadSutrasForActiveGrantha();
+    }
+
+    function filterDictionary() {
+      const query = document.getElementById("dict-search").value.toLowerCase().trim();
+      const rows = document.querySelectorAll("#dict-list tr");
+      
+      rows.forEach(row => {
+        const wordKey = row.getAttribute("data-key");
+        const meaning = row.getAttribute("data-meaning");
+        if (wordKey.includes(query) || meaning.includes(query)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    }
+
+    // --- MODAL HELPERS ---
+
+    function openModal(id) {
+      document.getElementById(id).classList.add("open");
+    }
+
+    // Explicitly make this global
+    window.closeModal = function(id) {
+      document.getElementById(id).classList.remove("open");
+    };
+
+    // Grantha Modal Add/Edit
+    function openGranthaModal(mode = "add", id = "") {
+      const form = document.getElementById("grantha-form");
+      form.reset();
+      
+      const modeInput = document.getElementById("grantha-form-mode");
+      const titleEl = document.getElementById("grantha-modal-title");
+      const idInput = document.getElementById("grantha-id-input");
+
+      if (mode === "edit") {
+        modeInput.value = "edit";
+        titleEl.innerText = "Edit Grantha Info";
+        idInput.disabled = true; // Cannot edit file ID slug easily
+        
+        const g = state.granthas.find(x => x.id === id);
+        if (g) {
+          document.getElementById("grantha-original-id").value = g.id;
+          idInput.value = g.id;
+          document.getElementById("grantha-title-input").value = g.title;
+          document.getElementById("grantha-engtitle-input").value = g.english_title;
+          document.getElementById("grantha-author-input").value = g.author;
+          document.getElementById("grantha-desc-input").value = g.description;
+        }
+      } else {
+        modeInput.value = "add";
+        titleEl.innerText = "Create New Grantha";
+        idInput.disabled = false;
+      }
+      
+      openModal("grantha-modal-backdrop");
+    }
+
+    // Sutra Modal Add/Edit
+    function openSutraModal(mode = "add", id = "") {
+      const form = document.getElementById("sutra-form");
+      form.reset();
+      
+      const modeInput = document.getElementById("sutra-form-mode");
+      const titleEl = document.getElementById("sutra-modal-title");
+
+      if (mode === "edit") {
+        modeInput.value = "edit";
+        titleEl.innerText = "Edit Sutra";
+        
+        const s = state.sutras.find(x => x.id === id);
+        if (s) {
+          document.getElementById("sutra-original-id").value = s.id;
+          document.getElementById("sutra-num-input").value = s.sutra_number;
+          document.getElementById("sutra-title-input").value = s.title;
+          document.getElementById("sutra-sanskrit-input").value = s.sanskrit;
+          document.getElementById("sutra-english-input").value = s.english_meaning;
+          document.getElementById("sutra-kannada-input").value = s.kannada_meaning;
+          document.getElementById("sutra-audio-input").value = s.audio;
+        }
+      } else {
+        modeInput.value = "add";
+        titleEl.innerText = "Add New Sutra";
+        
+        // Auto-increment sutra ID & number
+        const nextId = state.sutras.length > 0 ? Math.max(...state.sutras.map(x => x.id)) + 1 : 1;
+        document.getElementById("sutra-original-id").value = nextId;
+        
+        // Pre-fill next sutra number
+        document.getElementById("sutra-num-input").value = (state.sutras.length + 1).toString();
+        // Pre-fill audio format e.g. audio_muktavali_1.mp3
+        document.getElementById("sutra-audio-input").value = `audio_${state.activeGranthaId}_${state.sutras.length}.mp3`;
+      }
+      
+      openModal("sutra-modal-backdrop");
+    }
+
+    // Dictionary Modal Add/Edit
+    function openWordModal(mode = "add", key = "") {
+      const form = document.getElementById("word-form");
+      form.reset();
+      
+      const modeInput = document.getElementById("word-form-mode");
+      const titleEl = document.getElementById("word-modal-title");
+      const keyInput = document.getElementById("word-key-input");
+
+      if (mode === "edit") {
+        modeInput.value = "edit";
+        titleEl.innerText = "Edit Dictionary Word";
+        keyInput.disabled = true;
+        
+        const w = state.dictionary[key];
+        if (w) {
+          document.getElementById("word-original-key").value = key;
+          keyInput.value = key;
+          document.getElementById("word-desc-input").value = w.word;
+          document.getElementById("word-grammar-input").value = w.grammar;
+          document.getElementById("word-english-input").value = w.english;
+          document.getElementById("word-kannada-input").value = w.kannada;
+        }
+      } else {
+        modeInput.value = "add";
+        keyInput.disabled = false;
+      }
+      
+      openModal("word-modal-backdrop");
+    }
+
+    // --- FORM ACTIONS ---
+
+    // Submit Grantha Form
+    async function submitGranthaForm(e) {
+      e.preventDefault();
+      
+      const mode = document.getElementById("grantha-form-mode").value;
+      const id = document.getElementById("grantha-id-input").value.trim().toLowerCase();
+      const title = document.getElementById("grantha-title-input").value.trim();
+      const english_title = document.getElementById("grantha-engtitle-input").value.trim();
+      const author = document.getElementById("grantha-author-input").value.trim();
+      const description = document.getElementById("grantha-desc-input").value.trim();
+
+      if (mode === "add") {
+        // Check if ID slug exists
+        if (state.granthas.some(g => g.id === id)) {
+          alert(`Grantha with ID '${id}' already exists.`);
+          return;
+        }
+
+        const newGrantha = {
+          id: id,
+          title: title,
+          english_title: english_title,
+          author: author,
+          description: description,
+          sutra_count: 0
+        };
+
+        state.granthas.push(newGrantha);
+        logConsole(`Adding Grantha indices for ${id}...`, "info");
+      } else {
+        const originalId = document.getElementById("grantha-original-id").value;
+        const index = state.granthas.findIndex(g => g.id === originalId);
+        if (index !== -1) {
+          state.granthas[index].title = title;
+          state.granthas[index].english_title = english_title;
+          state.granthas[index].author = author;
+          state.granthas[index].description = description;
+        }
+      }
+
+      closeModal("grantha-modal-backdrop");
+
+      try {
+        // 1. Commit granthas.json
+        logConsole("Committing updated granthas.json index to GitHub...", "info");
+        const nextSha = await commitRepoFile("assets/data/granthas.json", state.shas.granthas, state.granthas, `Update granthas index: ${english_title}`);
+        state.shas.granthas = nextSha;
+        logConsole("Commit successful: granthas.json updated.", "success");
+
+        // 2. If it is a new Grantha, commit an empty sutra list JSON file
+        if (mode === "add") {
+          logConsole(`Creating empty database file assets/data/${id}.json...`, "info");
+          const fileSha = await commitRepoFile(`assets/data/${id}.json`, null, [], `Initialize empty sutras for ${english_title}`);
+          state.shas.sutras[id] = fileSha;
+          logConsole(`File assets/data/${id}.json created successfully.`, "success");
+        }
+
+        // Re-render
+        renderGranthas();
+        populateSutrasGranthaDropdown();
+      } catch (err) {
+        logConsole(`Failed to save Grantha: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
+        // Refresh index
+        fetchGranthasJson();
+      }
+    }
+
+    // Delete Grantha
+    async function deleteGrantha(id) {
+      if (!confirm(`Are you absolutely sure you want to delete the Grantha '${id}'? This deletes its metadata and all associated sutras.`)) {
+        return;
+      }
+
+      const g = state.granthas.find(x => x.id === id);
+      const index = state.granthas.findIndex(x => x.id === id);
+      if (index === -1) return;
+
+      const englishTitle = g.english_title;
+      state.granthas.splice(index, 1);
+
+      try {
+        logConsole(`Deleting Grantha '${id}'...`, "info");
+        
+        // 1. Commit updated granthas.json
+        const nextSha = await commitRepoFile("assets/data/granthas.json", state.shas.granthas, state.granthas, `Delete Grantha: ${englishTitle}`);
+        state.shas.granthas = nextSha;
+        logConsole("Commit successful: granthas.json updated.", "success");
+
+        // 2. We can delete the sutras JSON file.
+        if (state.shas.sutras[id]) {
+          logConsole(`Deleting assets/data/${id}.json file from GitHub...`, "info");
+          const url = `https://api.github.com/repos/${state.owner}/${state.repo}/contents/assets/data/${id}.json`;
+          const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+              "Authorization": `Bearer ${state.pat}`,
+              "Accept": "application/vnd.github+json"
+            },
+            body: JSON.stringify({
+              message: `Remove sutra file for deleted Grantha: ${englishTitle}`,
+              sha: state.shas.sutras[id],
+              branch: state.branch
+            })
+          });
+          if (response.ok) {
+            logConsole(`File assets/data/${id}.json deleted successfully.`, "success");
+          } else {
+            logConsole(`Could not delete file assets/data/${id}.json (already deleted/missing).`, "info");
+          }
+        }
+
+        renderGranthas();
+        populateSutrasGranthaDropdown();
+        if (state.activeGranthaId === id) {
+          state.activeGranthaId = state.granthas.length > 0 ? state.granthas[0].id : "";
+          document.getElementById("sutra-grantha-select").value = state.activeGranthaId;
+          loadSutrasForActiveGrantha();
+        }
+      } catch (err) {
+        logConsole(`Failed to delete Grantha: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
+        fetchGranthasJson();
+      }
+    }
+
+    // Submit Sutra Form
+    async function submitSutraForm(e) {
+      e.preventDefault();
+
+      const mode = document.getElementById("sutra-form-mode").value;
+      const sutraId = parseInt(document.getElementById("sutra-original-id").value, 10);
+      const sutraNum = document.getElementById("sutra-num-input").value.trim();
+      const title = document.getElementById("sutra-title-input").value.trim();
+      const sanskrit = document.getElementById("sutra-sanskrit-input").value.trim();
+      const english = document.getElementById("sutra-english-input").value.trim();
+      const kannada = document.getElementById("sutra-kannada-input").value.trim();
+      const audio = document.getElementById("sutra-audio-input").value.trim();
+
+      const newSutra = {
+        id: sutraId,
+        sutra_number: sutraNum,
+        title: title,
+        sanskrit: sanskrit,
+        english_meaning: english,
+        kannada_meaning: kannada,
+        audio: audio
+      };
+
+      if (mode === "add") {
+        state.sutras.push(newSutra);
+      } else {
+        const idx = state.sutras.findIndex(s => s.id === sutraId);
+        if (idx !== -1) {
+          state.sutras[idx] = newSutra;
+        }
+      }
+
+      closeModal("sutra-modal-backdrop");
+
+      try {
+        logConsole(`Committing updated sutras list to assets/data/${state.activeGranthaId}.json...`, "info");
+        
+        // 1. Commit active Grantha sutras JSON file
+        const nextSutrasSha = await commitRepoFile(
+          `assets/data/${state.activeGranthaId}.json`,
+          state.shas.sutras[state.activeGranthaId],
+          state.sutras,
+          `Update sutras for ${state.activeGranthaId}: ${title}`
+        );
+        state.shas.sutras[state.activeGranthaId] = nextSutrasSha;
+        logConsole(`Commit successful: ${state.activeGranthaId}.json updated.`, "success");
+
+        // 2. Update sutra_count in granthas.json
+        const gIdx = state.granthas.findIndex(x => x.id === state.activeGranthaId);
+        if (gIdx !== -1) {
+          state.granthas[gIdx].sutra_count = state.sutras.length;
+          
+          logConsole("Updating granthas.json sutra count index...", "info");
+          const nextGranthasSha = await commitRepoFile(
+            "assets/data/granthas.json",
+            state.shas.granthas,
+            state.granthas,
+            `Update sutra count for ${state.activeGranthaId} to ${state.sutras.length}`
+          );
+          state.shas.granthas = nextGranthasSha;
+          logConsole("Commit successful: granthas.json count updated.", "success");
+        }
+
+        renderSutras();
+        renderGranthas();
+      } catch (err) {
+        logConsole(`Failed to save Sutra: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
+        loadSutrasForActiveGrantha();
+      }
+    }
+
+    // Delete Sutra
+    async function deleteSutra(id) {
+      if (!confirm("Are you sure you want to delete this sutra?")) {
+        return;
+      }
+
+      const s = state.sutras.find(x => x.id === id);
+      const index = state.sutras.findIndex(x => x.id === id);
+      if (index === -1) return;
+
+      const sutraTitle = s.title;
+      state.sutras.splice(index, 1);
+
+      try {
+        logConsole(`Deleting sutra: ${sutraTitle}...`, "info");
+
+        // 1. Commit active Grantha sutras JSON file
+        const nextSutrasSha = await commitRepoFile(
+          `assets/data/${state.activeGranthaId}.json`,
+          state.shas.sutras[state.activeGranthaId],
+          state.sutras,
+          `Delete sutra from ${state.activeGranthaId}: ${sutraTitle}`
+        );
+        state.shas.sutras[state.activeGranthaId] = nextSutrasSha;
+        logConsole(`Commit successful: ${state.activeGranthaId}.json updated.`, "success");
+
+        // 2. Update count in granthas.json
+        const gIdx = state.granthas.findIndex(x => x.id === state.activeGranthaId);
+        if (gIdx !== -1) {
+          state.granthas[gIdx].sutra_count = state.sutras.length;
+          
+          logConsole("Updating granthas.json count...", "info");
+          const nextGranthasSha = await commitRepoFile(
+            "assets/data/granthas.json",
+            state.shas.granthas,
+            state.granthas,
+            `Update sutra count for ${state.activeGranthaId} to ${state.sutras.length}`
+          );
+          state.shas.granthas = nextGranthasSha;
+          logConsole("Commit successful: granthas.json count updated.", "success");
+        }
+
+        renderSutras();
+        renderGranthas();
+      } catch (err) {
+        logConsole(`Failed to delete Sutra: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
+        loadSutrasForActiveGrantha();
+      }
+    }
+
+    // Submit Dictionary Word Form
+    async function submitWordForm(e) {
+      e.preventDefault();
+
+      const mode = document.getElementById("word-form-mode").value;
+      const wordKey = document.getElementById("word-key-input").value.trim();
+      const originalKey = document.getElementById("word-original-key").value;
+      
+      const wordDesc = document.getElementById("word-desc-input").value.trim();
+      const grammar = document.getElementById("word-grammar-input").value.trim();
+      const english = document.getElementById("word-english-input").value.trim();
+      const kannada = document.getElementById("word-kannada-input").value.trim();
+
+      const newWordObj = {
+        word: wordDesc,
+        grammar: grammar,
+        english: english,
+        kannada: kannada
+      };
+
+      if (mode === "add") {
+        if (state.dictionary.hasOwnProperty(wordKey)) {
+          alert(`The word '${wordKey}' already exists in the dictionary.`);
+          return;
+        }
+        state.dictionary[wordKey] = newWordObj;
+      } else {
+        if (originalKey !== wordKey) {
+          delete state.dictionary[originalKey];
+        }
+        state.dictionary[wordKey] = newWordObj;
+      }
+
+      closeModal("word-modal-backdrop");
+
+      try {
+        logConsole(`Committing dictionary changes for '${wordKey}' to GitHub...`, "info");
+        const nextSha = await commitRepoFile(
+          "assets/data/dictionary.json",
+          state.shas.dictionary,
+          state.dictionary,
+          `Update dictionary word: ${wordKey}`
+        );
+        state.shas.dictionary = nextSha;
+        logConsole("Commit successful: dictionary.json updated.", "success");
+        renderDictionary();
+      } catch (err) {
+        logConsole(`Failed to save word: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
+        fetchDictionaryJson();
+      }
+    }
+
+    // Delete Word from Dictionary
+    async function deleteWord(key) {
+      if (!confirm(`Are you sure you want to delete '${key}' from the dictionary?`)) {
+        return;
+      }
+
+      delete state.dictionary[key];
+
+      try {
+        logConsole(`Deleting dictionary word: ${key}...`, "info");
+        const nextSha = await commitRepoFile(
+          "assets/data/dictionary.json",
+          state.shas.dictionary,
+          state.dictionary,
+          `Delete dictionary word: ${key}`
+        );
+        state.shas.dictionary = nextSha;
+        logConsole("Commit successful: dictionary.json updated.", "success");
+        renderDictionary();
+      } catch (err) {
+        logConsole(`Failed to delete word: ${err.message}`, "error");
+        alert(`Error: ${err.message}`);
+        fetchDictionaryJson();
+      }
+    }
+  </script>
+</body>
+</html>

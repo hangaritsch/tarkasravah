@@ -65,8 +65,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/data/tarkasangraha.json
-    - assets/data/dictionary.json
+    - assets/data/
     - assets/audio/
 
   fonts:

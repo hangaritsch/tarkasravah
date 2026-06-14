@@ -1,0 +1,18 @@
+[
+  {
+    "id": "tarkasangraha",
+    "title": "तर्कसङ्ग्रहः",
+    "english_title": "Tarkasangraha",
+    "author": "अन्नम्भट्टः (Annambhatta)",
+    "description": "A classic introductory primer to the Nyaya-Vaisheshika systems of Indian philosophy, written in the 17th century.",
+    "sutra_count": 6
+  },
+  {
+    "id": "muktavali",
+    "title": "कारिकावली / मुक्तावली",
+    "english_title": "Kārikāvalī / Muktāvalī",
+    "author": "विश्वनाथपञ्चाननभट्टाचार्यः (Vishvanatha)",
+    "description": "An advanced Sanskrit compendium on Nyaya theory, expanding on Padartha categories and logic.",
+    "sutra_count": 0
+  }
+]

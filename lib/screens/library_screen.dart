@@ -26,7 +26,7 @@ class LibraryScreen extends StatelessWidget {
         elevation: 0,
         iconTheme: IconThemeData(color: accent),
         title: Text(
-          "Tarkaśravaḥ (तर्कश्रावः)",
+          provider.activeGrantha?.title ?? "Library",
           style: TextStyle(
             color: accent,
             fontWeight: FontWeight.bold,

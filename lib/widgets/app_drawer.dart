@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/reader_provider.dart';
 import '../screens/about_us_screen.dart';
+import '../screens/grantha_list_screen.dart';
+import '../screens/library_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -63,15 +65,49 @@ class AppDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               children: [
-                // Library Navigation Link
+                // Select Grantha
                 ListTile(
-                  leading: Icon(Icons.library_books, color: accent),
+                  leading: Icon(Icons.dashboard_outlined, color: accent),
                   title: Text(
-                    "Library Home",
+                    "Select Grantha (ग्रन्थसूची)",
                     style: TextStyle(color: text, fontWeight: FontWeight.w600),
                   ),
                   onTap: () {
                     Navigator.pop(context); // Close drawer
+                    final routeName = ModalRoute.of(context)?.settings.name;
+                    if (routeName != 'GranthaListScreen') {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          settings: const RouteSettings(name: 'GranthaListScreen'),
+                          builder: (context) => const GranthaListScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 4),
+
+                // Library Navigation Link
+                ListTile(
+                  leading: Icon(Icons.library_books_outlined, color: accent),
+                  title: Text(
+                    "Sutra List (सूत्रपाठः)",
+                    style: TextStyle(color: text, fontWeight: FontWeight.w600),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context); // Close drawer
+                    final routeName = ModalRoute.of(context)?.settings.name;
+                    if (routeName != 'LibraryScreen') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          settings: const RouteSettings(name: 'LibraryScreen'),
+                          builder: (context) => const LibraryScreen(),
+                        ),
+                      );
+                    }
                   },
                 ),
                 const SizedBox(height: 4),
@@ -87,7 +123,10 @@ class AppDrawer extends StatelessWidget {
                     Navigator.pop(context); // Close drawer
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AboutUsScreen()),
+                      MaterialPageRoute(
+                        settings: const RouteSettings(name: 'AboutUsScreen'),
+                        builder: (context) => const AboutUsScreen(),
+                      ),
                     );
                   },
                 ),
@@ -161,7 +200,7 @@ class AppDrawer extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           provider.isFullyOfflineReady
-                              ? "All 6 sutras and audio tracks are saved locally for offline playback."
+                              ? "All ${provider.granthas.fold(0, (sum, g) => sum + g.sutraCount)} sutras and audio tracks are saved locally for offline playback."
                               : provider.isDownloadingAll
                                   ? "Fetching all audio files and indices from remote GitHub CDN..."
                                   : "Audio tracks stream online by default. Download them for offline playback.",
@@ -281,7 +320,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             child: Text(
-              "तर्कश्रावः • तर्कसंग्रहः",
+              "तर्कश्रावः${provider.activeGrantha != null ? ' • ${provider.activeGrantha!.title}' : ''}",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'PragatiNarrow',
