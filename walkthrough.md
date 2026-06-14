@@ -1,83 +1,49 @@
-# Walkthrough - Tarkaśravaḥ (तर्कश्रावः) Sanskrit E-Reader
+# Walkthrough - Per-Grantha Caching, Landings, and Offline Fallbacks
 
-We have successfully implemented Multi-Grantha (multi-text) support, refined the offline synchronization system, built a password-protected GitHub Pages CMS, and compiled the latest installable packages for Android and iOS.
-
----
-
-## 📁 Project Architecture & Local Path
-
-The project is located locally at:
-📁 `/opt/homebrew/var/www/app/tarkasravah`
+We have successfully implemented per-Grantha asset caching, built a responsive Sanskrit-themed landing page with client-side OS-detection, resolved remote CDN sync delays, and added inline warning alerts for offline operations.
 
 ---
 
-## 📚 Multi-Grantha Support & UI Dashboard
+## 📁 Key Files & Modifications
 
-To transition the app from a single hardcoded text to an expandable Sanskrit e-reader library, we implemented:
+### 1. Reusable Offline Banner Widget
+* **File**: [offline_warning_banner.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/widgets/offline_warning_banner.dart)
+* **Description**: A responsive inline banner that automatically appears when network connectivity is lost (or when a CDN sync / download request throws an exception). It matches the user's active reading theme (light, dark, or sepia) and utilizes the saffron accent color.
 
-### 1. Dynamic Data Structure
-* **Central Index**: Created [granthas.json](file:///opt/homebrew/var/www/app/tarkasravah/assets/data/granthas.json) which registers all available texts (including title, English title, author, description, and sutra count).
-* **Grantha Databases**: Separated individual texts into their own data files:
-  * [tarkasangraha.json](file:///opt/homebrew/var/www/app/tarkasravah/assets/data/tarkasangraha.json)
-  * [muktavali.json](file:///opt/homebrew/var/www/app/tarkasravah/assets/data/muktavali.json)
+### 2. State & Caching updates
+* **File**: [reader_provider.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/providers/reader_provider.dart)
+* **Modifications**:
+  * **Per-Grantha Caching States**: Added tracking maps (`_granthaDownloadProgress`, `_isGranthaDownloading`, `_isGranthaOfflineReady`) and getters to keep track of individual texts.
+  * **Grantha Downloader**: Implemented `downloadGranthaForOffline(Grantha grantha)` which downloads only the selected Grantha's JSON and its corresponding audio files, reporting progress incrementally.
+  * **Instant CDN Sync Fix**: Replaced jsDelivr CDN paths with raw GitHub URLs (`raw.githubusercontent.com`) and appended a cache-bypassing timestamp query parameter (`?t=timestamp`) to force immediate fetches of modified files on the `main` branch.
+  * **Graceful Network Handling**: Wrapped background sync and downloading in `try-catch` blocks to capture `SocketException` or timeout errors, gracefully falling back to local files and displaying a `"No internet connection. Operating in Offline Mode."` message.
+  * **Selection-based Syncing**: Updated `setActiveGrantha` to immediately trigger a background sync for the active text on selection.
 
-### 2. UI Screens & Navigation
-* **Grantha List Dashboard (`GranthaListScreen`)**: Added a premium selection screen as the application's new homepage. Users can see all available texts, their author, description, and sutra counts.
-* **Sutra Reader (`LibraryScreen`)**: Updated the main e-reader page to dynamically display the name of the *active* Grantha and load its corresponding sutras from cache/local storage.
-* **App Drawer Navigation (`AppDrawer`)**: Refactored the Navigation Drawer. It now includes:
-  * A **Select Grantha (ग्रन्थसूची)** option to navigate back to the library dashboard.
-  * A **Sutra List (सूत्रपाठः)** option to view the current text's sutra grid.
-  * A dynamic footer displaying the name of the currently active text.
-  * An updated **Offline Settings** card that calculates total downloaded sutras and audio tracks dynamically across all registered Granthas.
+### 3. Grantha Selection & Reading Screens
+* **File**: [grantha_list_screen.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/screens/grantha_list_screen.dart)
+* **Modifications**:
+  * Added the shared `OfflineWarningBanner` at the top of the body.
+  * Integrated a download button and animated progress tracker directly inside each Grantha card. Cards show:
+    * `Download Offline` button if files aren't cached yet.
+    * `Downloading X%` circular indicator during download.
+    * `Offline Ready` green icon once fully cached.
+* **File**: [library_screen.dart](file:///opt/homebrew/var/www/app/tarkasravah/lib/screens/library_screen.dart)
+* **Modifications**:
+  * Wrapped the body in a `Column` and placed the `OfflineWarningBanner` at the top of the screen.
 
----
-
-## 🖥️ Web-Hosted Password-Protected CMS
-
-We built a gorgeous, zero-dependency, single-page CMS application inside [cms/index.html](file:///opt/homebrew/var/www/app/tarkasravah/cms/index.html) that can be hosted for free on GitHub Pages:
-
-### 1. Key Security & Session Features
-* **Password Protection**: Access requires entering the password **`Tarka@2026`**. The password is validated securely client-side via a SHA-256 cryptographic hash check.
-* **Session Persistence [NEW]**: Login state is saved in the browser's local sandbox so that refreshing the page maintains your authenticated session.
-* **GitHub Personal Access Token (PAT)**: Admin commits are securely sent using a browser-supplied GitHub PAT. The token is stored locally in the browser's sandbox (`localStorage`) and is never sent to any external server other than the GitHub API.
-
-### 2. Rich Administrative Dashboard & Unified Audio Uploader
-* **Saffron/Maroon Design**: Aesthetic matches the reader app with gold/maroon accents, glassmorphic card layouts, responsive sidebar, glowing focused inputs, and custom transitions.
-* **Grantha Manager**: Add, edit, or delete Granthas. Adding a text commits an updated index file and automatically initializes a new `<grantha_id>.json` file in your repository.
-* **Sutra Editor (Unified Audio Management & Dedicated Modal) [UPDATED]**: Add, edit, or delete sutras for any chosen Grantha.
-  * **Scrollable Sutras List**: The Sutras (सूत्राणि) section list is now wrapped in a scrollable container with a maximum height of 550px and a sticky header, keeping Devanagari text lists organized and readable.
-  * **Inline Audio Hyperlinks**: The filenames in the "Audio File" column of the Sutras table are now clickable links that open a dedicated **Manage Audio Modal**.
-  * **Dedicated Manage Audio Modal**: Displays the current audio track (with a built-in preview player) and allows direct replacement of the audio track via file upload or live voice recording. On successful upload, it automatically updates the corresponding sutra's JSON database file in the repository to keep metadata and media files perfectly in sync.
-* **Audio Files Manager**: Full binary CRUD capabilities for audio tracks:
-  * **Upload MP3**: Choose a local `.mp3` file, set its filename, and upload it directly as base64 binary content.
-  * **Direct Microphone Recording [NEW]**: Pulse-animated microphone recording widget. Audio is recorded using the standard browser `MediaRecorder` API and automatically encoded/saved to the repository.
-  * **Preview Player**: Listen to uploaded files directly in the CMS using an HTML5 audio player.
-  * **Delete Audio**: Remove audio files from `assets/audio/` directly via the interface.
-* **Dictionary Editor**: Search, filter, add, edit, or delete words in `dictionary.json`.
-* **Integrated Git Console**: A floating console displays a live log stream of network requests, connection checks, and Git commits (showing successful SHAs).
+### 4. Sharing & Download Landing Page
+* **File**: [index.html](file:///opt/homebrew/var/www/app/tarkasravah/index.html)
+* **Description**: A premium, responsive Sanskrit landing page hosted at the repository root:
+  * **Device Detection**: Detects Android and iOS/macOS via user-agent sniffing to highlight the recommended download package with a linear gradient border and badge.
+  * **Version Detail**: Prominently shows the current app version `v1.0.0+1`.
+  * **Saffron/Maroon Accent styling**: Matching the app design, using glassmorphic cards and glowing hover effects.
+  * **Quick Links**: Offers manual selection buttons to download the APK (Android) or Simulator ZIP (iOS), as well as a link to open the CMS administrative console.
 
 ---
 
-## 🔍 Verification & Testing Status
+## 📦 Packages Rebuilt & Pushed
 
-* **Static Analysis**: `flutter analyze` runs successfully with **No issues found!**
-* **Unit Tests**: Pure Dart unit tests pass cleanly:
-  ```
-  All tests passed!
-  ```
-
----
-
-## 📦 Installable Packages (Build Outputs)
-
-The production-ready installable packages are compiled and pushed to your GitHub repository:
-
-### 🤖 Android Installable (APK)
-* **Local Path**: `/opt/homebrew/var/www/app/tarkasravah/build/releases/tarkasravah.apk`
-* **Local Link**: [tarkasravah.apk](file:///opt/homebrew/var/www/app/tarkasravah/build/releases/tarkasravah.apk)
-* **GitHub Download Link**: [Download Android APK](https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah.apk)
-
-### 🍎 iOS Installable (Simulator Bundle)
-* **Local Path**: `/opt/homebrew/var/www/app/tarkasravah/build/releases/tarkasravah-ios.zip` (contains the `Runner.app` simulator package)
-* **Local Link**: [tarkasravah-ios.zip](file:///opt/homebrew/var/www/app/tarkasravah/build/releases/tarkasravah-ios.zip)
-* **GitHub Download Link**: [Download iOS Simulator Zip](https://github.com/hangaritsch/tarkasravah/raw/main/build/releases/tarkasravah-ios.zip)
+We have re-compiled the release outputs, committed all changes, and pushed them to `origin/main` on GitHub:
+* **Android APK**: `build/releases/tarkasravah.apk` (Compiled in release mode)
+* **iOS Simulator Zip**: `build/releases/tarkasravah-ios.zip` (Runner.app simulator binary)
+* **Commits**: Pushed successfully to [GitHub Repo](https://github.com/hangaritsch/tarkasravah.git).
